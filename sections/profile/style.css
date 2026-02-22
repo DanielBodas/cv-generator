@@ -1,5 +1,9 @@
 /* Profile */
 
+.section-profile {
+    overflow: visible;
+}
+
 .profile-block {
     display: flex;
     flex-direction: column;
@@ -9,12 +13,13 @@
 }
 
 .profile-photo-wrap {
-    width: 88px;
-    height: 88px;
+    width: 114px;
+    height: 114px;
     border-radius: 50%;
     overflow: hidden;
     border: 2px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.28);
+    margin-top: -20px;
     margin-bottom: 11px;
     background: rgba(255, 255, 255, 0.08);
     flex-shrink: 0;
