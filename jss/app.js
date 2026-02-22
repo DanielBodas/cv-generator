@@ -43,7 +43,6 @@ async function initCV() {
             }
         });
 
-        const renderedItems = [];
         for (const sec of config.sections) {
             const target = areaEls[sec.area];
             if (target) {
@@ -61,14 +60,12 @@ async function initCV() {
                     }
                     el.prepend(tag);
                 }
-                renderedItems.push({ cfg: sec, el });
             }
         }
 
         if (document.getElementById('loading-screen')) document.getElementById('loading-screen').remove();
 
         // ── AJUSTE DINÁMICO DE OVERFLOW ──
-        window.setTimeout(() => handleLayoutCorrections(renderedItems, areaEls), 400);
 
     } catch (err) {
         console.error('❌ Error crítico:', err);
@@ -79,54 +76,6 @@ async function initCV() {
 /**
  * Revisa y corrige el layout si detecta que las piezas no encajan.
  */
-function handleLayoutCorrections(items, areaEls) {
-    console.log('[Layout] 🔍 Verificando integridad del diseño...');
-
-    let needsGlobalGapReduction = false;
-
-    // 1. Gestionar secciones individualmente
-    items.forEach(item => {
-        if (!item || !item.el) return;
-        const { el, cfg } = item;
-        const isOverflowing = el.scrollHeight > (el.clientHeight + 4);
-
-        if (isOverflowing) {
-            el.classList.add('is-overflowing');
-            el.classList.add('mode-compact');
-            needsGlobalGapReduction = true;
-        }
-
-        // Llamar SIEMPRE al script de la sección si existe para que ajuste volumen (crecer o encoger)
-        const scriptName = `section_${cfg.id.replace(/-/g, '_')}_script`;
-        if (window[scriptName] && typeof window[scriptName].onOverflow === 'function') {
-            console.log(`[Layout] ⚙️ Ejecutando ajuste dinámico para: ${cfg.id}`);
-            window[scriptName].onOverflow(el, cfg);
-        }
-    });
-
-    // 2. Seguridad Global: Si el área entera desborda el folio, forzar compresión y reajuste
-    Object.entries(areaEls).forEach(([name, areaEl]) => {
-        if (areaEl.scrollHeight > areaEl.clientHeight + 4) {
-            console.warn(`[Layout] ⚠️ El área "${name}" desborda el folio A4. Forzando reajuste de volumen.`);
-
-            // Buscar todos los items que pertenecen a este área
-            const areaSections = items.filter(it => it.cfg.area === name);
-            areaSections.forEach(item => {
-                const { el, cfg } = item;
-                el.classList.add('mode-compact');
-
-                // Forzar el script de la sección a re-ejecutarse bajo presión
-                const scriptName = `section_${cfg.id.replace(/-/g, '_')}_script`;
-                if (window[scriptName] && typeof window[scriptName].onOverflow === 'function') {
-                    window[scriptName].onOverflow(el, cfg);
-                }
-            });
-        }
-    });
-
-    console.groupEnd();
-}
-
 function applyTheme(theme, layout) {
     const r = document.documentElement;
     if (theme.primaryColor) r.style.setProperty('--primary', theme.primaryColor);

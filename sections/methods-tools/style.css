@@ -1,10 +1,10 @@
-/* ── METHODS & TOOLS (Sidebar Tech-Grid) ── */
+/* Methods & Tools */
 
 :root {
-    --sidebar-pill-fz: 9.5px;
+    --sidebar-pill-fz: 9.3px;
     --sidebar-items-gap: 5px;
-    --sidebar-category-gap: 16px;
-    --sidebar-category-pad: 10px;
+    --sidebar-category-gap: 14px;
+    --sidebar-category-pad: 9px;
 }
 
 .sidebar-skills-list {
@@ -17,56 +17,52 @@
 }
 
 .sidebar-skill-category {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.035);
     padding: var(--sidebar-category-pad);
-    border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 7px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
 .sidebar-skill-title {
-    font-size: 8.5px;
-    font-weight: 800;
-    color: rgba(255, 255, 255, 0.4);
+    font-size: 8.2px;
+    font-weight: 760;
+    color: rgba(255, 255, 255, 0.56);
     text-transform: uppercase;
-    letter-spacing: 1.2px;
+    letter-spacing: 0.8px;
     margin-bottom: 4px;
     display: block;
-    text-align: center;
+    text-align: left;
 }
 
 .sidebar-skill-items {
     display: flex;
     flex-wrap: wrap;
     gap: var(--sidebar-items-gap);
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 .sidebar-skill-pill {
     font-size: var(--sidebar-pill-fz);
     font-weight: 600;
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.07);
+    color: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.08);
     padding: 3px 8px;
-    border-radius: 3px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.2s ease;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: background 0.2s ease;
     white-space: nowrap;
-    flex-grow: 1;
-    /* PERMITIR QUE RELLENEN EL ANCHO */
-    text-align: center;
-    min-width: fit-content;
+    text-align: left;
 }
 
 .sidebar-skill-pill:hover {
-    background: var(--accent);
-    border-color: var(--accent);
-    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: none;
 }
 
-/* Modo compacto base */
 .mode-compact-sidebar-skills {
     --sidebar-category-gap: 8px;
     --sidebar-category-pad: 6px;

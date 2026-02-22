@@ -4,7 +4,7 @@
  */
 
 function init(data, cfg, el) {
-    // Inicialización básica
+    setupOverflowController(el, cfg);
 }
 
 /**
@@ -80,18 +80,21 @@ function onOverflow(el, cfg) {
         update();
     }
 
+
     // 2. FASE DE EXPANSIÓN (Si sobra espacio en el sidebar)
-    // Queremos que las iniciativas no se queden todas apelotonadas arriba
+    // Solo ajustar el espaciado interno; NO cambiar el `flex` del section.
     safety = 0;
-    while (hasRoom() && gap < 25 && safety < 60) {
-        gap += 0.8;
-        padV += 0.2;
-        if (roleFz < 12) roleFz += 0.05;
+    const maxGap = 16; // limitar expansión para evitar ocupaciones excesivas
+    while (hasRoom() && gap < maxGap && safety < 60) {
+        gap += 0.6;
+        padV += 0.15;
+        if (roleFz < 11) roleFz += 0.04;
         update();
-        if (isOver()) {
-            gap -= 0.8;
-            padV -= 0.2;
-            roleFz -= 0.05;
+        // Si la expansión provoca overflow en el área, revertir y salir
+        if (isOver() || (parentArea && parentArea.scrollHeight > parentArea.clientHeight + 4)) {
+            gap -= 0.6;
+            padV -= 0.15;
+            if (roleFz > 7.8) roleFz -= 0.04;
             update();
             break;
         }
@@ -102,4 +105,49 @@ function onOverflow(el, cfg) {
     console.groupEnd();
 }
 
+function setupOverflowController(el, cfg) {
+    const parentArea = el.closest('.area-container');
+
+    if (el.__overflowController) {
+        if (el.__overflowController.ro) el.__overflowController.ro.disconnect();
+        window.removeEventListener('resize', el.__overflowController.onResize);
+    }
+
+    let timerId = null;
+    let isRunning = false;
+    let lastRunAt = 0;
+
+    const run = () => {
+        if (isRunning) return;
+        isRunning = true;
+        try {
+            onOverflow(el, cfg);
+            lastRunAt = Date.now();
+        } finally {
+            requestAnimationFrame(() => {
+                isRunning = false;
+            });
+        }
+    };
+
+    const schedule = () => {
+        const now = Date.now();
+        if (now - lastRunAt < 180) return;
+        clearTimeout(timerId);
+        timerId = setTimeout(run, 90);
+    };
+
+    const onResize = schedule;
+    window.addEventListener('resize', onResize);
+
+    let ro = null;
+    if (typeof ResizeObserver !== 'undefined') {
+        ro = new ResizeObserver(schedule);
+        ro.observe(el);
+        if (parentArea) ro.observe(parentArea);
+    }
+
+    el.__overflowController = { ro, onResize };
+    schedule();
+}
 return { init, onOverflow };

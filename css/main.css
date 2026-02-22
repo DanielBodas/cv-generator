@@ -16,10 +16,10 @@
     --a4-h: 297mm;
 
     --sidebar-w: 200px;
-    --sidebar-pad: 18px;
-    --main-pad: 22px;
-    --section-gap: 16px;
-    --page-v-pad: 30px;
+    --sidebar-pad: 20px;
+    --main-pad: 24px;
+    --section-gap: 18px;
+    --page-v-pad: 28px;
 }
 
 /* ============================================================
@@ -34,7 +34,7 @@
 }
 
 body {
-    background: #d4d8dd;
+    background: #cfd5dc;
     font-family: var(--font);
     color: var(--text);
     display: flex;
@@ -110,6 +110,15 @@ body {
 }
 
 .cv-section:first-child {
+    margin-top: 0;
+}
+
+/* En la columna principal damos mas aire entre bloques. */
+.area-main .cv-section {
+    margin-top: calc(var(--section-gap) + 6px);
+}
+
+.area-main .cv-section:first-child {
     margin-top: 0;
 }
 
@@ -300,19 +309,23 @@ body {
    TIPOGRAFÍA Y SKILL BARS
    ============================================================ */
 h2 {
-    font-size: 11px;
+    font-size: 10.6px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 1.35px;
     color: var(--primary);
-    margin-bottom: 8px;
-    padding-bottom: 4px;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
     border-bottom: 1px solid var(--accent);
+}
+
+.area-main h2 {
+    margin-bottom: 12px;
 }
 
 .area-sidebar h2 {
     color: #ffffff;
-    opacity: 0.6;
+    opacity: 0.74;
     font-size: 9.5px;
     border-bottom-color: rgba(255, 255, 255, 0.15);
 }
@@ -372,8 +385,8 @@ h2 {
     border: 1px dashed #cbd5e1;
     border-radius: 6px;
     margin-top: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    text-transform: none;
+    letter-spacing: 0.2px;
 }
 
 .overflow-indicator svg {

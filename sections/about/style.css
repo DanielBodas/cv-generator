@@ -1,9 +1,9 @@
-/* ── ABOUT ── */
+/* About */
 .about-text {
-    font-size: 10.5px;
-    line-height: 1.6;
-    color: #475569;
+    font-size: 9.8px;
+    line-height: 1.7;
+    color: #46566b;
     text-align: justify;
-    border-left: 3px solid var(--accent);
-    padding-left: 12px;
+    border-left: 2px solid rgba(69, 123, 157, 0.72);
+    padding-left: 11px;
 }

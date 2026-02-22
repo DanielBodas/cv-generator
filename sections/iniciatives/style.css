@@ -1,10 +1,10 @@
-/* ── INICIATIVES (Badge Grid Edition) ── */
+/* Iniciatives */
 
 :root {
-    --init-gap: 8px;
+    --init-gap: 9px;
     --init-padding: 8px 10px;
-    --init-role-fz: 10px;
-    --init-org-fz: 8.5px;
+    --init-role-fz: 9.8px;
+    --init-org-fz: 8.3px;
 }
 
 .iniciatives-grid {
@@ -16,17 +16,17 @@
 .iniciatives-card {
     display: flex;
     align-items: center;
-    gap: 10px;
-    background: rgba(255, 255, 255, 0.04);
+    gap: 9px;
+    background: rgba(255, 255, 255, 0.05);
     padding: var(--init-padding);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: all 0.2s ease;
+    border-radius: 7px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .iniciatives-card:hover {
     background: rgba(255, 255, 255, 0.08);
-    border-color: var(--accent);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .iniciatives-icon {
@@ -39,26 +39,24 @@
 
 .iniciatives-role {
     font-size: var(--init-role-fz);
-    font-weight: 800;
+    font-weight: 760;
     color: #ffffff;
-    line-height: 1.1;
-    margin-bottom: 2px;
+    line-height: 1.2;
+    margin-bottom: 1px;
 }
 
 .iniciatives-org {
     font-size: var(--init-org-fz);
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.45);
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
+    font-weight: 560;
+    color: rgba(255, 255, 255, 0.58);
+    text-transform: none;
+    letter-spacing: 0.1px;
 }
 
-/* Ocultamos descripción en este modo */
 .init-desc {
     display: none;
 }
 
-/* ──── MODO ULTRA-COMPACTO (Final Defense) ──── */
 .mode-ultra-compact-init .iniciatives-icon {
     width: 18px;
     height: 18px;

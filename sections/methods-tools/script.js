@@ -17,6 +17,8 @@ function init(data, cfg, el) {
             container.appendChild(pill);
         });
     });
+
+    setupOverflowController(el, cfg);
 }
 
 /**
@@ -49,15 +51,16 @@ function onOverflow(el, cfg) {
 
     // --- FASE 1: EXPANSIÓN VERTICAL Y HORIZONTAL ---
     let safety = 0;
-    while (hasRoom() && fz < 16 && safety < 100) {
-        fz += 0.1;
-        gapItems += 0.1;
-        gapCat += 0.6;
-        padCat += 0.3;
+    while (hasRoom() && fz < 14 && safety < 100) {
+        // Expandir solo internamente (no tocar flex de la sección)
+        fz += 0.08;
+        gapItems += 0.08;
+        gapCat += 0.4;
+        padCat += 0.25;
         update();
-        if (isOverflowing()) {
-            // Retroceder un poco más para margen de seguridad
-            fz -= 0.1; gapItems -= 0.1; gapCat -= 0.6; padCat -= 0.3;
+        if (isOverflowing() || (el.closest('.area-container') && el.closest('.area-container').scrollHeight > el.closest('.area-container').clientHeight + 4)) {
+            // Retroceder cambios si provocan overflow en la sección o en el área
+            fz -= 0.08; gapItems -= 0.08; gapCat -= 0.4; padCat -= 0.25;
             update();
             break;
         }
@@ -78,10 +81,10 @@ function onOverflow(el, cfg) {
     // --- FASE 3: EQUILIBRADO FINAL ---
     // Si aún queda aire, estiramos la lista para que las categorías respiren
     if (hasRoom()) {
-        list.style.height = '100%';
+        // No cambies el flex del `.cv-section`. Ajusta el contenido internamente.
+        list.style.maxHeight = `calc(${el.clientHeight}px - 10px)`;
         list.style.display = 'flex';
         list.style.flexDirection = 'column';
-        // Usamos space-around para un reparto más equilibrado que space-between
         list.style.justifyContent = 'space-around';
     } else {
         list.style.height = 'auto';
@@ -89,6 +92,52 @@ function onOverflow(el, cfg) {
     }
 
     console.log(`[Core Tech] Fill complete. FZ: ${fz.toFixed(1)}px, Safety: ${safety}`);
+}
+
+function setupOverflowController(el, cfg) {
+    const parentArea = el.closest('.area-container');
+
+    if (el.__overflowController) {
+        if (el.__overflowController.ro) el.__overflowController.ro.disconnect();
+        window.removeEventListener('resize', el.__overflowController.onResize);
+    }
+
+    let timerId = null;
+    let isRunning = false;
+    let lastRunAt = 0;
+
+    const run = () => {
+        if (isRunning) return;
+        isRunning = true;
+        try {
+            onOverflow(el, cfg);
+            lastRunAt = Date.now();
+        } finally {
+            requestAnimationFrame(() => {
+                isRunning = false;
+            });
+        }
+    };
+
+    const schedule = () => {
+        const now = Date.now();
+        if (now - lastRunAt < 180) return;
+        clearTimeout(timerId);
+        timerId = setTimeout(run, 90);
+    };
+
+    const onResize = schedule;
+    window.addEventListener('resize', onResize);
+
+    let ro = null;
+    if (typeof ResizeObserver !== 'undefined') {
+        ro = new ResizeObserver(schedule);
+        ro.observe(el);
+        if (parentArea) ro.observe(parentArea);
+    }
+
+    el.__overflowController = { ro, onResize };
+    schedule();
 }
 
 return { init, onOverflow };
