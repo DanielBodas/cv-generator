@@ -7,7 +7,8 @@
             <span class="lang-level">{{level}}</span>
         </div>
         <div class="skill-bar">
-            <div class="skill-fill lang-fill-{{pct}}"></div>
+            <!-- Usamos data-pct para evitar errores de linter en el style inline -->
+            <div class="skill-fill" data-pct="{{pct}}"></div>
         </div>
     </div>
     {{/languages}}

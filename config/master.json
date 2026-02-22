@@ -9,7 +9,7 @@
     },
     "layout": {
         "format": "A4",
-        "debugLayout": 1,
+        "debugLayout": 0,
         "columns": "200px 1fr",
         "gridAreas": [
             "sidebar main"
@@ -36,14 +36,15 @@
             "id": "methods-tools",
             "area": "sidebar",
             "mode": "visual",
-            "weight": 2,
+            "weight": 3,
             "hasScript": true
         },
         {
             "id": "languages",
             "area": "sidebar",
             "mode": "visual",
-            "weight": 1
+            "weight": 1,
+            "hasScript": true
         },
         {
             "id": "about",

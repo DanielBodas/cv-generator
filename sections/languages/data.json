@@ -1,18 +1,18 @@
 {
     "languages": [
         {
-            "name": "Español",
-            "level": "Nativo",
+            "name": "Spanish",
+            "level": "Native",
             "pct": 100
         },
         {
-            "name": "Inglés",
-            "level": "Profesional",
-            "pct": 85
+            "name": "English",
+            "level": "Professional Proficiency",
+            "pct": 90
         },
         {
-            "name": "Francés",
-            "level": "Básico",
+            "name": "French",
+            "level": "Elementary Proficiency",
             "pct": 40
         }
     ]

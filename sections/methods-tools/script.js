@@ -1,6 +1,6 @@
 /**
- * Lógica de Equilibrado Proactivo - METHODS & TOOLS
- * Esta versión fuerza el crecimiento hasta que el scrollHeight sea idéntico al clientHeight.
+ * Lógica de Equilibrado Proactivo Avanzada - CORE TECH & METHODS
+ * Busca el llenado perfecto tanto en horizontal como en vertical.
  */
 
 function init(data, cfg, el) {
@@ -20,7 +20,7 @@ function init(data, cfg, el) {
 }
 
 /**
- * onOverflow: Redimensiona el contenido para que coincida exactamente con el alto del contenedor.
+ * onOverflow: Maximiza el uso del espacio asignado.
  */
 function onOverflow(el, cfg) {
     const list = el.querySelector('.sidebar-skills-list');
@@ -28,7 +28,7 @@ function onOverflow(el, cfg) {
 
     // Detectores de estado (el = .cv-section que está estirada por flex-grow)
     const isOverflowing = () => el.scrollHeight > (el.clientHeight + 2);
-    const hasRoom = () => el.scrollHeight < (el.clientHeight - 5);
+    const hasRoom = () => el.scrollHeight < (el.clientHeight - 4);
 
     // Valores iniciales (Reset)
     let fz = 9.5;
@@ -44,29 +44,29 @@ function onOverflow(el, cfg) {
     };
 
     update();
-    list.style.height = 'auto'; // Asegurar que podemos medir el scrollHeight real
+    list.style.height = 'auto';
     list.style.justifyContent = 'flex-start';
 
-    // Aumentar progresivamente hasta llenar el hueco
+    // --- FASE 1: EXPANSIÓN VERTICAL Y HORIZONTAL ---
     let safety = 0;
-    while (hasRoom() && fz < 15 && safety < 80) {
+    while (hasRoom() && fz < 16 && safety < 100) {
         fz += 0.1;
         gapItems += 0.1;
-        gapCat += 0.5;
-        padCat += 0.2;
+        gapCat += 0.6;
+        padCat += 0.3;
         update();
         if (isOverflowing()) {
-            // Un paso atrás
-            fz -= 0.1; gapItems -= 0.1; gapCat -= 0.5; padCat -= 0.2;
+            // Retroceder un poco más para margen de seguridad
+            fz -= 0.1; gapItems -= 0.1; gapCat -= 0.6; padCat -= 0.3;
             update();
             break;
         }
         safety++;
     }
 
-    // Reducir si empezamos ya desbordados
+    // --- FASE 2: COMPRESIÓN (Si empezamos ya desbordados) ---
     safety = 0;
-    while (isOverflowing() && fz > 7 && safety < 80) {
+    while (isOverflowing() && fz > 7.5 && safety < 100) {
         fz -= 0.1;
         gapItems -= 0.1;
         gapCat -= 0.5;
@@ -75,16 +75,20 @@ function onOverflow(el, cfg) {
         safety++;
     }
 
-    // Ajuste final de distribución estética
-    // Si aún queda una brizna de espacio, forzamos el estirado final con flex
+    // --- FASE 3: EQUILIBRADO FINAL ---
+    // Si aún queda aire, estiramos la lista para que las categorías respiren
     if (hasRoom()) {
         list.style.height = '100%';
         list.style.display = 'flex';
         list.style.flexDirection = 'column';
-        list.style.justifyContent = 'space-between';
+        // Usamos space-around para un reparto más equilibrado que space-between
+        list.style.justifyContent = 'space-around';
+    } else {
+        list.style.height = 'auto';
+        list.style.justifyContent = 'flex-start';
     }
 
-    console.log(`[Methods & Tools] Redimensión proactiva completada. FZ: ${fz.toFixed(1)}px`);
+    console.log(`[Core Tech] Fill complete. FZ: ${fz.toFixed(1)}px, Safety: ${safety}`);
 }
 
 return { init, onOverflow };

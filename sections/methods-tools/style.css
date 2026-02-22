@@ -54,6 +54,10 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.2s ease;
     white-space: nowrap;
+    flex-grow: 1;
+    /* PERMITIR QUE RELLENEN EL ANCHO */
+    text-align: center;
+    min-width: fit-content;
 }
 
 .sidebar-skill-pill:hover {
