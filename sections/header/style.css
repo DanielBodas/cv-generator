@@ -1,0 +1,44 @@
+/* ── HEADER: Zona de nombre y contacto ── */
+
+.section-header {
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 0;
+}
+
+.header-name {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: -0.5px;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.header-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 16px;
+}
+
+.contact-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.contact-item svg {
+    color: var(--accent);
+    flex-shrink: 0;
+}

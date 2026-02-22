@@ -1,0 +1,19 @@
+{
+    "languages": [
+        {
+            "name": "Español",
+            "level": "Nativo",
+            "pct": 100
+        },
+        {
+            "name": "Inglés",
+            "level": "Profesional",
+            "pct": 85
+        },
+        {
+            "name": "Francés",
+            "level": "Básico",
+            "pct": 40
+        }
+    ]
+}

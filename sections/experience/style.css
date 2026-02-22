@@ -1,0 +1,113 @@
+/* ── PROFESSIONAL EXPERIENCE (Ultra Compact) ── */
+
+.experience-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    justify-content: flex-start;
+}
+
+.exp-item {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding-left: 10px;
+    border-left: 1.5px solid var(--border, #e2e8f0);
+    padding-bottom: 2px;
+}
+
+.exp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1px;
+}
+
+.exp-role {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--primary);
+    margin: 0;
+}
+
+.exp-dates {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.exp-company {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 4px;
+}
+
+.exp-desc {
+    font-size: 10px;
+    color: #475569;
+    line-height: 1.5;
+    margin-bottom: 6px;
+    text-align: justify;
+}
+
+/* ── PILL TAGS ── */
+.exp-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.exp-tag-pill {
+    font-size: 8.5px;
+    font-weight: 700;
+    color: var(--primary);
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid #e2e8f0;
+    text-transform: uppercase;
+}
+
+/* ──── MODO LIGHT/MINIMIZED (Formato profesional reducido) ──── */
+
+.is-minimized {
+    background: #f8fafc;
+    border-left: 3px solid var(--accent);
+    /* Línea más gruesa y clara */
+    padding: 6px 10px;
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 2px;
+}
+
+.is-minimized .exp-header {
+    margin-bottom: 0;
+}
+
+.is-minimized .exp-role {
+    font-size: 11px;
+    /* Un poco más pequeño pero legible */
+}
+
+.is-minimized .exp-company {
+    font-size: 10px;
+    margin-bottom: 0;
+    opacity: 0.8;
+}
+
+.is-minimized .exp-desc,
+.is-minimized .exp-tags-container {
+    display: none;
+    /* Ocultamos el detalle */
+}
+
+/* ──── MODO COMPACTO GLOBAL ──── */
+.mode-compact .experience-list {
+    gap: 8px;
+}
+
+.mode-compact .exp-item:not(.is-minimized) {
+    padding-bottom: 4px;
+}

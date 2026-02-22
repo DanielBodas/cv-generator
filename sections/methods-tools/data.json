@@ -1,0 +1,33 @@
+{
+    "skills": [
+        {
+            "category": "Agile & Management",
+            "items": [
+                "Agile",
+                "SAFe",
+                "LBIP+",
+                "Kanban",
+                "Product Owner",
+                "Scrum of Scrums",
+                "Lean Management",
+                "Change Management"
+            ]
+        },
+        {
+            "category": "Tech & Digital Stack",
+            "items": [
+                "SQL",
+                "Bash",
+                "Jira",
+                "Python",
+                "G-Suite",
+                "DevOps",
+                "Data Viz",
+                "Analytics",
+                "Apps Script",
+                "Confluence",
+                "Digital Transformation"
+            ]
+        }
+    ]
+}

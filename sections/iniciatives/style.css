@@ -1,0 +1,63 @@
+/* ── INICIATIVES (Badge Grid Edition) ── */
+
+.iniciatives-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    /* Una columna para el sidebar */
+    gap: 8px;
+}
+
+.iniciatives-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.2s ease;
+}
+
+.iniciatives-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent);
+}
+
+.iniciatives-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    color: var(--accent);
+    opacity: 0.8;
+}
+
+.iniciatives-role {
+    font-size: 10px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.1;
+    margin-bottom: 2px;
+}
+
+.iniciatives-org {
+    font-size: 8.5px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* Ocultamos descripción en este modo (ya no es necesaria) */
+.init-desc {
+    display: none;
+}
+
+/* ──── ADAPTACIÓN DE ESPACIO ──── */
+.mode-compact-init .iniciatives-grid {
+    grid-template-columns: 1fr;
+    gap: 4px;
+}
+
+.mode-compact-init .iniciatives-card {
+    padding: 5px 8px;
+}

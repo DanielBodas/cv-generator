@@ -1,0 +1,14 @@
+<h2>Languages</h2>
+<div class="lang-list">
+    {{#languages}}
+    <div class="lang-item">
+        <div class="lang-row">
+            <span class="lang-name">{{name}}</span>
+            <span class="lang-level">{{level}}</span>
+        </div>
+        <div class="skill-bar">
+            <div class="skill-fill lang-fill-{{pct}}"></div>
+        </div>
+    </div>
+    {{/languages}}
+</div>

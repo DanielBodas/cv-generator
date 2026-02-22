@@ -1,0 +1,56 @@
+/* ── EXECUTIVE HIGHLIGHTS (Compact Cards) ── */
+
+:root {
+    --card-label-fz: 9px;
+    --card-text-fz: 8.5px;
+    --card-padding: 10px 8px;
+    --grid-gap: 10px;
+}
+
+.highlights-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--grid-gap);
+    margin-top: 6px;
+}
+
+.highlight-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-top: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: var(--card-padding);
+    display: flex;
+    flex-direction: column;
+    min-height: 60px;
+    /* Reducido para mayor flexibilidad */
+    transition: transform 0.2s ease;
+}
+
+.card-label {
+    font-size: var(--card-label-fz);
+    font-weight: 800;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    text-align: center;
+}
+
+.card-text {
+    font-size: var(--card-text-fz);
+    color: #475569;
+    line-height: 1.4;
+    margin: 0;
+    text-align: center;
+}
+
+/* ──── MODO ULTRA COMPACTO ──── */
+.mode-ultra-compact .highlight-card {
+    min-height: auto;
+    padding: 4px;
+}
+
+.mode-ultra-compact .card-label {
+    margin-bottom: 2px;
+}

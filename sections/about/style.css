@@ -1,0 +1,9 @@
+/* ── ABOUT ── */
+.about-text {
+    font-size: 10.5px;
+    line-height: 1.6;
+    color: #475569;
+    text-align: justify;
+    border-left: 3px solid var(--accent);
+    padding-left: 12px;
+}

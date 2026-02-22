@@ -1,0 +1,46 @@
+{
+    "experience": [
+        {
+            "role": "Product Owner – Digital Aircraft Mock-Up",
+            "company": "AIRBUS DS",
+            "dates": "2024 – Present",
+            "description": "Own the product vision and roadmap of a full-scale Digital Aircraft Mock-Up, enabling cross-functional collaboration across engineering, manufacturing and support domains. Prioritize and manage the product backlog to align business objectives, technical constraints and stakeholder expectations. Drive Agile delivery across multidisciplinary teams, ensuring incremental value generation and system interoperability within the aircraft digital ecosystem.",
+            "tags": "Product Strategy, Digital Twin, Agile, Stakeholder Management, System Integration"
+        },
+        {
+            "role": "Transformation Leader & Innovation Manager",
+            "company": "AIRBUS DS",
+            "dates": "2022 – 2024",
+            "description": "Led cross-functional digitalization and immersive technology projects from conception to deployment. Facilitated Agile workflows and implemented SAFe methodologies across multiple teams, significantly improving project delivery times. Drove a culture of continuous improvement utilizing the LBIP+ methodology to optimize internal processes.",
+            "tags": "Agile, SAFe, LBIP+, Innovation, Leadership"
+        },
+        {
+            "role": "MRTT Data Engineer (Acting as Product Owner)",
+            "company": "AIRBUS DS",
+            "dates": "2021 – 2022",
+            "description": "Acted as the bridge between technical data teams and business stakeholders, defining the product vision for data analytics solutions. Spearheaded the automation of data pipelines, reducing manual reporting time. Leveraged data science methodologies to provide actionable insights for decision-making.",
+            "tags": "Product Owner, Data Analytics, Python, Stakeholder Management"
+        },
+        {
+            "role": "Structural Service Engineer",
+            "company": "AIRBUS DS",
+            "dates": "2018 – 2021",
+            "description": "Coordinated customer-centric engineering solutions for complex in-service repairs and fleet issues. Managed the end-to-end lifecycle of technical investigations, leading problem-solving initiatives under tight deadlines and demonstrating strong crisis management.",
+            "tags": "Crisis Management, Problem-Solving, Aviation Safety, Customer Focus"
+        },
+        {
+            "role": "MSG3 Structure Engineer",
+            "company": "AIRBUS DS",
+            "dates": "2016 – 2018",
+            "description": "Analyzed and optimized aircraft maintenance programs, balancing safety requirements with cost-efficiency for airline operators. Collaborated in multidisciplinary environments to review structural data and propose preventive maintenance improvements.",
+            "tags": "Cost-Efficiency, Multidisciplinary Teams, Preventive Maintenance"
+        },
+        {
+            "role": "R&D Structural Engineer",
+            "company": "AERNNOVA",
+            "dates": "2015 – 2016",
+            "description": "Contributed to research and development projects, focusing on structural innovation and the application of new materials in aerospace design.",
+            "tags": "R&D, Innovation, Aerospace Design"
+        }
+    ]
+}

@@ -1,0 +1,79 @@
+{
+    "theme": {
+        "primaryColor": "#1d3557",
+        "secondaryColor": "#457b9d",
+        "sidebarColor": "#1d3557",
+        "textColor": "#1e293b",
+        "backgroundColor": "#ffffff",
+        "fontFamily": "'Inter', 'Segoe UI', sans-serif"
+    },
+    "layout": {
+        "format": "A4",
+        "debugLayout": 1,
+        "columns": "200px 1fr",
+        "gridAreas": [
+            "sidebar main"
+        ],
+        "gap": "0px",
+        "sectionGap": "16px",
+        "padding": "0mm"
+    },
+    "sections": [
+        {
+            "id": "profile",
+            "area": "sidebar",
+            "mode": "detailed",
+            "weight": 0
+        },
+        {
+            "id": "iniciatives",
+            "area": "sidebar",
+            "mode": "visual",
+            "weight": 2,
+            "hasScript": true
+        },
+        {
+            "id": "methods-tools",
+            "area": "sidebar",
+            "mode": "visual",
+            "weight": 2,
+            "hasScript": true
+        },
+        {
+            "id": "languages",
+            "area": "sidebar",
+            "mode": "visual",
+            "weight": 1
+        },
+        {
+            "id": "about",
+            "area": "main",
+            "mode": "detailed",
+            "weight": true,
+            "hasScript": true
+        },
+        {
+            "id": "executive-highlights",
+            "area": "main",
+            "mode": "detailed",
+            "weight": 1,
+            "hasScript": true
+        },
+        {
+            "id": "experience",
+            "area": "main",
+            "mode": "detailed",
+            "maxItems": 5,
+            "overflowStrategy": "indicator",
+            "weight": 6,
+            "hasScript": true
+        },
+        {
+            "id": "education",
+            "area": "main",
+            "mode": "detailed",
+            "weight": 3,
+            "hasScript": true
+        }
+    ]
+}

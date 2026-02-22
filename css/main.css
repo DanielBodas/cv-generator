@@ -1,0 +1,422 @@
+/* ============================================================
+   VARIABLES GLOBALES  (sobreescritas por JS desde master.json)
+   ============================================================ */
+:root {
+    --primary: #1d3557;
+    --accent: #457b9d;
+    --sidebar-bg: #1d3557;
+    --sidebar-text: #e8f1f8;
+    --main-bg: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --font: 'Inter', system-ui, sans-serif;
+
+    --a4-w: 210mm;
+    --a4-h: 297mm;
+
+    --sidebar-w: 200px;
+    --sidebar-pad: 18px;
+    --main-pad: 22px;
+    --section-gap: 16px;
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #d4d8dd;
+    font-family: var(--font);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 0 100px;
+    min-height: 100vh;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* ============================================================
+   BOTÓN PDF
+   ============================================================ */
+.print-fab {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 9999;
+}
+
+.print-fab button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 11px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 18px rgba(29, 53, 87, 0.40);
+    transition: transform 0.2s;
+}
+
+.print-fab button:hover {
+    transform: translateY(-3px);
+}
+
+/* ============================================================
+   HOJA A4
+   ============================================================ */
+.page-a4 {
+    width: var(--a4-w);
+    height: var(--a4-h);
+    background: var(--main-bg);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    display: grid;
+    overflow: hidden;
+    position: relative;
+}
+
+.area-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* Secciones agrupadas al principio */
+    overflow: hidden;
+    height: 100%;
+}
+
+.cv-section {
+    min-height: 0;
+    flex-shrink: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    margin-top: 14px;
+    /* Separación elegante y controlada */
+}
+
+.cv-section:first-child {
+    margin-top: 0;
+}
+
+.area-sidebar {
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    padding: 28px var(--sidebar-pad);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* Sidebar más compacto */
+    height: var(--a4-h);
+}
+
+.area-main {
+    background: var(--main-bg);
+    padding: 34px var(--main-pad);
+    /* Un poco más de aire arriba/abajo */
+    overflow: hidden;
+    height: 100%;
+}
+
+/* ============================================================
+   MODOS DE DEBUG (0: Off, 1: Low, 2: High)
+   ============================================================ */
+
+/* Común */
+[class*="debug-level-"] .area-container,
+[class*="debug-level-"] .cv-section {
+    position: relative;
+}
+
+[class*="debug-level-"] .debug-section-tag {
+    position: absolute;
+    z-index: 1000;
+    font-family: monospace;
+    pointer-events: none;
+}
+
+/* NIVEL 1: Subtle (Info útil sin tapar todo) */
+.debug-level-1 .area-container {
+    outline: 2px dashed #ff4444;
+}
+
+.debug-level-1 .area-container:not(.area-sidebar) {
+    background: rgba(255, 0, 0, 0.02);
+}
+
+.debug-level-1 .area-container::after {
+    content: "ZONA: " attr(data-area);
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    font-size: 8px;
+    font-weight: 800;
+    color: white;
+    background: #ff4444;
+    padding: 1px 5px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    z-index: 1000;
+}
+
+.debug-level-1 .cv-section {
+    outline: 1.5px dashed rgba(255, 68, 68, 0.5);
+}
+
+.debug-level-1 .debug-section-tag {
+    top: 0px;
+    right: 0px;
+    font-size: 7px;
+    font-weight: 800;
+    color: white;
+    background: #ff4444;
+    padding: 2px 7px;
+    border-bottom-left-radius: 4px;
+    white-space: nowrap;
+}
+
+/* NIVEL 2: MODO X-RAY (Diagnóstico Profundo) */
+.debug-level-2 {
+    background: #000 !important;
+    /* Resaltar la hoja blanca */
+}
+
+/* Visualizar Margen del Folio PDF */
+.debug-level-2.page-a4::before {
+    content: "PDF PADDING / MARGINS";
+    position: absolute;
+    inset: 0;
+    border: 15px solid rgba(255, 0, 255, 0.1);
+    pointer-events: none;
+    z-index: 9999;
+    font-size: 8px;
+    color: #ff00ff;
+    text-align: right;
+}
+
+/* Diferenciar Áreas por Color */
+.debug-level-2 .area-sidebar {
+    outline: 2px dashed #6366f1;
+    /* Indigo */
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.debug-level-2 .area-sidebar::after {
+    color: #6366f1;
+}
+
+.debug-level-2 .area-main {
+    outline: 2px dashed #10b981;
+    /* Emerald */
+    background: rgba(16, 185, 129, 0.05);
+}
+
+.debug-level-2 .area-main::after {
+    color: #10b981;
+}
+
+.debug-level-2 .area-container::after {
+    content: "AREA: " attr(data-area);
+    position: absolute;
+    bottom: -14px;
+    left: 4px;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+/* Secciones y Gaps */
+.debug-level-2 .cv-section {
+    outline: 1px solid #00ffff;
+    background: rgba(0, 255, 255, 0.03);
+    overflow: visible !important;
+}
+
+.debug-level-2 .cv-section::after {
+    content: "GAP: " var(--section-gap);
+    position: absolute;
+    top: calc(var(--section-gap) * -1);
+    left: -10px;
+    height: var(--section-gap);
+    border-left: 2px solid #ff5500;
+    color: #ff5500;
+    font-size: 7px;
+    display: flex;
+    align-items: center;
+    padding-left: 4px;
+}
+
+/* Cabecera vs Contenido */
+.debug-level-2 .cv-section h2 {
+    background: rgba(0, 255, 255, 0.2) !important;
+    outline: 1px dashed #00ffff !important;
+}
+
+.debug-level-2 .cv-section h2::before {
+    content: "HEADER";
+    position: absolute;
+    left: -45px;
+    font-size: 7px;
+    color: rgba(0, 255, 255, 0.6);
+}
+
+.debug-level-2 .cv-section>*:not(h2):not(.debug-section-tag) {
+    visibility: hidden;
+    /* Oculta contenido pero mantiene volumen */
+    background: rgba(255, 255, 0, 0.02);
+    outline: 1px dotted rgba(255, 255, 0, 0.2);
+}
+
+/* Overlay Técnico */
+.debug-level-2 .debug-section-tag {
+    top: -12px;
+    right: 0;
+    background: #00ffff;
+    color: #000;
+    font-size: 8px;
+    padding: 1px 4px;
+    border-radius: 2px;
+}
+
+/* Resaltar Overflow en Naranja */
+.debug-level-2 .cv-section.is-overflowing {
+    outline: 4px solid #ff5500 !important;
+    background: rgba(255, 85, 0, 0.1) !important;
+}
+
+/* ============================================================
+   TIPOGRAFÍA Y SKILL BARS
+   ============================================================ */
+h2 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--primary);
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--accent);
+}
+
+.area-sidebar h2 {
+    color: #ffffff;
+    opacity: 0.6;
+    font-size: 9.5px;
+    border-bottom-color: rgba(255, 255, 255, 0.15);
+}
+
+.skill-bar {
+    height: 3px;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+}
+
+.skill-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.70);
+}
+
+.skills-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.skill-item {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.skill-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.skill-name {
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.88);
+}
+
+.skill-pct {
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.38);
+}
+
+.overflow-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 8.5px;
+    font-weight: 600;
+    color: var(--accent);
+    background: #f1f5f9;
+    padding: 8px 12px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 6px;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.overflow-indicator svg {
+    opacity: 0.7;
+    color: var(--accent);
+}
+
+/* IMPRESIÓN */
+@page {
+    size: A4 portrait;
+    margin: 0;
+}
+
+@media print {
+
+    html,
+    body {
+        width: 210mm;
+        height: 297mm;
+        background: white;
+        margin: 0;
+        padding: 0;
+    }
+
+    .hide-on-print,
+    .debug-section-tag,
+    [class*="debug-level-"]::after,
+    .cv-section.is-overflowing::before {
+        display: none !important;
+    }
+
+    .page-a4 {
+        width: 210mm !important;
+        height: 297mm !important;
+        box-shadow: none !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .area-container,
+    .cv-section {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+}
