@@ -3,22 +3,22 @@
         {
             "role": "Management Team Member",
             "organization": "AI & Data Analytics Community (Spain)",
-            "description": "Fomento del intercambio de conocimientos y mejores prácticas para impulsar una cultura basada en datos en toda la organización."
+            "description": "Fostering knowledge exchange and best practices to drive a data-driven culture across the organization."
         },
         {
             "role": "Airbus Ambassador",
             "organization": "Airbassador Programme",
-            "description": "Promoción activa de la cultura corporativa, la innovación y los valores de la marca a nivel interno y externo."
+            "description": "Actively promoting corporate culture, innovation, and brand values internally and externally."
         },
         {
             "role": "Active Participant",
             "organization": "Toastmasters Sessions",
-            "description": "Desarrollo continuo de habilidades avanzadas de hablar en público, comunicación efectiva y liderazgo."
+            "description": "Continuous development of advanced public speaking, effective communication, and leadership skills."
         },
         {
             "role": "Data Scientific Research",
             "organization": "Service Analytics Plateau (SeAP)",
-            "description": "Colaboración en proyectos de investigación aplicada e innovación en Big Data."
+            "description": "Collaborating on applied research projects and innovation in Big Data."
         }
     ]
 }

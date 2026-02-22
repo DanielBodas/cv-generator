@@ -17,6 +17,7 @@
     <div class="profile-divider"></div>
 
     <div class="profile-contacts">
+        {{#if email}}
         <a class="contact-line" href="mailto:{{email}}">
             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2">
@@ -25,6 +26,9 @@
             </svg>
             <span>{{email}}</span>
         </a>
+        {{/if}}
+
+        {{#if phone}}
         <div class="contact-line">
             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2">
@@ -34,6 +38,9 @@
             </svg>
             <span>{{phone}}</span>
         </div>
+        {{/if}}
+
+        {{#if location}}
         <div class="contact-line">
             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2">
@@ -42,6 +49,9 @@
             </svg>
             <span>{{location}}</span>
         </div>
+        {{/if}}
+
+        {{#if linkedin}}
         <div class="contact-line">
             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2">
@@ -51,6 +61,9 @@
             </svg>
             <span>{{linkedin}}</span>
         </div>
+        {{/if}}
+
+        {{#if github}}
         <div class="contact-line">
             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2">
@@ -60,5 +73,6 @@
             </svg>
             <span>{{github}}</span>
         </div>
+        {{/if}}
     </div>
 </div>

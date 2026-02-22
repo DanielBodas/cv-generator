@@ -19,6 +19,7 @@
     --sidebar-pad: 18px;
     --main-pad: 22px;
     --section-gap: 16px;
+    --page-v-pad: 30px;
 }
 
 /* ============================================================
@@ -104,7 +105,7 @@ body {
     flex-direction: column;
     overflow: hidden;
     position: relative;
-    margin-top: 14px;
+    margin-top: var(--section-gap);
     /* Separación elegante y controlada */
 }
 
@@ -115,18 +116,16 @@ body {
 .area-sidebar {
     background: var(--sidebar-bg);
     color: var(--sidebar-text);
-    padding: 28px var(--sidebar-pad);
+    padding: var(--page-v-pad) var(--sidebar-pad);
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    /* Sidebar más compacto */
+    /* Eliminamos gap para usar margin-top uniforme de las secciones */
     height: var(--a4-h);
 }
 
 .area-main {
     background: var(--main-bg);
-    padding: 34px var(--main-pad);
-    /* Un poco más de aire arriba/abajo */
+    padding: var(--page-v-pad) var(--main-pad);
     overflow: hidden;
     height: 100%;
 }

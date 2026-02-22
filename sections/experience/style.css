@@ -1,9 +1,103 @@
-/* ── PROFESSIONAL EXPERIENCE (Ultra Compact) ── */
+/* ── PROFESSIONAL JOURNEY (Horizontal Timeline) ── */
+
+:root {
+    --exp-gap: 18px;
+    --exp-role-fz: 13px;
+    --exp-desc-line-height: 1.5;
+    --exp-item-pad-bottom: 2px;
+}
+
+.experience-journey {
+    position: relative;
+    height: 35px;
+    margin-bottom: 20px;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.experience-journey::before {
+    content: "";
+    position: absolute;
+    left: 15px;
+    right: 15px;
+    height: 1px;
+    background: linear-gradient(90deg, #e2e8f0 0%, var(--accent) 50%, #e2e8f0 100%);
+    opacity: 0.6;
+}
+
+.experience-journey .journey-point {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #cbd5e1;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    border: 1px solid white;
+    z-index: 2;
+    transition: all 0.3s ease;
+}
+
+.experience-journey .journey-point.active {
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    width: 8px;
+    height: 8px;
+    animation: journeyPulse 2s infinite;
+}
+
+@keyframes journeyPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(69, 123, 157, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 6px rgba(69, 123, 157, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(69, 123, 157, 0);
+    }
+}
+
+.experience-journey .journey-year {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 7.5px;
+    font-weight: 800;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
+
+.experience-journey .journey-role {
+    position: absolute;
+    bottom: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 6.5px;
+    color: var(--primary);
+    white-space: nowrap;
+    opacity: 0.5;
+    font-weight: 600;
+}
+
+/* Ocultar en modo muy compacto si es necesario */
+.mode-compact .experience-journey {
+    height: 25px;
+    margin-bottom: 12px;
+}
+
+.mode-compact .journey-role {
+    display: none;
+}
 
 .experience-list {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: var(--exp-gap);
     justify-content: flex-start;
 }
 
@@ -13,7 +107,7 @@
     position: relative;
     padding-left: 10px;
     border-left: 1.5px solid var(--border, #e2e8f0);
-    padding-bottom: 2px;
+    padding-bottom: var(--exp-item-pad-bottom);
 }
 
 .exp-header {
@@ -24,7 +118,7 @@
 }
 
 .exp-role {
-    font-size: 13px;
+    font-size: var(--exp-role-fz);
     font-weight: 800;
     color: var(--primary);
     margin: 0;
@@ -48,7 +142,7 @@
 .exp-desc {
     font-size: 10px;
     color: #475569;
-    line-height: 1.5;
+    line-height: var(--exp-desc-line-height);
     margin-bottom: 6px;
     text-align: justify;
 }

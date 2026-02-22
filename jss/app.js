@@ -104,12 +104,23 @@ function handleLayoutCorrections(items, areaEls) {
         }
     });
 
-    // 2. Seguridad Global: Si el área entera desborda el folio, forzar compresión
+    // 2. Seguridad Global: Si el área entera desborda el folio, forzar compresión y reajuste
     Object.entries(areaEls).forEach(([name, areaEl]) => {
-        // areaEl.clientHeight es el alto real del contenedor en el folio
         if (areaEl.scrollHeight > areaEl.clientHeight + 4) {
-            console.warn(`[Layout] ⚠️ El área "${name}" desborda el folio A4.`);
-            areaEl.querySelectorAll('.cv-section').forEach(s => s.classList.add('mode-compact'));
+            console.warn(`[Layout] ⚠️ El área "${name}" desborda el folio A4. Forzando reajuste de volumen.`);
+
+            // Buscar todos los items que pertenecen a este área
+            const areaSections = items.filter(it => it.cfg.area === name);
+            areaSections.forEach(item => {
+                const { el, cfg } = item;
+                el.classList.add('mode-compact');
+
+                // Forzar el script de la sección a re-ejecutarse bajo presión
+                const scriptName = `section_${cfg.id.replace(/-/g, '_')}_script`;
+                if (window[scriptName] && typeof window[scriptName].onOverflow === 'function') {
+                    window[scriptName].onOverflow(el, cfg);
+                }
+            });
         }
     });
 
@@ -144,6 +155,11 @@ async function renderSection(cfg, container) {
         let tpl = await htmlRes.text();
         const data = await dataRes.json();
         injectStyles(cfg.id, path);
+
+        // Soporte básico para condicionales {{#if key}} ... {{/if}}
+        tpl = tpl.replace(/{{\s*#if\s+(\w+)\s*}}([\s\S]*?){{\s*\/if\s*}}/g, (_, key, sub) => {
+            return data[key] ? sub : '';
+        });
 
         // Procesar bucles y variables (Misma lógica anterior)
         tpl = tpl.replace(/{{#(\w+)}}([\s\S]*?){{\/\1}}/g, (_, key, sub) => {
@@ -191,8 +207,8 @@ async function renderSection(cfg, container) {
         el.innerHTML = tpl;
         container.appendChild(el);
 
-        // Intentar cargar script.js si tiene la marca o es una sección estándar
-        if (cfg.hasScript !== false) {
+        // Solo intentar cargar script.js si está marcado explícitamente
+        if (cfg.hasScript === true) {
             await loadSectionScript(cfg.id, path, data, cfg, el);
         }
         return el;

@@ -1,10 +1,16 @@
 /* ── INICIATIVES (Badge Grid Edition) ── */
 
+:root {
+    --init-gap: 8px;
+    --init-padding: 8px 10px;
+    --init-role-fz: 10px;
+    --init-org-fz: 8.5px;
+}
+
 .iniciatives-grid {
     display: grid;
     grid-template-columns: 1fr;
-    /* Una columna para el sidebar */
-    gap: 8px;
+    gap: var(--init-gap);
 }
 
 .iniciatives-card {
@@ -12,7 +18,7 @@
     align-items: center;
     gap: 10px;
     background: rgba(255, 255, 255, 0.04);
-    padding: 8px 10px;
+    padding: var(--init-padding);
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     transition: all 0.2s ease;
@@ -24,15 +30,15 @@
 }
 
 .iniciatives-icon {
-    width: 24px;
-    height: 24px;
+    width: var(--init-icon-size, 24px);
+    height: var(--init-icon-size, 24px);
     flex-shrink: 0;
     color: var(--accent);
     opacity: 0.8;
 }
 
 .iniciatives-role {
-    font-size: 10px;
+    font-size: var(--init-role-fz);
     font-weight: 800;
     color: #ffffff;
     line-height: 1.1;
@@ -40,24 +46,25 @@
 }
 
 .iniciatives-org {
-    font-size: 8.5px;
+    font-size: var(--init-org-fz);
     font-weight: 600;
     color: rgba(255, 255, 255, 0.45);
     text-transform: uppercase;
     letter-spacing: 0.3px;
 }
 
-/* Ocultamos descripción en este modo (ya no es necesaria) */
+/* Ocultamos descripción en este modo */
 .init-desc {
     display: none;
 }
 
-/* ──── ADAPTACIÓN DE ESPACIO ──── */
-.mode-compact-init .iniciatives-grid {
-    grid-template-columns: 1fr;
-    gap: 4px;
+/* ──── MODO ULTRA-COMPACTO (Final Defense) ──── */
+.mode-ultra-compact-init .iniciatives-icon {
+    width: 18px;
+    height: 18px;
 }
 
-.mode-compact-init .iniciatives-card {
-    padding: 5px 8px;
+.mode-ultra-compact-init .iniciatives-card {
+    gap: 6px;
+    border-radius: 4px;
 }

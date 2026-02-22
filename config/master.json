@@ -66,6 +66,7 @@
             "mode": "detailed",
             "maxItems": 5,
             "overflowStrategy": "indicator",
+            "showJourney": false,
             "weight": 6,
             "hasScript": true
         },
