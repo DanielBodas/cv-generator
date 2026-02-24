@@ -5,8 +5,11 @@
     --exp-role-fz: 12.2px;
     --exp-desc-line-height: 1.56;
     --exp-item-pad-bottom: 2px;
+    /* Gap específico entre items minimizados — muy ajustado */
+    --exp-mini-gap: 4px;
 }
 
+/* ── Journey timeline ── */
 .experience-journey {
     position: relative;
     height: 32px;
@@ -48,9 +51,9 @@
 }
 
 @keyframes journeyPulse {
-    0% { box-shadow: 0 0 0 0 rgba(69, 123, 157, 0.4); }
-    70% { box-shadow: 0 0 0 6px rgba(69, 123, 157, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(69, 123, 157, 0); }
+    0%   { box-shadow: 0 0 0 0   rgba(69, 123, 157, 0.4); }
+    70%  { box-shadow: 0 0 0 6px rgba(69, 123, 157, 0);   }
+    100% { box-shadow: 0 0 0 0   rgba(69, 123, 157, 0);   }
 }
 
 .experience-journey .journey-year {
@@ -80,11 +83,9 @@
     height: 24px;
     margin-bottom: 10px;
 }
+.mode-compact .journey-role { display: none; }
 
-.mode-compact .journey-role {
-    display: none;
-}
-
+/* ── Lista principal ── */
 .experience-list {
     display: flex;
     flex-direction: column;
@@ -92,6 +93,7 @@
     justify-content: flex-start;
 }
 
+/* ── Item detallado (normal) ── */
 .exp-item {
     display: flex;
     flex-direction: column;
@@ -119,8 +121,8 @@
     font-size: 8.3px;
     font-weight: 650;
     color: var(--text-muted);
-    text-transform: none;
     letter-spacing: 0.05px;
+    white-space: nowrap;
 }
 
 .exp-company {
@@ -152,38 +154,108 @@
     padding: 2px 6px;
     border-radius: 3px;
     border: 1px solid #e2e8f0;
-    text-transform: none;
 }
 
+/* ── Mini-row: oculta por defecto, solo visible en .is-minimized ── */
+.exp-mini-row        { display: none; }
+.exp-dates-mini      { display: none; }
+
+/* ── Item MINIMIZADO: fila única ultra-compacta ── */
+/*
+   Diseño: [● Role  ·  Company]               [dates]
+   Sin descripción, sin tags, sin padding vertical.
+*/
 .is-minimized {
-    background: #f8fafc;
+    /* Fila horizontal en lugar de columna */
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+
+    /* Borde izquierdo fino con color accent */
     border-left: 2px solid var(--accent);
-    padding: 5px 10px;
-    border-radius: 0 4px 4px 0;
-    margin-bottom: 2px;
+    padding-left: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-right: 4px;
+
+    /* Fondo levemente diferenciado */
+    background: #f8fafc;
+    border-radius: 0 3px 3px 0;
 }
 
-.is-minimized .exp-header {
-    margin-bottom: 0;
+/* Metadatos agrupados a la izquierda */
+.is-minimized .exp-mini-row {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    min-width: 0;
+    overflow: hidden;
 }
 
+/* Role en minimizado */
 .is-minimized .exp-role {
-    font-size: 10.8px;
+    font-size: 9.6px;
+    font-weight: 700;
+    color: var(--primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 210px;
 }
 
-.is-minimized .exp-company {
-    font-size: 10px;
+/* Separador · entre role y company */
+.is-minimized .exp-role::after {
+    content: ' ·';
+    color: #94a3b8;
+    font-weight: 400;
+}
+
+/* Ocultar estructura normal en minimizado */
+.is-minimized .exp-header          { display: none; }
+.is-minimized .exp-company         { display: none; }
+.is-minimized .exp-desc            { display: none; }
+.is-minimized .exp-tags-container  { display: none; }
+
+/* Mostrar la mini-row en minimizado */
+.is-minimized .exp-mini-row        { display: flex; }
+
+/* Company dentro de la mini-row: visible */
+.is-minimized .exp-mini-row .exp-company {
+    display: block;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
     margin-bottom: 0;
-    opacity: 0.8;
+    opacity: 0.85;
 }
 
-.is-minimized .exp-desc,
-.is-minimized .exp-tags-container {
-    display: none;
+/* Dates a la derecha en minimizado */
+.is-minimized .exp-dates-mini {
+    display: block;
+    font-size: 7.8px;
+    font-weight: 650;
+    color: var(--text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
-.mode-compact .experience-list {
-    gap: 12px;
+/* ── Gap reducido entre minimizados consecutivos ── */
+/*
+   Cuando dos .is-minimized van seguidos, el gap normal se ve enorme.
+   Usamos el selector de hermano adyacente para reducirlo.
+*/
+.exp-item.is-minimized + .exp-item.is-minimized {
+    margin-top: calc(var(--exp-mini-gap) - var(--exp-gap));
+    /* Anula el gap del flex con margen negativo + mini-gap */
+}
+
+/* ── Modo compact ── */
+.mode-compact .experience-list { gap: 12px; }
+
+.mode-compact .exp-item.is-minimized + .exp-item.is-minimized {
+    margin-top: calc(var(--exp-mini-gap) - 12px);
 }
 
 .mode-compact .exp-item:not(.is-minimized) {

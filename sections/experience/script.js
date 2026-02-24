@@ -1,5 +1,6 @@
 /**
- * Experience overflow: prioriza aire entre puestos y compacta desde abajo.
+ * Experience overflow: prioriza aire entre puestos importantes
+ * y colapsa los secundarios en filas ultra-compactas de una línea.
  */
 
 function init(data, cfg, el) {
@@ -36,11 +37,11 @@ function init(data, cfg, el) {
 function renderJourneyTimeline(items, container) {
     container.innerHTML = '';
     const timelineData = items.map(item => {
-        const parts = item.dates.split('�').map(s => s.trim());
+        const parts = item.dates.split('–').map(s => s.trim());
         const start = parseInt(parts[0]);
         let end = parts[1] === 'Present' ? new Date().getFullYear() : parseInt(parts[1]);
         if (isNaN(end)) end = start;
-        return { start, end, role: item.role.split(/[�|]/)[0].trim() };
+        return { start, end, role: item.role.split(/[–|]/)[0].trim() };
     });
 
     const minYear = Math.min(...timelineData.map(y => y.start));
@@ -83,34 +84,39 @@ function onOverflow(el, cfg) {
         return selfRoom && areaRoom;
     };
 
-    items.forEach(item => item.classList.remove('is-minimized'));
-    el.classList.remove('mode-compact');
+    // Reset completo
+    items.forEach(item => item.classList.remove('is-minimized', 'is-micro'));
+    el.classList.remove('mode-compact', 'mode-tight');
 
     let gap = 24;
     let roleFz = 12.2;
     let descLh = 1.56;
     let itemPad = 2;
+    // Gap específico entre minimizados (mucho más ajustado)
+    let miniGap = 4;
 
     const update = () => {
         el.style.setProperty('--exp-gap', `${gap}px`);
         el.style.setProperty('--exp-role-fz', `${roleFz}px`);
         el.style.setProperty('--exp-desc-line-height', `${descLh}`);
         el.style.setProperty('--exp-item-pad-bottom', `${itemPad}px`);
+        el.style.setProperty('--exp-mini-gap', `${miniGap}px`);
     };
 
     update();
 
-    // Primero compactamos de abajo antes de tirar el gap.
+    // PASO 1: Colapsar de abajo hacia arriba en modo minimizado ultra-compacto
     for (let i = items.length - 1; i > 0; i--) {
         if (!isOver()) break;
         items[i].classList.add('is-minimized');
     }
 
+    // PASO 2: Activar modo compact si aún hay overflow
     if (isOver()) {
         el.classList.add('mode-compact');
     }
 
-    // Compactacion secundaria suave
+    // PASO 3: Compresión suave de tipografía y gap
     let safety = 0;
     while (isOver() && safety < 35) {
         if (gap > 12) gap -= 0.5;
@@ -120,11 +126,12 @@ function onOverflow(el, cfg) {
         safety++;
     }
 
+    // PASO 4: Último recurso — colapsar también el primero
     if (isOver() && items.length > 0) {
         items[0].classList.add('is-minimized');
     }
 
-    // Si sobra, abrir aire
+    // PASO 5: Si sobra espacio, abrir aire en los detallados
     safety = 0;
     while (hasRoom() && gap < 28 && safety < 40) {
         gap += 0.4;
@@ -161,9 +168,7 @@ function setupOverflowController(el, cfg) {
             onOverflow(el, cfg);
             lastRunAt = Date.now();
         } finally {
-            requestAnimationFrame(() => {
-                isRunning = false;
-            });
+            requestAnimationFrame(() => { isRunning = false; });
         }
     };
 
@@ -174,8 +179,7 @@ function setupOverflowController(el, cfg) {
         timerId = setTimeout(run, 90);
     };
 
-    const onResize = schedule;
-    window.addEventListener('resize', onResize);
+    window.addEventListener('resize', schedule);
 
     let ro = null;
     if (typeof ResizeObserver !== 'undefined') {
@@ -184,7 +188,7 @@ function setupOverflowController(el, cfg) {
         if (parentArea) ro.observe(parentArea);
     }
 
-    el.__overflowController = { ro, onResize };
+    el.__overflowController = { ro, onResize: schedule };
     schedule();
 }
 

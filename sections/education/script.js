@@ -1,6 +1,6 @@
 /**
- * Education overflow: mismo enfoque que Experience.
- * Compacta desde abajo y mantiene aire entre items cuando sea posible.
+ * Education overflow: compacta desde abajo en filas ultra-compactas
+ * de una línea, liberando espacio para los items importantes.
  */
 
 function init(data, cfg, el) {
@@ -43,6 +43,7 @@ function onOverflow(el, cfg) {
     let schoolFz = 10.6;
     let yearFz = 8.6;
     let itemPadLeft = 10;
+    let miniGap = 4;
 
     const update = () => {
         el.style.setProperty('--edu-gap', `${gap}px`);
@@ -50,19 +51,21 @@ function onOverflow(el, cfg) {
         el.style.setProperty('--edu-school-fz', `${schoolFz}px`);
         el.style.setProperty('--edu-year-fz', `${yearFz}px`);
         el.style.setProperty('--edu-item-pad-left', `${itemPadLeft}px`);
+        el.style.setProperty('--edu-mini-gap', `${miniGap}px`);
     };
 
+    // Reset
     items.forEach(item => item.classList.remove('is-minimized', 'is-micro'));
     el.classList.remove('mode-compact', 'mode-tight');
     update();
 
-    // 1) Compactacion por historico: de abajo hacia arriba
+    // PASO 1: Colapsar de abajo hacia arriba
     for (let i = items.length - 1; i > 0; i--) {
         if (!isOver()) break;
         items[i].classList.add('is-minimized');
     }
 
-    // 2) Si aun no cabe, activar compacto y micro desde abajo
+    // PASO 2: Activar modo compact
     if (isOver()) {
         el.classList.add('mode-compact');
         for (let i = items.length - 1; i > 0; i--) {
@@ -71,37 +74,37 @@ function onOverflow(el, cfg) {
         }
     }
 
-    // 3) Compresion suave de tipografia/gap (manteniendo aire razonable)
+    // PASO 3: Compresión suave de tipografía/gap
     let safety = 0;
     while (isOver() && safety < 35) {
-        if (gap > 12) gap -= 0.5;
-        if (degreeFz > 11.2) degreeFz -= 0.08;
-        if (schoolFz > 9.6) schoolFz -= 0.07;
-        if (yearFz > 8.0) yearFz -= 0.05;
-        if (itemPadLeft > 8) itemPadLeft -= 0.2;
+        if (gap > 12)         gap       -= 0.5;
+        if (degreeFz > 11.2)  degreeFz  -= 0.08;
+        if (schoolFz > 9.6)   schoolFz  -= 0.07;
+        if (yearFz > 8.0)     yearFz    -= 0.05;
+        if (itemPadLeft > 8)  itemPadLeft -= 0.2;
         update();
         safety++;
     }
 
-    // 4) Ultimo recurso: compactar tambien el primero
+    // PASO 4: Último recurso — colapsar el primero
     if (isOver() && items.length > 0) {
         items[0].classList.add('is-minimized');
     }
 
-    // 5) Si sobra hueco, abrir de nuevo
+    // PASO 5: Si sobra, abrir aire
     safety = 0;
     while (hasRoom() && gap < 26 && safety < 35) {
-        gap += 0.4;
+        gap      += 0.4;
         degreeFz += 0.04;
         schoolFz += 0.04;
-        yearFz += 0.02;
+        yearFz   += 0.02;
         update();
 
         if (isOver()) {
-            gap -= 0.4;
+            gap      -= 0.4;
             degreeFz -= 0.04;
             schoolFz -= 0.04;
-            yearFz -= 0.02;
+            yearFz   -= 0.02;
             update();
             break;
         }
@@ -128,9 +131,7 @@ function setupOverflowController(el, cfg) {
             onOverflow(el, cfg);
             lastRunAt = Date.now();
         } finally {
-            requestAnimationFrame(() => {
-                isRunning = false;
-            });
+            requestAnimationFrame(() => { isRunning = false; });
         }
     };
 
@@ -141,8 +142,7 @@ function setupOverflowController(el, cfg) {
         timerId = setTimeout(run, 90);
     };
 
-    const onResize = schedule;
-    window.addEventListener('resize', onResize);
+    window.addEventListener('resize', schedule);
 
     let ro = null;
     if (typeof ResizeObserver !== 'undefined') {
@@ -151,7 +151,7 @@ function setupOverflowController(el, cfg) {
         if (parentArea) ro.observe(parentArea);
     }
 
-    el.__overflowController = { ro, onResize };
+    el.__overflowController = { ro, onResize: schedule };
     schedule();
 }
 
