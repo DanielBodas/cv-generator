@@ -2,18 +2,24 @@
     "languages": [
         {
             "name": "Spanish",
+            "flag": "🇪🇸",
             "level": "Native",
+            "code": "Native",
             "pct": 100
         },
         {
             "name": "English",
+            "flag": "🇬🇧",
             "level": "Professional Proficiency",
+            "code": "C1",
             "pct": 90
         },
         {
             "name": "French",
-            "level": "Elementary Proficiency",
-            "pct": 40
+            "flag": "🇫🇷",
+            "level": "Elementary",
+            "code": "A1",
+            "pct": 20
         }
     ]
 }

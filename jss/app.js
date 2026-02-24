@@ -117,6 +117,10 @@ async function renderSection(cfg, container) {
             let items = cfg.maxItems ? list.slice(0, cfg.maxItems) : list;
             const rendered = items.map(item => {
                 let t = sub;
+                // Soporte para arrays simples de strings con {{.}}
+                if (typeof item !== 'object' || item === null) {
+                    return t.replaceAll('{{.}}', String(item));
+                }
                 Object.entries(item).forEach(([k, v]) => {
                     t = t.replaceAll(`{{${k}}}`, String(v));
                 });

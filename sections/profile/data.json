@@ -1,8 +1,12 @@
 {
     "name": "Daniel Bodas",
-    "title": "Project Manager | Digital Transformation Leader | Aerospace Innovation",
+    "roles": [
+        "Technical Product Owner",
+        "Digital Transformation",
+        "Aerospace Engineering"
+    ],
     "photo": "sections/profile/photo.svg",
-    "email": "[EMAIL_ADDRESS]",
+    "email": "danielbodasromero@gmail.com",
     "phone": "(+34) 625 232 666",
     "location": "Madrid, España",
     "linkedin": "linkedin.com/in/danielbodas"

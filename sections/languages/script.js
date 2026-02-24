@@ -1,57 +1,92 @@
 /**
- * Lógica de Equilibrado y Renderizado para LANGUAGES
+ * Languages: nombre + badge código + barra. Colapsa de abajo hacia arriba.
  */
 
 function init(data, cfg, el) {
-    // Aplicamos los anchos de las barras desde el data-attribute
-    // Esto evita errores de linter en el HTML
-    const bars = el.querySelectorAll('.skill-fill');
-    bars.forEach(bar => {
+    el.querySelectorAll('.skill-fill').forEach(bar => {
         const pct = bar.getAttribute('data-pct');
-        if (pct) {
-            bar.style.width = `${pct}%`;
-        }
+        if (pct) bar.style.width = `${pct}%`;
     });
+    setupOverflowController(el, cfg);
 }
 
-/**
- * onOverflow: Ajusta el espaciado para que la sección de idiomas 
- * también sea elástica y aproveche el folio.
- */
 function onOverflow(el, cfg) {
-    const list = el.querySelector('.lang-list');
-    if (!list) return;
+    const items = Array.from(el.querySelectorAll('.lang-item'));
+    const parentArea = el.closest('.area-container');
 
-    const isOver = () => el.scrollHeight > (el.clientHeight + 4);
-    const hasRoom = () => (el.clientHeight - el.scrollHeight) > 10;
+    const isOver = () => {
+        const selfOver = el.scrollHeight > (el.clientHeight + 4);
+        const areaOver = parentArea && parentArea.scrollHeight > (parentArea.clientHeight + 4);
+        return selfOver || areaOver;
+    };
+    const hasRoom = () => {
+        const selfRoom = el.scrollHeight < (el.clientHeight - 8);
+        const areaRoom = parentArea && parentArea.scrollHeight < (parentArea.clientHeight - 10);
+        return selfRoom && areaRoom;
+    };
 
-    let gap = 12;
-    let safety = 0;
+    items.forEach(item => item.classList.remove('is-minimized'));
+    el.classList.remove('mode-compact');
 
-    // Reset
-    el.style.setProperty('--lang-gap', `${gap}px`);
-    list.style.justifyContent = 'flex-start';
-
-    // 1. Expansión Proactiva (Inflar espacios si sobra sitio)
-    while (hasRoom() && gap < 28 && safety < 40) {
-        gap += 1;
+    let gap = 10, nameFz = 10;
+    const update = () => {
         el.style.setProperty('--lang-gap', `${gap}px`);
-        if (isOver()) {
-            gap -= 1;
-            el.style.setProperty('--lang-gap', `${gap}px`);
-            break;
-        }
-        safety++;
+        el.style.setProperty('--lang-name-fz', `${nameFz}px`);
+    };
+    update();
+
+    for (let i = items.length - 1; i > 0; i--) {
+        if (!isOver()) break;
+        items[i].classList.add('is-minimized');
     }
 
-    // 2. Compresión (Si el sidebar está muy lleno)
+    let safety = 0;
+    while (isOver() && safety < 30) {
+        if (gap > 6)      gap    -= 0.5;
+        if (nameFz > 9.0) nameFz -= 0.08;
+        update(); safety++;
+    }
+
     if (isOver()) {
         el.classList.add('mode-compact');
-        gap = 8;
-        el.style.setProperty('--lang-gap', `${gap}px`);
+        items[0].classList.add('is-minimized');
     }
 
-    console.log(`[Languages] Optimización de espacio: Gap ${gap}px`);
+    safety = 0;
+    while (hasRoom() && gap < 16 && safety < 40) {
+        gap += 0.5; update();
+        if (isOver()) { gap -= 0.5; update(); break; }
+        safety++;
+    }
+}
+
+function setupOverflowController(el, cfg) {
+    const parentArea = el.closest('.area-container');
+    if (el.__overflowController) {
+        if (el.__overflowController.ro) el.__overflowController.ro.disconnect();
+        window.removeEventListener('resize', el.__overflowController.onResize);
+    }
+    let timerId = null, isRunning = false, lastRunAt = 0;
+    const run = () => {
+        if (isRunning) return;
+        isRunning = true;
+        try { onOverflow(el, cfg); lastRunAt = Date.now(); }
+        finally { requestAnimationFrame(() => { isRunning = false; }); }
+    };
+    const schedule = () => {
+        if (Date.now() - lastRunAt < 180) return;
+        clearTimeout(timerId);
+        timerId = setTimeout(run, 90);
+    };
+    window.addEventListener('resize', schedule);
+    let ro = null;
+    if (typeof ResizeObserver !== 'undefined') {
+        ro = new ResizeObserver(schedule);
+        ro.observe(el);
+        if (parentArea) ro.observe(parentArea);
+    }
+    el.__overflowController = { ro, onResize: schedule };
+    schedule();
 }
 
 return { init, onOverflow };

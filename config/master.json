@@ -70,7 +70,7 @@
             "id": "experience",
             "area": "main",
             "mode": "detailed",
-            "maxItems": 5,
+            "maxItems": 6,
             "overflowStrategy": "indicator",
             "showJourney": false,
             "weight": 6,

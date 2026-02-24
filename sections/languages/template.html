@@ -4,11 +4,16 @@
     <div class="lang-item">
         <div class="lang-row">
             <span class="lang-name">{{name}}</span>
-            <span class="lang-level">{{level}}</span>
+            <span class="lang-code">{{code}}</span>
         </div>
-        <div class="skill-bar">
-            <!-- Usamos data-pct para evitar errores de linter en el style inline -->
-            <div class="skill-fill" data-pct="{{pct}}"></div>
+        <div class="lang-bar-wrap">
+            <div class="skill-bar">
+                <div class="skill-fill" data-pct="{{pct}}"></div>
+            </div>
+        </div>
+        <div class="lang-mini-row">
+            <span class="lang-name">{{name}}</span>
+            <span class="lang-code">{{code}}</span>
         </div>
     </div>
     {{/languages}}
