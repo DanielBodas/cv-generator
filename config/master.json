@@ -9,13 +9,13 @@
     },
     "layout": {
         "format": "A4",
-        "debugLayout": 0,
+        "debugLayout": 1,
         "columns": "200px 1fr",
         "gridAreas": [
             "sidebar main"
         ],
         "gap": "0px",
-        "sectionGap": "16px",
+        "sectionGap": "12px",
         "padding": "0mm"
     },
     "sections": [
@@ -45,6 +45,12 @@
             "mode": "visual",
             "weight": 1,
             "hasScript": true
+        },
+        {
+            "id": "references",
+            "area": "sidebar",
+            "mode": "detailed",
+            "weight": 0
         },
         {
             "id": "about",

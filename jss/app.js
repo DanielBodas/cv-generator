@@ -100,9 +100,9 @@ async function renderSection(cfg, container) {
             fetch(`${path}/template.html`),
             fetch(`${path}/data.json`)
         ]);
-        if (!htmlRes.ok || !dataRes.ok) throw new Error(`Error carga ${cfg.id}`);
+        if (!htmlRes.ok) throw new Error(`Error carga ${cfg.id}`);
         let tpl = await htmlRes.text();
-        const data = await dataRes.json();
+        const data = dataRes.ok ? await dataRes.json() : {};
         injectStyles(cfg.id, path);
 
         // Soporte básico para condicionales {{#if key}} ... {{/if}}

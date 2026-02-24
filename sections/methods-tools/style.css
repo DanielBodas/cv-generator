@@ -11,8 +11,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--sidebar-category-gap);
-    height: auto;
-    flex: none;
     justify-content: flex-start;
 }
 
@@ -34,7 +32,6 @@
     letter-spacing: 0.8px;
     margin-bottom: 4px;
     display: block;
-    text-align: left;
 }
 
 .sidebar-skill-items {
@@ -52,20 +49,10 @@
     padding: 3px 8px;
     border-radius: 4px;
     border: 1px solid rgba(255, 255, 255, 0.12);
-    transition: background 0.2s ease;
     white-space: nowrap;
-    text-align: left;
 }
 
 .sidebar-skill-pill:hover {
     background: rgba(255, 255, 255, 0.12);
     border-color: rgba(255, 255, 255, 0.2);
-    transform: none;
-}
-
-.mode-compact-sidebar-skills {
-    --sidebar-category-gap: 8px;
-    --sidebar-category-pad: 6px;
-    --sidebar-items-gap: 3px;
-    --sidebar-pill-fz: 8.5px;
 }

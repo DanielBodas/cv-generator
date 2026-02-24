@@ -1,6 +1,6 @@
 /**
- * Lógica de Equilibrado Proactivo Avanzada - CORE TECH & METHODS
- * Busca el llenado perfecto tanto en horizontal como en vertical.
+ * Methods & Tools overflow: compresión/expansión limpia.
+ * Sin space-around que crea huecos raros. Prioriza las primeras categorías.
  */
 
 function init(data, cfg, el) {
@@ -9,7 +9,14 @@ function init(data, cfg, el) {
         const itemsRaw = container.getAttribute('data-items');
         if (!itemsRaw) return;
         container.innerHTML = '';
-        const items = itemsRaw.split(',').map(i => i.trim()).filter(i => i !== '');
+        // Soporta tanto array JSON ["a","b"] como string "a, b"
+        let items;
+        try {
+            const parsed = JSON.parse(itemsRaw);
+            items = Array.isArray(parsed) ? parsed : [parsed];
+        } catch {
+            items = itemsRaw.split(',').map(i => i.trim()).filter(Boolean);
+        }
         items.forEach(text => {
             const pill = document.createElement('span');
             pill.className = 'sidebar-skill-pill';
@@ -21,77 +28,72 @@ function init(data, cfg, el) {
     setupOverflowController(el, cfg);
 }
 
-/**
- * onOverflow: Maximiza el uso del espacio asignado.
- */
 function onOverflow(el, cfg) {
     const list = el.querySelector('.sidebar-skills-list');
+    const categories = Array.from(el.querySelectorAll('.sidebar-skill-category'));
     if (!list) return;
 
-    // Detectores de estado (el = .cv-section que está estirada por flex-grow)
-    const isOverflowing = () => el.scrollHeight > (el.clientHeight + 2);
-    const hasRoom = () => el.scrollHeight < (el.clientHeight - 4);
+    const parentArea = el.closest('.area-container');
 
-    // Valores iniciales (Reset)
-    let fz = 9.5;
+    const isOver = () => {
+        const selfOver = el.scrollHeight > (el.clientHeight + 4);
+        const areaOver = parentArea && parentArea.scrollHeight > (parentArea.clientHeight + 4);
+        return selfOver || areaOver;
+    };
+
+    const hasRoom = () => {
+        const selfRoom = el.scrollHeight < (el.clientHeight - 4);
+        const areaRoom = parentArea && parentArea.scrollHeight < (parentArea.clientHeight - 10);
+        return selfRoom && areaRoom;
+    };
+
+    // Reset
+    categories.forEach(c => c.classList.remove('is-minimized'));
+    list.style.justifyContent = 'flex-start';
+
+    let fz      = 9.3;
     let gapItems = 5;
-    let gapCat = 16;
-    let padCat = 10;
+    let gapCat  = 14;
+    let padCat  = 9;
 
     const update = () => {
-        el.style.setProperty('--sidebar-pill-fz', `${fz}px`);
-        el.style.setProperty('--sidebar-items-gap', `${gapItems}px`);
-        el.style.setProperty('--sidebar-category-gap', `${gapCat}px`);
-        el.style.setProperty('--sidebar-category-pad', `${padCat}px`);
+        el.style.setProperty('--sidebar-pill-fz',       `${fz}px`);
+        el.style.setProperty('--sidebar-items-gap',     `${gapItems}px`);
+        el.style.setProperty('--sidebar-category-gap',  `${gapCat}px`);
+        el.style.setProperty('--sidebar-category-pad',  `${padCat}px`);
     };
 
     update();
-    list.style.height = 'auto';
-    list.style.justifyContent = 'flex-start';
 
-    // --- FASE 1: EXPANSIÓN VERTICAL Y HORIZONTAL ---
+    // PASO 1: Compresión suave
     let safety = 0;
-    while (hasRoom() && fz < 14 && safety < 100) {
-        // Expandir solo internamente (no tocar flex de la sección)
-        fz += 0.08;
-        gapItems += 0.08;
-        gapCat += 0.4;
-        padCat += 0.25;
+    while (isOver() && safety < 60) {
+        if (fz > 7.5)       fz       -= 0.1;
+        if (gapItems > 2)   gapItems -= 0.1;
+        if (gapCat > 6)     gapCat   -= 0.4;
+        if (padCat > 4)     padCat   -= 0.2;
         update();
-        if (isOverflowing() || (el.closest('.area-container') && el.closest('.area-container').scrollHeight > el.closest('.area-container').clientHeight + 4)) {
-            // Retroceder cambios si provocan overflow en la sección o en el área
-            fz -= 0.08; gapItems -= 0.08; gapCat -= 0.4; padCat -= 0.25;
+        safety++;
+    }
+
+    // PASO 2: Expansión si sobra espacio (solo internamente, sin tocar flex de la sección)
+    safety = 0;
+    while (hasRoom() && fz < 11 && safety < 80) {
+        fz       += 0.07;
+        gapItems += 0.06;
+        gapCat   += 0.3;
+        padCat   += 0.15;
+        update();
+        if (isOver()) {
+            fz       -= 0.07;
+            gapItems -= 0.06;
+            gapCat   -= 0.3;
+            padCat   -= 0.15;
             update();
             break;
         }
         safety++;
     }
-
-    // --- FASE 2: COMPRESIÓN (Si empezamos ya desbordados) ---
-    safety = 0;
-    while (isOverflowing() && fz > 7.5 && safety < 100) {
-        fz -= 0.1;
-        gapItems -= 0.1;
-        gapCat -= 0.5;
-        padCat -= 0.2;
-        update();
-        safety++;
-    }
-
-    // --- FASE 3: EQUILIBRADO FINAL ---
-    // Si aún queda aire, estiramos la lista para que las categorías respiren
-    if (hasRoom()) {
-        // No cambies el flex del `.cv-section`. Ajusta el contenido internamente.
-        list.style.maxHeight = `calc(${el.clientHeight}px - 10px)`;
-        list.style.display = 'flex';
-        list.style.flexDirection = 'column';
-        list.style.justifyContent = 'space-around';
-    } else {
-        list.style.height = 'auto';
-        list.style.justifyContent = 'flex-start';
-    }
-
-    console.log(`[Core Tech] Fill complete. FZ: ${fz.toFixed(1)}px, Safety: ${safety}`);
 }
 
 function setupOverflowController(el, cfg) {
@@ -113,9 +115,7 @@ function setupOverflowController(el, cfg) {
             onOverflow(el, cfg);
             lastRunAt = Date.now();
         } finally {
-            requestAnimationFrame(() => {
-                isRunning = false;
-            });
+            requestAnimationFrame(() => { isRunning = false; });
         }
     };
 
@@ -126,8 +126,7 @@ function setupOverflowController(el, cfg) {
         timerId = setTimeout(run, 90);
     };
 
-    const onResize = schedule;
-    window.addEventListener('resize', onResize);
+    window.addEventListener('resize', schedule);
 
     let ro = null;
     if (typeof ResizeObserver !== 'undefined') {
@@ -136,7 +135,7 @@ function setupOverflowController(el, cfg) {
         if (parentArea) ro.observe(parentArea);
     }
 
-    el.__overflowController = { ro, onResize };
+    el.__overflowController = { ro, onResize: schedule };
     schedule();
 }
 
