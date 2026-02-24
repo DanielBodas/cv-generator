@@ -3,29 +3,26 @@
         {
             "category": "Agile & Management",
             "items": [
-                "Agile",
-                "SAFe",
-                "LBIP+",
-                "Kanban",
-                "Product Owner",
-                "Scrum of Scrums",
-                "Lean Management",
-                "Change Management"
+                "Agile Implementation",
+                "LBIP+ (Airbus Methodology)",
+                "Lean Manufacturing",
+                "Scrum Methodologies",
+                "Kanban Framework",
+                "Change Management Strategy"
             ]
         },
         {
             "category": "Tech & Digital Stack",
             "items": [
+                "Python",
+                "Google Apps Script",
                 "SQL",
                 "Bash",
-                "Jira",
-                "Python",
                 "G-Suite",
-                "DevOps",
-                "Data Viz",
+                "DevOps Principles",
                 "Analytics",
                 "Apps Script",
-                "Confluence",
+                "Jira & Confluence Admin",
                 "Digital Transformation"
             ]
         }

@@ -1,24 +1,24 @@
 {
     "initiatives": [
         {
-            "role": "Management Team Member",
+            "role": "Core Team Member",
             "organization": "AI & Data Analytics Community (Spain)",
-            "description": "Fostering knowledge exchange and best practices to drive a data-driven culture across the organization."
+            "description": "Driving the corporate data culture by facilitating knowledge exchange, defining analytics best practices, and accelerating AI adoption across engineering teams."
         },
         {
-            "role": "Airbus Ambassador",
-            "organization": "Airbassador Programme",
-            "description": "Actively promoting corporate culture, innovation, and brand values internally and externally."
+            "role": "Corporate Brand Ambassador",
+            "organization": "Airbus Airbassador Programme",
+            "description": "Promoting corporate values and technological innovation at industry fairs and external events. Selected for exclusive leadership academies to drive brand presence and talent attraction."
         },
         {
-            "role": "Active Participant",
-            "organization": "Toastmasters Sessions",
-            "description": "Continuous development of advanced public speaking, effective communication, and leadership skills."
+            "role": "Public Speaker & Member",
+            "organization": "Airbus Toastmasters Club",
+            "description": "Refining executive communication and leadership skills to effectively pitch technical products, run Agile ceremonies, and align senior stakeholders."
         },
         {
-            "role": "Data Scientific Research",
+            "role": "Analytics Integration Lead",
             "organization": "Service Analytics Plateau (SeAP)",
-            "description": "Collaborating on applied research projects and innovation in Big Data."
+            "description": "Led the strategic integration of ILS departmental data into corporate Big Data initiatives, fostering advanced analytics and cross-functional synergies."
         }
     ]
 }

@@ -198,10 +198,11 @@
     font-size: 9.6px;
     font-weight: 700;
     color: var(--primary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 210px;
+
+    white-space: normal;     /* permitir salto de línea */
+    overflow: visible;       /* no cortar */
+    text-overflow: unset;    /* eliminar ellipsis */
+    max-width: none;         /* quitar límite artificial */
 }
 
 /* Separador · entre role y company */

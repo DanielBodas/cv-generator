@@ -2,10 +2,9 @@
 
 :root {
     --init-gap: 9px;
-    --init-padding: 8px 10px;
+    --init-padding: 8px 10px 8px 14px;
     --init-role-fz: 9.8px;
     --init-org-fz: 8.3px;
-    --init-icon-size: 24px;
     --init-mini-gap: 4px;
 }
 
@@ -19,31 +18,54 @@
 
 /* ── Card normal ── */
 .iniciatives-card {
+    position: relative;
     display: flex;
     align-items: flex-start;
-    gap: 9px;
     width: 100%;
     box-sizing: border-box;
     background: rgba(255, 255, 255, 0.05);
     padding: var(--init-padding);
     border-radius: 7px;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
 }
 
+/* 🔥 Watermark REAL usando pseudo-elemento */
+.iniciatives-card::after {
+    content: "";
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 80px;
+    height: 80px;
+    opacity: 0.05;
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+
+    /* SVG inline como background */
+    background-image: url("data:image/svg+xml;utf8,\
+    <svg viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' xmlns='http://www.w3.org/2000/svg'>\
+    <circle cx='12' cy='12' r='10'/>\
+    <path d='M12 8l4 4-4 4M8 12h8'/>\
+    </svg>");
+}
+
+/* Eliminamos el icono real del flujo */
 .iniciatives-icon {
-    width: var(--init-icon-size);
-    height: var(--init-icon-size);
-    flex-shrink: 0;
-    color: var(--accent);
-    opacity: 0.8;
+    display: none;
 }
 
-/* El contenido ocupa el espacio restante y contiene el texto */
+/* Contenido por encima */
 .iniciatives-content {
     flex: 1;
     min-width: 0;
     display: flex;
     flex-direction: column;
+    position: relative;
+    z-index: 1;
 }
 
 .iniciatives-role {
@@ -68,17 +90,19 @@
 
 .init-desc { display: none; }
 
-/* ── Card MINIMIZADA: solo role, sin icono, altura mínima ── */
+/* ── Card MINIMIZADA ── */
 .iniciatives-card.is-minimized {
     padding: 4px 8px;
     border-radius: 4px;
     background: rgba(255, 255, 255, 0.03);
     border-color: rgba(255, 255, 255, 0.07);
-    gap: 0;
 }
 
-.iniciatives-card.is-minimized .iniciatives-icon {
-    display: none;
+.iniciatives-card.is-minimized::after {
+    width: 50px;
+    height: 50px;
+    opacity: 0.03;
+    right: -15px;
 }
 
 .iniciatives-card.is-minimized .iniciatives-org {
@@ -91,13 +115,13 @@
     margin-bottom: 0;
 }
 
-/* Gap reducido entre minimizados consecutivos */
 .iniciatives-card.is-minimized + .iniciatives-card.is-minimized {
     margin-top: calc(var(--init-mini-gap) - var(--init-gap));
 }
 
-/* ── Ultra-compact (último recurso) ── */
-.mode-ultra-compact-init .iniciatives-card:not(.is-minimized) .iniciatives-icon {
-    width: 18px;
-    height: 18px;
+/* Ultra compact */
+.mode-ultra-compact-init .iniciatives-card::after {
+    width: 40px;
+    height: 40px;
+    opacity: 0.02;
 }
