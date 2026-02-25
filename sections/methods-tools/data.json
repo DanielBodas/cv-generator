@@ -14,16 +14,14 @@
         {
             "category": "Tech & Digital Stack",
             "items": [
-                "Python",
+                "Python (Advanced)",
+                "Java, HTML & CSS",
+                "SQL & NoSQL Databases",
+                "Spotfire (Data Viz)",
                 "Google Apps Script",
-                "SQL",
-                "Bash",
-                "G-Suite",
-                "DevOps Principles",
-                "Analytics",
-                "Apps Script",
-                "Jira & Confluence Admin",
-                "Digital Transformation"
+                "Bash & DevOps",
+                "Git & GitHub",
+                "Jira & Confluence Admin"
             ]
         }
     ]

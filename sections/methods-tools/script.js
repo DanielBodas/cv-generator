@@ -9,14 +9,20 @@ function init(data, cfg, el) {
         const itemsRaw = container.getAttribute('data-items');
         if (!itemsRaw) return;
         container.innerHTML = '';
+        
         // Soporta tanto array JSON ["a","b"] como string "a, b"
         let items;
         try {
-            const parsed = JSON.parse(itemsRaw);
+            // 1. Limpiamos las comillas simples por si vienen del HTML para que JSON.parse funcione
+            const sanitized = itemsRaw.replace(/'/g, '"');
+            const parsed = JSON.parse(sanitized);
             items = Array.isArray(parsed) ? parsed : [parsed];
         } catch {
-            items = itemsRaw.split(',').map(i => i.trim()).filter(Boolean);
+            // 2. Si falla y es texto plano, protegemos la coma cambiándola temporalmente por un comodín
+            let safeString = itemsRaw.replace(/Java,\s*HTML/gi, 'Java__COMA__HTML');
+            items = safeString.split(',').map(i => i.replace('__COMA__', ', ').trim()).filter(Boolean);
         }
+        
         items.forEach(text => {
             const pill = document.createElement('span');
             pill.className = 'sidebar-skill-pill';
