@@ -1,0 +1,28 @@
+{
+    "education": [
+        {
+            "degree": "Artificial Intelligence Nanodegree",
+            "school": "Udacity & AIRBUS",
+            "year": "2023",
+            "tags": "AI Strategy, Process Automation, Tech Innovation"
+        },
+        {
+            "degree": "Data Analyst Nanodegree",
+            "school": "Udacity & AIRBUS",
+            "year": "2022",
+            "tags": "Data-Driven Decisions, Analytics, Value Creation"
+        },
+        {
+            "degree": "Master in Professional Development 4.0",
+            "school": "University of Alcala (UAH)",
+            "year": "2018",
+            "tags": "Digital Transformation, Industry 4.0, Change Management"
+        },
+        {
+            "degree": "Degree in Aerospace Engineering (Aircraft Spec.)",
+            "school": "Technical University of Madrid (UPM)",
+            "year": "2016",
+            "tags": "Complex Problem-Solving, Aerospace Engineering, Analytical Thinking"
+        }
+    ]
+}

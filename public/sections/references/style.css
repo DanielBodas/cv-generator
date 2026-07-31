@@ -1,0 +1,31 @@
+/* References — pegado al borde inferior izquierdo del A4, fuera del sidebar */
+
+.section-references {
+    position: absolute !important;
+    bottom: 0;
+    left: 0;
+    width: 200px; /* mismo ancho que el sidebar */
+    margin: 0 !important;
+    flex: none !important;
+}
+
+.references-footer {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    color: rgba(255, 255, 255, 0.32);
+}
+
+.references-footer svg {
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.references-footer span {
+    font-size: 7.8px;
+    font-weight: 500;
+    font-style: italic;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+}

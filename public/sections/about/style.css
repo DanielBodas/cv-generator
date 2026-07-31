@@ -1,0 +1,9 @@
+/* About */
+.about-text {
+    font-size: 9.8px;
+    line-height: 1.7;
+    color: #46566b;
+    text-align: justify;
+    border-left: 2px solid rgba(69, 123, 157, 0.72);
+    padding-left: 11px;
+}
