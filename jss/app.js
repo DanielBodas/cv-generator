@@ -1,81 +1,130 @@
 /**
  * CV Modular Engine - PROACTIVE LAYOUT EDITION
- * No solo detecta el overflow, sino que intenta corregirlo dinámicamente.
+ * Adaptado para soportar configuración en tiempo real y persistencia local.
  */
 
-document.addEventListener('DOMContentLoaded', initCV);
+// Inicialización global del estado del CV
+window.CVConfig = null;
+window.CVSectionsData = {};
 
-async function initCV() {
+document.addEventListener('DOMContentLoaded', initCVStart);
+
+async function initCVStart() {
     console.group('%c🚀 CV Engine: Iniciando carga inteligente...', 'color: #1d3557; font-weight: bold; font-size: 14px;');
     try {
-        const configRes = await fetch('./config/master.json');
-        if (!configRes.ok) throw new Error('No se pudo cargar config/master.json');
-        const config = await configRes.json();
-
-        applyTheme(config.theme, config.layout);
-        setupGrid(config.layout);
-
-        const page = document.getElementById('cv-page');
-        page.innerHTML = '';
-
-        const debugLvl = config.layout.debugLayout || 0;
-        if (debugLvl > 0) page.classList.add(`debug-level-${debugLvl}`);
-
-        // Áreas
-        const areas = [...new Set(config.layout.gridAreas.flatMap(r => r.split(' ')))];
-        const areaEls = {};
-        const areaWeights = {};
-
-        areas.forEach(name => {
-            const div = document.createElement('div');
-            div.className = `area-container area-${name}`;
-            div.style.gridArea = name;
-            div.dataset.area = name;
-            page.appendChild(div);
-            areaEls[name] = div;
-            areaWeights[name] = 0;
-        });
-
-        config.sections.forEach(sec => {
-            const w = sec.weight;
-            if (typeof w === 'number' && w > 0 && areaWeights[sec.area] !== undefined) {
-                areaWeights[sec.area] += w;
-            }
-        });
-
-        for (const sec of config.sections) {
-            const target = areaEls[sec.area];
-            if (target) {
-                const el = await renderSection(sec, target);
-                if (debugLvl > 0 && el) {
-                    const tag = document.createElement('div');
-                    tag.className = 'debug-section-tag';
-                    const w = sec.weight;
-                    if (w === true || w === 0 || !w) {
-                        tag.innerText = `ID: ${sec.id} | W: AUTO`;
-                    } else if (typeof w === 'number') {
-                        const totalW = areaWeights[sec.area];
-                        const pct = totalW > 0 ? Math.round((w / totalW) * 100) : 0;
-                        tag.innerText = `ID: ${sec.id} | W: ${w}/${totalW} (${pct}%)`;
-                    }
-                    el.prepend(tag);
-                }
-            }
+        // 1. Cargar Configuración Maestra
+        const savedConfig = localStorage.getItem('cv_master_config');
+        if (savedConfig) {
+            window.CVConfig = JSON.parse(savedConfig);
+            console.log('📦 Configuración cargada de localStorage');
+        } else {
+            const configRes = await fetch('./config/master.json');
+            if (!configRes.ok) throw new Error('No se pudo cargar config/master.json');
+            window.CVConfig = await configRes.json();
+            localStorage.setItem('cv_master_config', JSON.stringify(window.CVConfig));
+            console.log('📡 Configuración cargada del servidor por defecto');
         }
 
-        if (document.getElementById('loading-screen')) document.getElementById('loading-screen').remove();
+        // 2. Ejecutar renderizado
+        await renderAllCV();
 
-        // ── AJUSTE DINÁMICO DE OVERFLOW ──
+        // Notificar que el CV se ha cargado inicializado (por si el panel de control está escuchando)
+        document.dispatchEvent(new CustomEvent('cv-loaded'));
 
     } catch (err) {
-        console.error('❌ Error crítico:', err);
+        console.error('❌ Error crítico en inicio:', err);
+    } finally {
         console.groupEnd();
     }
 }
 
 /**
- * Revisa y corrige el layout si detecta que las piezas no encajan.
+ * Renderiza todo el CV a partir de window.CVConfig y window.CVSectionsData
  */
+async function renderAllCV() {
+    const config = window.CVConfig;
+    if (!config) return;
+
+    applyTheme(config.theme, config.layout);
+    setupGrid(config.layout);
+
+    const page = document.getElementById('cv-page');
+    // Guardar pantalla de carga si existe, si no, limpiar todo
+    const loadingScreen = document.getElementById('loading-screen');
+    page.innerHTML = '';
+    if (loadingScreen) {
+        page.appendChild(loadingScreen);
+    }
+
+    const debugLvl = config.layout.debugLayout || 0;
+    if (debugLvl > 0) {
+        page.className = 'page-a4';
+        page.classList.add(`debug-level-${debugLvl}`);
+    } else {
+        page.className = 'page-a4';
+    }
+
+    // Identificar áreas de grid activas según la configuración
+    const areas = [...new Set(config.layout.gridAreas.flatMap(r => r.split(' ')))];
+    const areaEls = {};
+    const areaWeights = {};
+
+    areas.forEach(name => {
+        const div = document.createElement('div');
+        div.className = `area-container area-${name}`;
+        div.style.gridArea = name;
+        div.dataset.area = name;
+        page.appendChild(div);
+        areaEls[name] = div;
+        areaWeights[name] = 0;
+    });
+
+    // Calcular pesos de secciones por área
+    config.sections.forEach(sec => {
+        if (sec.disabled) return; // Omitir secciones deshabilitadas por el usuario
+        const w = sec.weight;
+        if (typeof w === 'number' && w > 0 && areaWeights[sec.area] !== undefined) {
+            areaWeights[sec.area] += w;
+        }
+    });
+
+    // Renderizar secciones activas en el orden de la configuración
+    for (const sec of config.sections) {
+        if (sec.disabled) continue; // Omitir secciones deshabilitadas
+        const target = areaEls[sec.area];
+        if (target) {
+            const el = await renderSection(sec, target);
+            if (debugLvl > 0 && el) {
+                const tag = document.createElement('div');
+                tag.className = 'debug-section-tag';
+                const w = sec.weight;
+                if (w === true || w === 0 || !w) {
+                    tag.innerText = `ID: ${sec.id} | W: AUTO`;
+                } else if (typeof w === 'number') {
+                    const totalW = areaWeights[sec.area];
+                    const pct = totalW > 0 ? Math.round((w / totalW) * 100) : 0;
+                    tag.innerText = `ID: ${sec.id} | W: ${w}/${totalW} (${pct}%)`;
+                }
+                el.prepend(tag);
+            }
+        }
+    }
+
+    if (document.getElementById('loading-screen')) {
+        document.getElementById('loading-screen').remove();
+    }
+}
+
+/**
+ * Función global expuesta para volver a renderizar el CV en tiempo real al editar.
+ */
+window.refreshCV = async function() {
+    console.log('🔄 Re-renderizando CV en tiempo real...');
+    await renderAllCV();
+    // Emitir evento para indicar que el CV se redibujó
+    document.dispatchEvent(new CustomEvent('cv-refreshed'));
+};
+
 function applyTheme(theme, layout) {
     const r = document.documentElement;
     if (theme.primaryColor) r.style.setProperty('--primary', theme.primaryColor);
@@ -89,20 +138,32 @@ function applyTheme(theme, layout) {
 
 function setupGrid(layout) {
     const page = document.getElementById('cv-page');
-    page.style.gridTemplateColumns = layout.columns || '210px 1fr';
+    page.style.gridTemplateColumns = layout.columns || '200px 1fr';
     page.style.gridTemplateAreas = layout.gridAreas.map(r => `"${r}"`).join(' ');
 }
 
 async function renderSection(cfg, container) {
     const path = `./sections/${cfg.id}`;
     try {
-        const [htmlRes, dataRes] = await Promise.all([
-            fetch(`${path}/template.html`),
-            fetch(`${path}/data.json`)
-        ]);
-        if (!htmlRes.ok) throw new Error(`Error carga ${cfg.id}`);
+        const htmlRes = await fetch(`${path}/template.html`);
+        if (!htmlRes.ok) throw new Error(`Error al cargar plantilla de ${cfg.id}`);
         let tpl = await htmlRes.text();
-        const data = dataRes.ok ? await dataRes.json() : {};
+
+        // Cargar Datos de la Sección (de Memoria, localStorage o Red)
+        let data = window.CVSectionsData[cfg.id];
+        if (!data) {
+            const savedData = localStorage.getItem(`cv_section_data_${cfg.id}`);
+            if (savedData) {
+                data = JSON.parse(savedData);
+                window.CVSectionsData[cfg.id] = data;
+            } else {
+                const dataRes = await fetch(`${path}/data.json`);
+                data = dataRes.ok ? await dataRes.json() : {};
+                window.CVSectionsData[cfg.id] = data;
+                localStorage.setItem(`cv_section_data_${cfg.id}`, JSON.stringify(data));
+            }
+        }
+
         injectStyles(cfg.id, path);
 
         // Soporte básico para condicionales {{#if key}} ... {{/if}}
@@ -110,7 +171,7 @@ async function renderSection(cfg, container) {
             return data[key] ? sub : '';
         });
 
-        // Procesar bucles y variables (Misma lógica anterior)
+        // Procesar bucles y variables
         tpl = tpl.replace(/{{#(\w+)}}([\s\S]*?){{\/\1}}/g, (_, key, sub) => {
             const list = data[key];
             if (!Array.isArray(list)) return '';
@@ -166,7 +227,7 @@ async function renderSection(cfg, container) {
         }
         return el;
     } catch (e) {
-        console.warn(`[CV] ${cfg.id} omitido:`, e.message);
+        console.warn(`[CV] ${cfg.id} omitido o error de renderizado:`, e.message);
     }
 }
 
