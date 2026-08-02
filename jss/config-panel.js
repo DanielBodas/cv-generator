@@ -66,10 +66,27 @@ function initConfigPanel() {
                 renderSectionsTab();
             } else if (tabId === 'tab-content') {
                 renderPremiumContentTab();
+            } else if (tabId === 'tab-ats') {
+                runATSAudit();
             } else if (tabId === 'tab-actions') {
                 renderActionsTab();
             }
         });
+    });
+
+    // Registrar actualización en tiempo real cuando el CV cambia
+    document.addEventListener('cv-refreshed', () => {
+        const atsTabButton = document.querySelector('.tab-btn[data-tab="tab-ats"]');
+        if (atsTabButton && atsTabButton.classList.contains('active')) {
+            runATSAudit();
+        }
+    });
+
+    document.addEventListener('cv-loaded', () => {
+        const atsTabButton = document.querySelector('.tab-btn[data-tab="tab-ats"]');
+        if (atsTabButton && atsTabButton.classList.contains('active')) {
+            runATSAudit();
+        }
     });
 
     // 3. INICIALIZAR PESTAÑAS INDIVIDUALES
@@ -892,3 +909,329 @@ function saveSectionData(id) {
         localStorage.setItem(`cv_section_data_${id}`, JSON.stringify(window.CVSectionsData[id]));
     }
 }
+
+/* ============================================================
+   LÓGICA AUTOMATIZADA DEL EVALUADOR Y AUDITORÍA ATS
+   ============================================================ */
+
+window.runATSAudit = function() {
+    const config = window.CVConfig;
+    const sectionsData = window.CVSectionsData;
+    if (!config || !sectionsData) return;
+
+    let totalScore = 0;
+    const recommendations = [];
+
+    // --- 1. EVALUACIÓN DE ESTRUCTURA (Max 30 pts) ---
+    // Secciones críticas requeridas por un ATS para catalogar adecuadamente el CV
+    const coreSections = [
+        { id: 'profile', name: 'Perfil / Encabezado', weight: 6 },
+        { id: 'about', name: 'Sobre Mí / Resumen Profesional', weight: 6 },
+        { id: 'experience', name: 'Experiencia Profesional', weight: 6 },
+        { id: 'education', name: 'Educación y Formación', weight: 6 },
+        { id: 'methods-tools', name: 'Métodos y Herramientas (Skills)', weight: 6 }
+    ];
+
+    let structureScore = 0;
+    const structureChecklistEl = document.getElementById('ats-structure-checklist');
+    if (structureChecklistEl) structureChecklistEl.innerHTML = '';
+
+    coreSections.forEach(sec => {
+        const configSec = config.sections.find(s => s.id === sec.id);
+        const isActive = configSec && !configSec.disabled;
+
+        let itemScore = 0;
+        let itemClass = 'fail';
+        let bullet = '❌';
+        let text = `Falta la sección crítica: ${sec.name}`;
+
+        if (isActive) {
+            itemScore = sec.weight;
+            structureScore += itemScore;
+            itemClass = 'pass';
+            bullet = '✅';
+            text = `Sección de ${sec.name} activa.`;
+        } else {
+            recommendations.push({
+                type: 'warning',
+                icon: '⚠️',
+                text: `Activa la sección <strong>${sec.name}</strong> para que los sistemas ATS puedan clasificar tu perfil correctamente.`
+            });
+        }
+
+        if (structureChecklistEl) {
+            const li = document.createElement('li');
+            li.className = `ats-checklist-item ${itemClass}`;
+            li.innerHTML = `<span class="item-bullet">${bullet}</span><span>${text}</span>`;
+            structureChecklistEl.appendChild(li);
+        }
+    });
+    totalScore += structureScore;
+    const structureScoreEl = document.getElementById('ats-structure-score');
+    if (structureScoreEl) structureScoreEl.innerText = `${structureScore}/30 pts`;
+
+
+    // --- 2. INFORMACIÓN DE CONTACTO (Max 20 pts) ---
+    // Un ATS necesita extraer formas de contacto de forma inequívoca
+    const profileData = sectionsData.profile || {};
+    const contactFields = [
+        { key: 'name', label: 'Nombre Completo', weight: 4 },
+        { key: 'email', label: 'Dirección de Correo', weight: 4 },
+        { key: 'phone', label: 'Número de Teléfono', weight: 4 },
+        { key: 'location', label: 'Ubicación / Ciudad', weight: 4 },
+        { key: 'linkedin', label: 'Enlace a LinkedIn', weight: 4 }
+    ];
+
+    let contactScore = 0;
+    const contactChecklistEl = document.getElementById('ats-contact-checklist');
+    if (contactChecklistEl) contactChecklistEl.innerHTML = '';
+
+    contactFields.forEach(field => {
+        const hasVal = profileData[field.key] && String(profileData[field.key]).trim().length > 0;
+        let itemScore = 0;
+        let itemClass = 'fail';
+        let bullet = '❌';
+        let text = `Falta información: ${field.label}`;
+
+        if (hasVal) {
+            itemScore = field.weight;
+            contactScore += itemScore;
+            itemClass = 'pass';
+            bullet = '✅';
+            text = `${field.label} presente en cabecera.`;
+        } else {
+            recommendations.push({
+                type: 'danger',
+                icon: '🚨',
+                text: `Completa el campo <strong>${field.label}</strong> en tu Perfil. Sin esto, las cribas automáticas de RRHH podrían descartarte.`
+            });
+        }
+
+        if (contactChecklistEl) {
+            const li = document.createElement('li');
+            li.className = `ats-checklist-item ${itemClass}`;
+            li.innerHTML = `<span class="item-bullet">${bullet}</span><span>${text}</span>`;
+            contactChecklistEl.appendChild(li);
+        }
+    });
+    totalScore += contactScore;
+    const contactScoreEl = document.getElementById('ats-contact-score');
+    if (contactScoreEl) contactScoreEl.innerText = `${contactScore}/20 pts`;
+
+
+    // --- 3. PALABRAS CLAVE / KEYWORDS (Max 30 pts) ---
+    // Análisis de densidad de palabras clave del sector de ingeniería y gestión Agile
+    const keywordsToAudit = [
+        { term: 'agile', display: 'Agile', category: 'Metodología' },
+        { term: 'scrum', display: 'Scrum', category: 'Metodología' },
+        { term: 'python', display: 'Python', category: 'Tecnología' },
+        { term: 'sql', display: 'SQL / Databases', category: 'Tecnología' },
+        { term: 'product owner', display: 'Product Owner', category: 'Rol' },
+        { term: 'git', display: 'Git / GitHub', category: 'Tecnología' },
+        { term: 'jira', display: 'Jira / Confluence', category: 'Herramientas' },
+        { term: 'kanban', display: 'Kanban', category: 'Metodología' },
+        { term: 'aerospace', display: 'Aerospace / Aeronáutica', category: 'Sector' },
+        { term: 'analytics', display: 'Analytics / Spotfire', category: 'Herramientas' }
+    ];
+
+    // Serializar todo el contenido visible para la búsqueda de keywords
+    let fullCvText = '';
+    config.sections.forEach(sec => {
+        if (sec.disabled) return;
+        const data = sectionsData[sec.id];
+        if (data) {
+            fullCvText += ' ' + JSON.stringify(data);
+        }
+    });
+    fullCvText = fullCvText.toLowerCase();
+
+    let keywordsScore = 0;
+    const keywordsListEl = document.getElementById('ats-keywords-list');
+    if (keywordsListEl) keywordsListEl.innerHTML = '';
+
+    const missingKeywords = [];
+
+    keywordsToAudit.forEach(kw => {
+        // Expresión regular sutil para encontrar la palabra completa o subpalabras habituales
+        const found = fullCvText.includes(kw.term);
+        const pill = document.createElement('span');
+
+        if (found) {
+            keywordsScore += 3; // 3 pts por keyword encontrada (máx 10 keywords = 30 pts)
+            pill.className = 'ats-keyword-pill found';
+            pill.innerHTML = `✓ ${kw.display}`;
+        } else {
+            missingKeywords.push(kw.display);
+            pill.className = 'ats-keyword-pill missing';
+            pill.innerHTML = `✗ ${kw.display}`;
+        }
+
+        if (keywordsListEl) keywordsListEl.appendChild(pill);
+    });
+
+    if (missingKeywords.length > 0) {
+        // Sugerir las primeras keywords que faltan
+        const suggestText = missingKeywords.slice(0, 3).join(', ');
+        recommendations.push({
+            type: 'warning',
+            icon: '💡',
+            text: `Incorpora términos clave que faltan en tu sector (ej. <strong>${suggestText}</strong>) para optimizar la indexación de tu currículum.`
+        });
+    }
+
+    totalScore += keywordsScore;
+    const keywordsScoreEl = document.getElementById('ats-keywords-score');
+    if (keywordsScoreEl) keywordsScoreEl.innerText = `${keywordsScore}/30 pts`;
+
+
+    // --- 4. DENSIDAD DE TEXTO Y LONGITUD (Max 20 pts) ---
+    // Los ATS penalizan documentos extremadamente cortos o gigantescos
+    // Limpiamos los caracteres de formato JSON para contar palabras reales aproximadas
+    const cleanText = fullCvText.replace(/[\{\}\[\]\:\",_]/g, " ").replace(/\s+/g, " ").trim();
+    const wordCount = cleanText.split(" ").filter(w => w.length > 2).length;
+
+    let densityScore = 0;
+    let densityClass = 'fail';
+    let densityBullet = '❌';
+    let densityText = '';
+
+    if (wordCount >= 300 && wordCount <= 700) {
+        densityScore = 20;
+        densityClass = 'pass';
+        densityBullet = '✅';
+        densityText = `Longitud óptima: ${wordCount} palabras.`;
+    } else if (wordCount >= 180 && wordCount < 300) {
+        densityScore = 12;
+        densityClass = 'warning';
+        densityBullet = '⚠️';
+        densityText = `CV algo breve (${wordCount} palabras). Agrega descripciones más ricas.`;
+        recommendations.push({
+            type: 'warning',
+            icon: '📝',
+            text: `Tu CV tiene pocas palabras (${wordCount}). Intenta redactar con mayor detalle tus logros de negocio y contribuciones técnicas.`
+        });
+    } else if (wordCount > 700 && wordCount <= 1000) {
+        densityScore = 12;
+        densityClass = 'warning';
+        densityBullet = '⚠️';
+        densityText = `CV extenso (${wordCount} palabras). Intenta sintetizar.`;
+        recommendations.push({
+            type: 'warning',
+            icon: '📝',
+            text: `Tu currículum tiene una extensión de palabras alta (${wordCount}). Recorta y resume para asegurar que quepa perfectamente y de forma limpia en el diseño A4.`
+        });
+    } else if (wordCount < 180) {
+        densityScore = 5;
+        densityClass = 'fail';
+        densityBullet = '❌';
+        densityText = `CV extremadamente corto (${wordCount} palabras).`;
+        recommendations.push({
+            type: 'danger',
+            icon: '🚨',
+            text: `La densidad de palabras es críticamente baja (${wordCount}). Un ATS podría considerarlo vacío. Describe con verbos de acción tus puestos.`
+        });
+    } else {
+        densityScore = 5;
+        densityClass = 'fail';
+        densityBullet = '❌';
+        densityText = `CV sobrecargado (${wordCount} palabras).`;
+        recommendations.push({
+            type: 'danger',
+            icon: '🚨',
+            text: `Extensión excesiva de palabras (${wordCount}). Los ATS y reclutadores humanos prefieren brevedad. Reduce textos superfluos.`
+        });
+    }
+
+    const densityChecklistEl = document.getElementById('ats-density-checklist');
+    if (densityChecklistEl) {
+        densityChecklistEl.innerHTML = '';
+        const li = document.createElement('li');
+        li.className = `ats-checklist-item ${densityClass}`;
+        li.innerHTML = `<span class="item-bullet">${densityBullet}</span><span>${densityText}</span>`;
+        densityChecklistEl.appendChild(li);
+
+        // Añadir segundo check sobre legibilidad estructural de fuentes
+        const isStandardFont = config.theme.fontFamily && !config.theme.fontFamily.includes('Georgia');
+        let fontBullet = '✅';
+        let fontText = 'Tipografía sans-serif de alta legibilidad para OCR.';
+        if (!isStandardFont) {
+            fontBullet = '⚠️';
+            fontText = 'Tipografía Serif elegida. Las fuentes Sans-serif (ej. Inter, Roboto) se leen mejor por máquinas.';
+            recommendations.push({
+                type: 'warning',
+                icon: '🎨',
+                text: 'Considera usar una tipografía Sans-serif (ej. Inter o Roboto) en la pestaña de Estilo para asegurar un escaneo perfecto por parte del software OCR.'
+            });
+        }
+        const liFont = document.createElement('li');
+        liFont.className = `ats-checklist-item ${isStandardFont ? 'pass' : 'warning'}`;
+        liFont.innerHTML = `<span class="item-bullet">${fontBullet}</span><span>${fontText}</span>`;
+        densityChecklistEl.appendChild(liFont);
+    }
+
+    totalScore += densityScore;
+    const densityScoreEl = document.getElementById('ats-density-score');
+    if (densityScoreEl) densityScoreEl.innerText = `${densityScore}/20 pts`;
+
+
+    // --- 5. RENDERIZADO FINAL DEL SCORE Y BADGES ---
+    const scoreValEl = document.getElementById('ats-score-value');
+    if (scoreValEl) scoreValEl.innerText = `${totalScore}%`;
+
+    const gaugeProgressEl = document.querySelector('.gauge-progress');
+    if (gaugeProgressEl) {
+        // Circunferencia = 2 * Math.PI * 40 = 251.2
+        const circumference = 251.2;
+        const offset = circumference - (circumference * totalScore) / 100;
+        gaugeProgressEl.style.strokeDashoffset = offset;
+
+        // Cambiar el color de la barra del gauge dinámicamente
+        if (totalScore >= 80) {
+            gaugeProgressEl.style.stroke = 'var(--color-success)';
+        } else if (totalScore >= 60) {
+            gaugeProgressEl.style.stroke = '#fbbf24'; // Amarillo/Ambar
+        } else {
+            gaugeProgressEl.style.stroke = 'var(--color-danger)';
+        }
+    }
+
+    const statusBadgeEl = document.getElementById('ats-status-text');
+    if (statusBadgeEl) {
+        statusBadgeEl.className = 'ats-status-badge';
+        if (totalScore >= 80) {
+            statusBadgeEl.innerText = 'Excelente';
+            statusBadgeEl.classList.add('optimal');
+        } else if (totalScore >= 60) {
+            statusBadgeEl.innerText = 'Mejorable';
+            statusBadgeEl.classList.add('warning');
+        } else {
+            statusBadgeEl.innerText = 'Crítico';
+            statusBadgeEl.classList.add('danger');
+        }
+    }
+
+
+    // --- 6. RENDERIZADO DE RECOMENDACIONES CLAVE ---
+    const recommendationsEl = document.getElementById('ats-recommendations');
+    if (recommendationsEl) {
+        recommendationsEl.innerHTML = '';
+        if (recommendations.length === 0) {
+            const emptyCard = document.createElement('div');
+            emptyCard.className = 'ats-tip-card success-tip';
+            emptyCard.innerHTML = `<span class="tip-icon">🏆</span><span>¡Enhorabuena! Tu CV no requiere mejoras críticas. Sigue así.</span>`;
+            recommendationsEl.appendChild(emptyCard);
+        } else {
+            // Mostrar hasta un máximo de 5 recomendaciones prioritarias
+            recommendations.slice(0, 5).forEach(rec => {
+                const tipCard = document.createElement('div');
+                tipCard.className = `ats-tip-card ${rec.type === 'danger' ? 'danger-tip' : ''} ${rec.type === 'success' ? 'success-tip' : ''}`;
+                if (rec.type === 'danger') {
+                    tipCard.style.borderLeftColor = 'var(--color-danger)';
+                    tipCard.style.background = 'rgba(239, 68, 68, 0.05)';
+                }
+                tipCard.innerHTML = `<span class="tip-icon">${rec.icon}</span><span>${rec.text}</span>`;
+                recommendationsEl.appendChild(tipCard);
+            });
+        }
+    }
+};
