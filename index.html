@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CV Generator</title>
+    <title>CV Generator & Configurator</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -12,31 +12,177 @@
         rel="stylesheet">
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/config-panel.css">
 </head>
 
 <body>
 
-    <!-- Botón flotante FUERA del A4, no interfiere con la impresión -->
-    <div class="print-fab hide-on-print" title="Guardar como PDF (Ctrl+P)">
-        <button onclick="window.print()" id="btn-print">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                <rect x="6" y="14" width="12" height="8"></rect>
-            </svg>
-            <span>Guardar PDF</span>
-        </button>
+    <div class="app-container">
+        <!-- Panel de Configuración -->
+        <aside id="config-panel" class="hide-on-print">
+            <div class="panel-header">
+                <h2>⚙️ Configurador de CV</h2>
+                <button id="toggle-panel-btn" title="Ocultar Panel">◀</button>
+            </div>
+
+            <!-- Pestañas de Navegación -->
+            <nav class="panel-tabs">
+                <button class="tab-btn active" data-tab="tab-theme">🎨 Estilo</button>
+                <button class="tab-btn" data-tab="tab-sections">🗂️ Estructura</button>
+                <button class="tab-btn" data-tab="tab-content">📝 Contenido</button>
+                <button class="tab-btn" data-tab="tab-actions">💾 Guardar</button>
+            </nav>
+
+            <div class="panel-body">
+                <!-- PESTAÑA 1: TEMA Y ESTILO -->
+                <div id="tab-theme" class="tab-content-item active">
+                    <h3>Colores del Tema</h3>
+                    <div class="form-group row">
+                        <label for="theme-primary">Primario (Sidebar/H2):</label>
+                        <input type="color" id="theme-primary">
+                    </div>
+                    <div class="form-group row">
+                        <label for="theme-secondary">Secundario (Acentos):</label>
+                        <input type="color" id="theme-secondary">
+                    </div>
+                    <div class="form-group row">
+                        <label for="theme-sidebar">Fondo Sidebar:</label>
+                        <input type="color" id="theme-sidebar">
+                    </div>
+                    <div class="form-group row">
+                        <label for="theme-text">Color de Texto:</label>
+                        <input type="color" id="theme-text">
+                    </div>
+                    <div class="form-group row">
+                        <label for="theme-bg">Color de Fondo:</label>
+                        <input type="color" id="theme-bg">
+                    </div>
+
+                    <h3>Tipografía y Espaciado</h3>
+                    <div class="form-group">
+                        <label for="theme-font">Tipografía:</label>
+                        <select id="theme-font">
+                            <option value="'Inter', 'Segoe UI', sans-serif">Inter (Por defecto)</option>
+                            <option value="'Roboto', sans-serif">Roboto</option>
+                            <option value="'Open Sans', sans-serif">Open Sans</option>
+                            <option value="system-ui, -apple-system, sans-serif">Sistema (San Francisco/Segoe UI)</option>
+                            <option value="Georgia, serif">Georgia (Elegante)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="layout-section-gap">Separación entre Secciones:</label>
+                        <input type="text" id="layout-section-gap" placeholder="ej. 12px, 18px">
+                    </div>
+                    <div class="form-group">
+                        <label for="layout-sidebar-width">Ancho de Columna Sidebar:</label>
+                        <input type="text" id="layout-sidebar-width" placeholder="ej. 200px, 220px">
+                    </div>
+
+                    <h3>Visualización y Diagnóstico</h3>
+                    <div class="form-group">
+                        <label for="layout-debug">Modo de Diagnóstico (Debug):</label>
+                        <select id="layout-debug">
+                            <option value="0">Apagado</option>
+                            <option value="1">Nivel 1: Líneas de Guía</option>
+                            <option value="2">Nivel 2: Diagnóstico de Margen</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- PESTAÑA 2: SECCIONES Y ESTRUCTURA -->
+                <div id="tab-sections" class="tab-content-item">
+                    <p class="tab-desc">Activa, desactiva, ordena o cambia el área de las secciones del CV.</p>
+                    <div id="sections-list" class="sections-drag-list">
+                        <!-- Se generará dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- PESTAÑA 3: CONTENIDO DE SECCIONES -->
+                <div id="tab-content" class="tab-content-item">
+                    <div class="form-group">
+                        <label for="content-section-selector">Selecciona Sección:</label>
+                        <select id="content-section-selector">
+                            <!-- Se generará dinámicamente -->
+                        </select>
+                    </div>
+
+                    <div class="content-editor-modes">
+                        <button id="mode-visual-btn" class="editor-mode-btn active">Formulario Visual</button>
+                        <button id="mode-json-btn" class="editor-mode-btn">JSON Crudo</button>
+                    </div>
+
+                    <div id="visual-editor-container" class="active">
+                        <!-- Formulario generado dinámicamente -->
+                    </div>
+
+                    <div id="json-editor-container">
+                        <p class="json-warning">⚠️ La edición cruda permite modificar la estructura del JSON directamente. Una sintaxis rota podría invalidar la sección.</p>
+                        <textarea id="raw-json-textarea" spellcheck="false"></textarea>
+                        <button id="apply-json-btn" class="btn btn-primary">Aplicar JSON</button>
+                    </div>
+                </div>
+
+                <!-- PESTAÑA 4: EXPORTACIÓN Y BACKUPS -->
+                <div id="tab-actions" class="tab-content-item">
+                    <h3>Persistencia Local</h3>
+                    <p class="desc">Los cambios se guardan automáticamente en tu navegador (localStorage) para que no se pierdan al recargar.</p>
+
+                    <div class="action-buttons">
+                        <button id="btn-export-consolidated" class="btn btn-success">
+                            📥 Descargar Todo (Consolidado)
+                        </button>
+                        <button id="btn-import-config-trigger" class="btn btn-secondary">
+                            📤 Importar Configuración
+                        </button>
+                        <input type="file" id="import-config-file" style="display: none;" accept=".json">
+
+                        <button id="btn-reset-default" class="btn btn-danger">
+                            🔄 Restablecer de Fábrica
+                        </button>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <h3>Descargas Individuales</h3>
+                        <p class="desc">Descarga los archivos específicos listos para reemplazar en tu código fuente (`config/master.json` y `data.json` de cada sección).</p>
+                        <div id="individual-downloads" class="individual-downloads-list">
+                            <!-- Lista de descargas individuales generada dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Contenedor del CV -->
+        <div class="cv-viewport">
+            <!-- Botón flotante FUERA del A4, no interfiere con la impresión -->
+            <div class="print-fab hide-on-print" title="Guardar como PDF (Ctrl+P)">
+                <button onclick="window.print()" id="btn-print">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                        <rect x="6" y="14" width="12" height="8"></rect>
+                    </svg>
+                    <span>Guardar PDF</span>
+                </button>
+            </div>
+
+            <!-- Hoja A4 pura, sin botones dentro -->
+            <main id="cv-page" class="page-a4">
+                <div id="loading-screen">
+                    <span>Generando CV…</span>
+                </div>
+            </main>
+        </div>
     </div>
 
-    <!-- Hoja A4 pura, sin botones dentro -->
-    <main id="cv-page" class="page-a4">
-        <div id="loading-screen">
-            <span>Generando CV…</span>
-        </div>
-    </main>
+    <!-- Botón flotante para abrir el panel si está colapsado -->
+    <button id="floating-settings-btn" class="hide-on-print" title="Configurar CV">
+        ⚙️ Ajustes
+    </button>
 
     <script src="jss/app.js"></script>
+    <script src="jss/config-panel.js"></script>
 </body>
 
 </html>
