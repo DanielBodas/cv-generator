@@ -36,56 +36,86 @@
             <div class="panel-body">
                 <!-- PESTAÑA 1: TEMA Y ESTILO -->
                 <div id="tab-theme" class="tab-content-item active">
-                    <h3>Colores del Tema</h3>
-                    <div class="form-group row">
-                        <label for="theme-primary">Primario (Sidebar/H2):</label>
-                        <input type="color" id="theme-primary">
-                    </div>
-                    <div class="form-group row">
-                        <label for="theme-secondary">Secundario (Acentos):</label>
-                        <input type="color" id="theme-secondary">
-                    </div>
-                    <div class="form-group row">
-                        <label for="theme-sidebar">Fondo Sidebar:</label>
-                        <input type="color" id="theme-sidebar">
-                    </div>
-                    <div class="form-group row">
-                        <label for="theme-text">Color de Texto:</label>
-                        <input type="color" id="theme-text">
-                    </div>
-                    <div class="form-group row">
-                        <label for="theme-bg">Color de Fondo:</label>
-                        <input type="color" id="theme-bg">
-                    </div>
-
-                    <h3>Tipografía y Espaciado</h3>
-                    <div class="form-group">
-                        <label for="theme-font">Tipografía:</label>
-                        <select id="theme-font">
-                            <option value="'Inter', 'Segoe UI', sans-serif">Inter (Por defecto)</option>
-                            <option value="'Roboto', sans-serif">Roboto</option>
-                            <option value="'Open Sans', sans-serif">Open Sans</option>
-                            <option value="system-ui, -apple-system, sans-serif">Sistema (San Francisco/Segoe UI)</option>
-                            <option value="Georgia, serif">Georgia (Elegante)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="layout-section-gap">Separación entre Secciones:</label>
-                        <input type="text" id="layout-section-gap" placeholder="ej. 12px, 18px">
-                    </div>
-                    <div class="form-group">
-                        <label for="layout-sidebar-width">Ancho de Columna Sidebar:</label>
-                        <input type="text" id="layout-sidebar-width" placeholder="ej. 200px, 220px">
+                    <!-- ACORDEÓN 1: COLORES DEL TEMA -->
+                    <div class="accordion-item expanded">
+                        <div class="accordion-header">
+                            <div class="accordion-title">
+                                <span>🎨</span> <strong>Colores del Tema</strong>
+                            </div>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="form-group row">
+                                <label for="theme-primary">Primario (Sidebar/H2):</label>
+                                <input type="color" id="theme-primary">
+                            </div>
+                            <div class="form-group row">
+                                <label for="theme-secondary">Secundario (Acentos):</label>
+                                <input type="color" id="theme-secondary">
+                            </div>
+                            <div class="form-group row">
+                                <label for="theme-sidebar">Fondo Sidebar:</label>
+                                <input type="color" id="theme-sidebar">
+                            </div>
+                            <div class="form-group row">
+                                <label for="theme-text">Color de Texto:</label>
+                                <input type="color" id="theme-text">
+                            </div>
+                            <div class="form-group row">
+                                <label for="theme-bg">Color de Fondo:</label>
+                                <input type="color" id="theme-bg">
+                            </div>
+                        </div>
                     </div>
 
-                    <h3>Visualización y Diagnóstico</h3>
-                    <div class="form-group">
-                        <label for="layout-debug">Modo de Diagnóstico (Debug):</label>
-                        <select id="layout-debug">
-                            <option value="0">Apagado</option>
-                            <option value="1">Nivel 1: Líneas de Guía</option>
-                            <option value="2">Nivel 2: Diagnóstico de Margen</option>
-                        </select>
+                    <!-- ACORDEÓN 2: TIPOGRAFÍA Y ESPACIADO -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <div class="accordion-title">
+                                <span>✍️</span> <strong>Tipografía y Espaciado</strong>
+                            </div>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="form-group">
+                                <label for="theme-font">Tipografía:</label>
+                                <select id="theme-font">
+                                    <option value="'Inter', 'Segoe UI', sans-serif">Inter (Por defecto)</option>
+                                    <option value="'Roboto', sans-serif">Roboto</option>
+                                    <option value="'Open Sans', sans-serif">Open Sans</option>
+                                    <option value="system-ui, -apple-system, sans-serif">Sistema (San Francisco/Segoe UI)</option>
+                                    <option value="Georgia, serif">Georgia (Elegante)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="layout-section-gap">Separación entre Secciones:</label>
+                                <input type="text" id="layout-section-gap" placeholder="ej. 12px, 18px">
+                            </div>
+                            <div class="form-group">
+                                <label for="layout-sidebar-width">Ancho de Columna Sidebar:</label>
+                                <input type="text" id="layout-sidebar-width" placeholder="ej. 200px, 220px">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ACORDEÓN 3: VISUALIZACIÓN Y DIAGNÓSTICO -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <div class="accordion-title">
+                                <span>🔍</span> <strong>Visualización y Diagnóstico</strong>
+                            </div>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="form-group">
+                                <label for="layout-debug">Modo de Diagnóstico (Debug):</label>
+                                <select id="layout-debug">
+                                    <option value="0">Apagado</option>
+                                    <option value="1">Nivel 1: Líneas de Guía</option>
+                                    <option value="2">Nivel 2: Diagnóstico de Margen</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

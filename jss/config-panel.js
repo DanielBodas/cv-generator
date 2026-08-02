@@ -154,46 +154,54 @@ function initThemeTab() {
 
     const themeContainer = document.getElementById('tab-theme');
 
-    // Crear y añadir la sección de "Presets" al principio de la pestaña Estilos
+    // Crear y añadir la sección de "Presets" al principio de la pestaña Estilos en formato Acordeón
     if (!document.getElementById('presets-section')) {
         const presetsSection = document.createElement('div');
         presetsSection.id = 'presets-section';
+        presetsSection.className = 'accordion-item';
         presetsSection.innerHTML = `
-            <h3>Temas Rápidos SaaS</h3>
-            <p class="desc">Aplica combinaciones de colores premium prediseñadas al instante.</p>
-            <div class="presets-grid">
-                <button class="preset-btn" data-preset="navy">
-                    <span>⚓ Classic Navy</span>
-                    <div class="preset-colors">
-                        <div class="preset-color-dot" style="background: #1d3557;"></div>
-                        <div class="preset-color-dot" style="background: #457b9d;"></div>
-                        <div class="preset-color-dot" style="background: #1d3557;"></div>
-                    </div>
-                </button>
-                <button class="preset-btn" data-preset="midnight">
-                    <span>🌌 Midnight Executive</span>
-                    <div class="preset-colors">
-                        <div class="preset-color-dot" style="background: #0f172a;"></div>
-                        <div class="preset-color-dot" style="background: #3b82f6;"></div>
-                        <div class="preset-color-dot" style="background: #0f172a;"></div>
-                    </div>
-                </button>
-                <button class="preset-btn" data-preset="emerald">
-                    <span>🌲 Minimal Forest</span>
-                    <div class="preset-colors">
-                        <div class="preset-color-dot" style="background: #064e3b;"></div>
-                        <div class="preset-color-dot" style="background: #10b981;"></div>
-                        <div class="preset-color-dot" style="background: #064e3b;"></div>
-                    </div>
-                </button>
-                <button class="preset-btn" data-preset="charcoal">
-                    <span>🎸 Slate Rose</span>
-                    <div class="preset-colors">
-                        <div class="preset-color-dot" style="background: #27272a;"></div>
-                        <div class="preset-color-dot" style="background: #f43f5e;"></div>
-                        <div class="preset-color-dot" style="background: #27272a;"></div>
-                    </div>
-                </button>
+            <div class="accordion-header">
+                <div class="accordion-title">
+                    <span>✨</span> <strong>Temas Rápidos SaaS</strong>
+                </div>
+                <span class="accordion-arrow">▼</span>
+            </div>
+            <div class="accordion-body">
+                <p class="desc">Aplica combinaciones de colores premium prediseñadas al instante.</p>
+                <div class="presets-grid">
+                    <button class="preset-btn" data-preset="navy">
+                        <span>⚓ Classic Navy</span>
+                        <div class="preset-colors">
+                            <div class="preset-color-dot" style="background: #1d3557;"></div>
+                            <div class="preset-color-dot" style="background: #457b9d;"></div>
+                            <div class="preset-color-dot" style="background: #1d3557;"></div>
+                        </div>
+                    </button>
+                    <button class="preset-btn" data-preset="midnight">
+                        <span>🌌 Midnight Executive</span>
+                        <div class="preset-colors">
+                            <div class="preset-color-dot" style="background: #0f172a;"></div>
+                            <div class="preset-color-dot" style="background: #3b82f6;"></div>
+                            <div class="preset-color-dot" style="background: #0f172a;"></div>
+                        </div>
+                    </button>
+                    <button class="preset-btn" data-preset="emerald">
+                        <span>🌲 Minimal Forest</span>
+                        <div class="preset-colors">
+                            <div class="preset-color-dot" style="background: #064e3b;"></div>
+                            <div class="preset-color-dot" style="background: #10b981;"></div>
+                            <div class="preset-color-dot" style="background: #064e3b;"></div>
+                        </div>
+                    </button>
+                    <button class="preset-btn" data-preset="charcoal">
+                        <span>🎸 Slate Rose</span>
+                        <div class="preset-colors">
+                            <div class="preset-color-dot" style="background: #27272a;"></div>
+                            <div class="preset-color-dot" style="background: #f43f5e;"></div>
+                            <div class="preset-color-dot" style="background: #27272a;"></div>
+                        </div>
+                    </button>
+                </div>
             </div>
         `;
         // Inyectar antes del primer elemento hijo de la pestaña
@@ -208,7 +216,8 @@ function initThemeTab() {
         };
 
         document.querySelectorAll('.preset-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Evitar que colapse el acordeón al hacer clic en un preset
                 const id = btn.getAttribute('data-preset');
                 const colors = presets[id];
                 if (colors) {
@@ -228,6 +237,23 @@ function initThemeTab() {
             });
         });
     }
+
+    // Inicializar lógica de toggle para todos los acordeones del tab de Temas
+    themeContainer.querySelectorAll('.accordion-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const item = header.closest('.accordion-item');
+            const wasExpanded = item.classList.contains('expanded');
+
+            // Colapsar todos los acordeones del tab de estilo para mantener una sola vista limpia
+            themeContainer.querySelectorAll('.accordion-item').forEach(el => {
+                el.classList.remove('expanded');
+            });
+
+            if (!wasExpanded) {
+                item.classList.add('expanded');
+            }
+        });
+    });
 
     // Obtener campos de entrada
     const primaryInput = document.getElementById('theme-primary');
