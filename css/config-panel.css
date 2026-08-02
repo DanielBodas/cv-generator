@@ -724,8 +724,13 @@ body {
     box-shadow: 0 12px 30px rgba(99, 102, 241, 0.2);
 }
 
+/* Ocultar barra de navegación móvil en pantallas grandes */
+.mobile-toggle-bar {
+    display: none;
+}
+
 /* ESTILO RESPONSIVO PREMIUM */
-@media (max-width: 900px) {
+@media (max-width: 900px) and (min-width: 769px) {
     .app-container {
         flex-direction: column;
     }
@@ -747,6 +752,131 @@ body {
         height: 50%;
         padding: 20px;
     }
+}
+
+/* ESTILOS ESPECÍFICOS PARA MÓVIL (PANTALLAS CHICAS) */
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* Ocultar botones flotantes conflictivos en móvil */
+    #floating-settings-btn,
+    #toggle-panel-btn {
+        display: none !important;
+    }
+
+    /* El panel de configuración ocupa todo el alto menos la barra inferior */
+    #config-panel {
+        width: 100% !important;
+        height: calc(100% - 60px) !important;
+        border-right: none;
+        border-bottom: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        display: flex;
+        transition: none;
+        transform: none !important;
+        margin-left: 0 !important;
+    }
+
+    /* El visor del CV ocupa todo el alto menos la barra inferior */
+    .cv-viewport {
+        width: 100% !important;
+        height: calc(100% - 60px) !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 999;
+        padding: 16px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        overflow-x: hidden;
+    }
+
+    /* Control de visibilidad según pestaña activa de la barra móvil */
+    .app-container.show-editor #config-panel {
+        display: flex !important;
+        visibility: visible !important;
+    }
+    .app-container.show-editor .cv-viewport {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    .app-container:not(.show-editor) #config-panel,
+    .app-container.show-preview #config-panel {
+        display: none !important;
+        visibility: hidden !important;
+    }
+    .app-container:not(.show-editor) .cv-viewport,
+    .app-container.show-preview .cv-viewport {
+        display: flex !important;
+        visibility: visible !important;
+    }
+
+    /* Ajustar posición de botón PDF para no chocar */
+    .print-fab {
+        bottom: 80px;
+        right: 16px;
+    }
+
+    /* Barra de navegación inferior móvil */
+    .mobile-toggle-bar {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        background: #090d16;
+        border-top: 1px solid var(--panel-border);
+        z-index: 10001;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .mobile-tab-btn {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: var(--panel-text-muted);
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+        border-top: 3px solid transparent;
+        height: 100%;
+    }
+
+    .mobile-tab-btn:hover {
+        color: #ffffff;
+    }
+
+    .mobile-tab-btn.active {
+        color: #ffffff;
+        background: rgba(99, 102, 241, 0.08);
+        border-top: 3px solid var(--color-primary-electric);
+    }
+}
+
+/* Estilo para el contenedor del CV que permite escalado */
+#cv-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    height: auto;
 }
 
 /* ============================================================

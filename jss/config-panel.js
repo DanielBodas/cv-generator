@@ -40,6 +40,41 @@ function initConfigPanel() {
     togglePanelBtn.addEventListener('click', () => togglePanel(true));
     floatingSettingsBtn.addEventListener('click', () => togglePanel(false));
 
+    // GESTIÓN DE PESTAÑAS MÓVILES (Editar vs Vista Previa)
+    const appContainer = document.querySelector('.app-container');
+    const mobileEditBtn = document.getElementById('mobile-edit-btn');
+    const mobilePreviewBtn = document.getElementById('mobile-preview-btn');
+
+    if (appContainer && mobileEditBtn && mobilePreviewBtn) {
+        // Inicializar estado por defecto en móvil
+        appContainer.classList.add('show-editor');
+
+        mobileEditBtn.addEventListener('click', () => {
+            mobileEditBtn.classList.add('active');
+            mobilePreviewBtn.classList.remove('active');
+            appContainer.classList.remove('show-preview');
+            appContainer.classList.add('show-editor');
+
+            if (typeof window.adjustCVScale === 'function') {
+                window.adjustCVScale();
+            }
+        });
+
+        mobilePreviewBtn.addEventListener('click', () => {
+            mobilePreviewBtn.classList.add('active');
+            mobileEditBtn.classList.remove('active');
+            appContainer.classList.remove('show-editor');
+            appContainer.classList.add('show-preview');
+
+            // Al cambiar a vista previa, necesitamos asegurar el reajuste del escalado
+            setTimeout(() => {
+                if (typeof window.adjustCVScale === 'function') {
+                    window.adjustCVScale();
+                }
+            }, 50);
+        });
+    }
+
     // 2. NAVEGACIÓN POR PESTAÑAS CON TRANSICIONES
     const tabButtons = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content-item');

@@ -167,12 +167,25 @@
                 </button>
             </div>
 
-            <!-- Hoja A4 pura, sin botones dentro -->
-            <main id="cv-page" class="page-a4">
-                <div id="loading-screen">
-                    <span>Generando CV…</span>
-                </div>
-            </main>
+            <!-- Contenedor para escalado del A4 en móvil -->
+            <div id="cv-wrapper">
+                <!-- Hoja A4 pura, sin botones dentro -->
+                <main id="cv-page" class="page-a4">
+                    <div id="loading-screen">
+                        <span>Generando CV…</span>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <!-- Barra de navegación inferior para móvil -->
+        <div class="mobile-toggle-bar hide-on-print">
+            <button id="mobile-edit-btn" class="mobile-tab-btn active">
+                <span>📝 Editar</span>
+            </button>
+            <button id="mobile-preview-btn" class="mobile-tab-btn">
+                <span>👁️ Vista Previa</span>
+            </button>
         </div>
     </div>
 

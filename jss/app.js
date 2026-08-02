@@ -113,6 +113,13 @@ async function renderAllCV() {
     if (document.getElementById('loading-screen')) {
         document.getElementById('loading-screen').remove();
     }
+
+    // Autoajustar escalado de la página A4
+    setTimeout(() => {
+        if (typeof window.adjustCVScale === 'function') {
+            window.adjustCVScale();
+        }
+    }, 50);
 }
 
 /**
@@ -252,3 +259,43 @@ async function loadSectionScript(id, path, data, cfg, el) {
         console.error(`[Script] Error en ${id}:`, e);
     }
 }
+
+/**
+ * Función de escalado inteligente para encajar la hoja A4 en la pantalla en dispositivos móviles o pequeños.
+ */
+window.adjustCVScale = function() {
+    const viewport = document.querySelector('.cv-viewport');
+    const page = document.getElementById('cv-page');
+    const wrapper = document.getElementById('cv-wrapper');
+    if (!viewport || !page || !wrapper) return;
+
+    // Resetear transformaciones previas para cálculos limpios
+    page.style.transform = 'none';
+    wrapper.style.height = 'auto';
+
+    const viewportWidth = viewport.clientWidth;
+    const padding = window.innerWidth <= 768 ? 32 : 80; // Padding de 16px por lado en móvil, 40px en escritorio
+    const availableWidth = viewportWidth - padding;
+    const pageOriginalWidth = page.offsetWidth || 794;
+    const pageOriginalHeight = page.offsetHeight || 1123;
+
+    if (availableWidth < pageOriginalWidth) {
+        const scale = availableWidth / pageOriginalWidth;
+        page.style.transform = `scale(${scale})`;
+        page.style.transformOrigin = 'top center';
+
+        // El contenedor externo debe adaptarse a la altura escalada real para evitar espacio en blanco excesivo
+        const scaledHeight = pageOriginalHeight * scale;
+        wrapper.style.height = `${scaledHeight}px`;
+    } else {
+        page.style.transform = 'none';
+        wrapper.style.height = 'auto';
+    }
+};
+
+// Registrar eventos de redimensionamiento
+window.addEventListener('resize', () => {
+    if (typeof window.adjustCVScale === 'function') {
+        window.adjustCVScale();
+    }
+});
