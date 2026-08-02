@@ -887,15 +887,16 @@ body {
     #config-panel,
     #floating-settings-btn,
     .print-fab,
-    .live-saved-badge {
+    .live-saved-badge,
+    .mobile-toggle-bar {
         display: none !important;
     }
 
     .app-container {
         display: block !important;
         position: static !important;
-        width: auto !important;
-        height: auto !important;
+        width: 210mm !important;
+        height: 297mm !important;
         overflow: visible !important;
         background: white !important;
     }
@@ -905,15 +906,33 @@ body {
         overflow: visible !important;
         padding: 0 !important;
         margin: 0 !important;
-        width: auto !important;
-        height: auto !important;
+        width: 210mm !important;
+        height: 297mm !important;
         background: white !important;
+    }
+
+    #cv-wrapper {
+        width: 210mm !important;
+        height: 297mm !important;
+        transform: none !important;
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    #cv-page {
+        width: 210mm !important;
+        height: 297mm !important;
+        transform: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
     }
 
     body {
         overflow: visible !important;
-        width: auto !important;
-        height: auto !important;
+        width: 210mm !important;
+        height: 297mm !important;
         background: white !important;
     }
 }
