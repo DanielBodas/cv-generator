@@ -293,8 +293,27 @@ window.adjustCVScale = function() {
     }
 };
 
-// Registrar eventos de redimensionamiento
+// Registrar eventos de redimensionamiento y preparación para impresión
 window.addEventListener('resize', () => {
+    if (typeof window.adjustCVScale === 'function') {
+        window.adjustCVScale();
+    }
+});
+
+// Desactivar el escalado de pantalla móvil al imprimir para que el PDF se genere en un folio A4 real y normal
+window.addEventListener('beforeprint', () => {
+    const page = document.getElementById('cv-page');
+    const wrapper = document.getElementById('cv-wrapper');
+    if (page) {
+        page.style.transform = 'none';
+        page.style.transformOrigin = 'initial';
+    }
+    if (wrapper) {
+        wrapper.style.height = 'auto';
+    }
+});
+
+window.addEventListener('afterprint', () => {
     if (typeof window.adjustCVScale === 'function') {
         window.adjustCVScale();
     }
