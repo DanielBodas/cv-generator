@@ -162,15 +162,15 @@ function initThemeTab() {
         presetsSection.innerHTML = `
             <div class="accordion-header">
                 <div class="accordion-title">
-                    <span>✨</span> <strong>Temas Rápidos SaaS</strong>
+                    <strong>Temas recomendados</strong>
                 </div>
                 <span class="accordion-arrow">▼</span>
             </div>
             <div class="accordion-body">
-                <p class="desc">Aplica combinaciones de colores premium prediseñadas al instante.</p>
+                <p class="desc">Aplica combinaciones de colores de estilo corporativo al instante.</p>
                 <div class="presets-grid">
                     <button class="preset-btn" data-preset="navy">
-                        <span>⚓ Classic Navy</span>
+                        <span>Azul Ejecutivo</span>
                         <div class="preset-colors">
                             <div class="preset-color-dot" style="background: #1d3557;"></div>
                             <div class="preset-color-dot" style="background: #457b9d;"></div>
@@ -178,7 +178,7 @@ function initThemeTab() {
                         </div>
                     </button>
                     <button class="preset-btn" data-preset="midnight">
-                        <span>🌌 Midnight Executive</span>
+                        <span>Gris Carbón</span>
                         <div class="preset-colors">
                             <div class="preset-color-dot" style="background: #0f172a;"></div>
                             <div class="preset-color-dot" style="background: #3b82f6;"></div>
@@ -186,7 +186,7 @@ function initThemeTab() {
                         </div>
                     </button>
                     <button class="preset-btn" data-preset="emerald">
-                        <span>🌲 Minimal Forest</span>
+                        <span>Verde Oxford</span>
                         <div class="preset-colors">
                             <div class="preset-color-dot" style="background: #064e3b;"></div>
                             <div class="preset-color-dot" style="background: #10b981;"></div>
@@ -194,7 +194,7 @@ function initThemeTab() {
                         </div>
                     </button>
                     <button class="preset-btn" data-preset="charcoal">
-                        <span>🎸 Slate Rose</span>
+                        <span>Negro Clásico</span>
                         <div class="preset-colors">
                             <div class="preset-color-dot" style="background: #27272a;"></div>
                             <div class="preset-color-dot" style="background: #f43f5e;"></div>
@@ -358,7 +358,7 @@ function renderSectionsTab() {
 
         const title = document.createElement('div');
         title.className = 'section-card-title';
-        title.innerHTML = `<span>📂</span> <strong>${sec.id}</strong>`;
+        title.innerHTML = `<strong>${sec.id.toUpperCase()}</strong>`;
 
         const controls = document.createElement('div');
         controls.className = 'section-card-controls';
@@ -543,7 +543,7 @@ function renderPremiumContentTab() {
 
         const textContainer = document.createElement('div');
         textContainer.className = 'accordion-title';
-        textContainer.innerHTML = `<span>📝</span> <strong>${sec.id.toUpperCase()}</strong> ${sec.disabled ? '<span style="font-size:10px; opacity:0.5;">(Oculta)</span>' : ''}`;
+        textContainer.innerHTML = `<strong>${sec.id.toUpperCase()}</strong> ${sec.disabled ? '<span style="font-size:10px; opacity:0.5;">(Oculta)</span>' : ''}`;
 
         const arrow = document.createElement('span');
         arrow.className = 'accordion-arrow';
@@ -667,7 +667,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
             gridContainer = null; // Reiniciar rejilla para dar paso a la lista
 
             const label = document.createElement('label');
-            label.innerHTML = `<strong style="color: #818cf8;">📁 ${labelText} (Colección)</strong>`;
+            label.innerHTML = `<strong>${labelText} (Colección)</strong>`;
             formGroup.appendChild(label);
 
             const arrayContainer = document.createElement('div');
@@ -758,7 +758,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
             // Botón para añadir un nuevo elemento de estilo premium
             const btnAdd = document.createElement('button');
             btnAdd.className = 'btn-add-item';
-            btnAdd.innerText = `➕ Añadir nuevo elemento a ${labelText.toLowerCase()}`;
+            btnAdd.innerText = `Añadir elemento a ${labelText.toLowerCase()}`;
             btnAdd.addEventListener('click', (e) => {
                 e.preventDefault();
                 let newItem = "";
@@ -789,7 +789,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
             gridContainer = null; // Reiniciar rejilla
 
             const label = document.createElement('label');
-            label.innerHTML = `<strong>📦 ${labelText}</strong>`;
+            label.innerHTML = `<strong>${labelText}</strong>`;
             formGroup.appendChild(label);
 
             const subContainer = document.createElement('div');
@@ -905,7 +905,7 @@ function renderActionsTab() {
     const masterItem = document.createElement('div');
     masterItem.className = 'download-link-item';
     masterItem.innerHTML = `
-        <span>📄 config/master.json</span>
+        <span>config/master.json</span>
         <a href="#" class="download-link" data-type="master">Descargar</a>
     `;
     masterItem.querySelector('.download-link').addEventListener('click', (e) => {
@@ -919,7 +919,7 @@ function renderActionsTab() {
         const secItem = document.createElement('div');
         secItem.className = 'download-link-item';
         secItem.innerHTML = `
-            <span>📄 sections/${sec.id}/data.json</span>
+            <span>sections/${sec.id}/data.json</span>
             <a href="#" class="download-link" data-type="section" data-id="${sec.id}">Descargar</a>
         `;
         secItem.querySelector('.download-link').addEventListener('click', (e) => {
