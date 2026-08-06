@@ -271,7 +271,12 @@ window.adjustCVScale = function() {
 
     // Resetear transformaciones previas para cálculos limpios
     page.style.transform = 'none';
+    page.style.position = 'static';
+    page.style.left = 'auto';
+    page.style.top = 'auto';
+    wrapper.style.width = '100%';
     wrapper.style.height = 'auto';
+    wrapper.style.position = 'relative';
 
     const viewportWidth = viewport.clientWidth;
     const padding = window.innerWidth <= 768 ? 32 : 80; // Padding de 16px por lado en móvil, 40px en escritorio
@@ -281,14 +286,25 @@ window.adjustCVScale = function() {
 
     if (availableWidth < pageOriginalWidth) {
         const scale = availableWidth / pageOriginalWidth;
-        page.style.transform = `scale(${scale})`;
-        page.style.transformOrigin = 'top center';
 
-        // El contenedor externo debe adaptarse a la altura escalada real para evitar espacio en blanco excesivo
+        // Usamos posicionamiento absoluto para que no dependa del centrado de flexbox del padre al transformarse
+        page.style.position = 'absolute';
+        page.style.left = '0';
+        page.style.top = '0';
+        page.style.transform = `scale(${scale})`;
+        page.style.transformOrigin = 'top left';
+
+        // El contenedor externo debe adaptarse al tamaño escalado exacto para centrarse y fluir correctamente
+        const scaledWidth = pageOriginalWidth * scale;
         const scaledHeight = pageOriginalHeight * scale;
+        wrapper.style.width = `${scaledWidth}px`;
         wrapper.style.height = `${scaledHeight}px`;
     } else {
         page.style.transform = 'none';
+        page.style.position = 'static';
+        page.style.left = 'auto';
+        page.style.top = 'auto';
+        wrapper.style.width = 'auto';
         wrapper.style.height = 'auto';
     }
 };
