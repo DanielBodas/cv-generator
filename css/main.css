@@ -82,6 +82,9 @@ body {
 .page-a4 {
     width: var(--a4-w);
     height: var(--a4-h);
+    min-width: var(--a4-w);
+    min-height: var(--a4-h);
+    flex-shrink: 0;
     background: var(--main-bg);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
     display: grid;
