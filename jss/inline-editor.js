@@ -352,12 +352,11 @@ function openDataEditorModal(sectionId) {
     const data = window.CVSectionsData[sectionId];
     if (!data) return;
 
-    generatePremiumFormFields(data, formCont, [], sectionId);
+    generatePremiumFormFields(data, formCont, [], sectionId, false);
 }
 
 function extractItemHeaderTitle(item, defaultTitle) {
     if (typeof item !== 'object' || item === null) return String(item);
-    // Intentamos buscar campos descriptivos comunes
     const candidates = ['role', 'company', 'category', 'title', 'degree', 'institution', 'name', 'label', 'idioma', 'skill'];
     for (const key of candidates) {
         if (item[key] && typeof item[key] === 'string' && item[key].trim() !== '') {
@@ -367,7 +366,7 @@ function extractItemHeaderTitle(item, defaultTitle) {
     return defaultTitle;
 }
 
-function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
+function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId, forceCollapse = false) {
     if (typeof obj !== 'object' || obj === null) return;
 
     Object.entries(obj).forEach(([key, val]) => {
@@ -414,7 +413,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
 
             val.forEach((item, idx) => {
                 const itemCard = document.createElement('div');
-                itemCard.className = 'array-item collapsed'; // Por defecto colapsado
+                itemCard.className = 'array-item collapsed'; // Collapsed by default
 
                 // Header del Accordion/Colapsable
                 const itemHeader = document.createElement('div');
@@ -438,7 +437,6 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
 
                 // Toggle click handler para colapsar/expandir
                 itemHeader.onclick = (e) => {
-                    // Si se hace clic en el botón de eliminar, no expandir/colapsar
                     if (e.target.closest('.btn-delete-item')) return;
 
                     const isCollapsed = itemCard.classList.contains('collapsed');
@@ -470,7 +468,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
                 itemBody.appendChild(controls);
 
                 if (typeof item === 'object' && item !== null) {
-                    generatePremiumFormFields(item, itemBody, [...currentPath, idx], sectionId);
+                    generatePremiumFormFields(item, itemBody, [...currentPath, idx], sectionId, forceCollapse);
                 } else {
                     const input = document.createElement('input');
                     input.type = 'text';
@@ -481,7 +479,6 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
                         localStorage.setItem(`cv_section_data_${sectionId}`, JSON.stringify(window.CVSectionsData[sectionId]));
                         window.refreshCV();
 
-                        // Actualizar título del header en tiempo real
                         itemTitleSpan.innerText = e.target.value || `Elemento ${idx + 1}`;
                     };
                     itemBody.appendChild(input);
@@ -517,7 +514,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
             const subContainer = document.createElement('div');
             subContainer.className = 'form-object-container';
 
-            generatePremiumFormFields(val, subContainer, currentPath, sectionId);
+            generatePremiumFormFields(val, subContainer, currentPath, sectionId, forceCollapse);
             formGroup.appendChild(subContainer);
             parentElement.appendChild(formGroup);
         }
