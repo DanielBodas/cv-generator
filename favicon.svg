@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="sidebarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1d3557" />
+      <stop offset="100%" stop-color="#457b9d" />
+    </linearGradient>
+    <linearGradient id="mainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+    <linearGradient id="badgeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e" />
+      <stop offset="100%" stop-color="#fb7185" />
+    </linearGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#e2e8f0" stop-opacity="0.3" />
+    </linearGradient>
+
+    <!-- Clip path for profile badge silhouette -->
+    <clipPath id="badgeClip">
+      <circle cx="140" cy="140" r="54" />
+    </clipPath>
+  </defs>
+
+  <style>
+    /* Default light/standard styles */
+    .page-border {
+      stroke: url(#borderGrad);
+      stroke-width: 14;
+      fill: #ffffff;
+      filter: drop-shadow(0px 12px 24px rgba(29, 53, 87, 0.15));
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar-block {
+      fill: url(#sidebarGrad);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .main-block-1, .main-block-2 {
+      fill: url(#mainGrad);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .profile-badge {
+      filter: drop-shadow(0px 8px 16px rgba(244, 63, 94, 0.35));
+      animation: floating 4s ease-in-out infinite;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Soft pulses for lines to feel alive */
+    .line-pulse {
+      animation: pulse 3s ease-in-out infinite alternate;
+    }
+    .line-delay-1 { animation-delay: 0.5s; }
+    .line-delay-2 { animation-delay: 1s; }
+    .line-delay-3 { animation-delay: 1.5s; }
+
+    /* Animations */
+    @keyframes floating {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.25; }
+      100% { opacity: 0.55; }
+    }
+
+    /* Hover interactions (dynamic scale & glows) */
+    svg:hover .page-border {
+      stroke: #6366f1;
+      filter: drop-shadow(0px 16px 32px rgba(99, 102, 241, 0.25));
+    }
+
+    svg:hover .sidebar-block {
+      transform: scale(1.02);
+      transform-origin: 140px 256px;
+    }
+
+    svg:hover .main-block-1 {
+      transform: scale(1.02);
+      transform-origin: 336px 156px;
+    }
+
+    svg:hover .main-block-2 {
+      transform: scale(1.02);
+      transform-origin: 336px 351px;
+    }
+
+    /* Dynamic Dark Mode adjustments */
+    @media (prefers-color-scheme: dark) {
+      .page-border {
+        fill: #0f172a; /* Slate-900 background in dark mode */
+        stroke: #38bdf8; /* Vibrant light blue/cyan glow */
+        filter: drop-shadow(0px 0px 20px rgba(56, 189, 248, 0.4));
+      }
+
+      #sidebarGrad stop:first-child {
+        stop-color: #3b82f6;
+      }
+      #sidebarGrad stop:last-child {
+        stop-color: #60a5fa;
+      }
+
+      #mainGrad stop:first-child {
+        stop-color: #818cf8;
+      }
+      #mainGrad stop:last-child {
+        stop-color: #c084fc;
+      }
+    }
+  </style>
+
+  <!-- Page Sheet Container -->
+  <rect x="40" y="40" width="432" height="432" rx="48" class="page-border" />
+
+  <!-- Sidebar Column (Left) -->
+  <g class="sidebar-block">
+    <rect x="70" y="70" width="140" height="372" rx="20" />
+    <!-- Sidebar Details / Skill Lines -->
+    <rect x="94" y="280" width="92" height="12" rx="6" fill="#ffffff" class="line-pulse line-delay-1" />
+    <rect x="94" y="310" width="76" height="12" rx="6" fill="#ffffff" class="line-pulse line-delay-2" />
+    <rect x="94" y="340" width="84" height="12" rx="6" fill="#ffffff" class="line-pulse line-delay-3" />
+  </g>
+
+  <!-- Main Area Column (Right) -->
+  <!-- Main Block 1 (Top) -->
+  <g class="main-block-1">
+    <rect x="230" y="70" width="212" height="172" rx="20" />
+    <!-- Lines inside Block 1 -->
+    <rect x="256" y="114" width="160" height="12" rx="6" fill="#ffffff" class="line-pulse line-delay-1" />
+    <rect x="256" y="144" width="128" height="12" rx="6" fill="#ffffff" class="line-pulse line-delay-2" />
+    <rect x="256" y="174" width="144" height="12" rx="6" fill="#ffffff" class="line-pulse line-delay-3" />
+  </g>
+
+  <!-- Main Block 2 (Bottom) -->
+  <g class="main-block-2">
+    <rect x="230" y="260" width="212" height="182" rx="20" />
+    <!-- Lines inside Block 2 -->
+    <rect x="256" y="304" width="160" height="12" rx="6" fill="#ffffff" class="line-pulse line-delay-1" />
+    <rect x="256" y="334" width="140" height="12" rx="6" fill="#ffffff" class="line-pulse line-delay-2" />
+    <rect x="256" y="364" width="112" height="12" rx="6" fill="#ffffff" class="line-pulse line-delay-3" />
+  </g>
+
+  <!-- Floating Dynamic Profile Badge -->
+  <g class="profile-badge">
+    <!-- Base Badge Circle with Pink Gradient -->
+    <circle cx="140" cy="140" r="54" fill="url(#badgeGrad)" />
+    <!-- Stylized User Avatar Clipped to Circle -->
+    <g clip-path="url(#badgeClip)">
+      <circle cx="140" cy="120" r="18" fill="#ffffff" />
+      <path d="M100 174 C100 148 116 142 140 142 C164 142 180 148 180 174 Z" fill="#ffffff" />
+    </g>
+  </g>
+</svg>
