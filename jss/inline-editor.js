@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const file = e.target.files[0];
         if (!file) return;
         const reader = new FileReader();
-        reader.onload = function(evt) {
+        reader.onload = function (evt) {
             try {
                 const data = JSON.parse(evt.target.result);
                 if (data.masterConfig) localStorage.setItem('cv_master_config', JSON.stringify(data.masterConfig));
@@ -80,22 +80,22 @@ function showModal(contentHtml) {
     const { modal, overlay } = getGenericModal();
     modal.className = 'modal'; // Limpia clases previas
     modal.innerHTML = contentHtml;
-    
+
     overlay.style.display = 'block';
     modal.style.display = 'block';
-    
+
     setTimeout(() => {
         overlay.classList.add('show');
         modal.classList.add('show');
     }, 10);
 }
 
-window.closeModal = function() {
+window.closeModal = function () {
     const modal = document.getElementById('general-settings-modal');
     const overlay = document.querySelector('.modal-overlay');
     if (modal) modal.classList.remove('show');
     if (overlay) overlay.classList.remove('show');
-    
+
     setTimeout(() => {
         if (modal) modal.style.display = 'none';
         if (overlay) overlay.style.display = 'none';
@@ -147,9 +147,9 @@ function openGeneralSettingsModal() {
             <div class="form-group-single">
                 <label>Fuente del currículum</label>
                 <select id="inline-theme-font" class="dynamic-select">
-                    <option value="'Inter', sans-serif" ${(config.theme.fontFamily||'').includes('Inter') ? 'selected' : ''}>Inter</option>
-                    <option value="'Roboto', sans-serif" ${(config.theme.fontFamily||'').includes('Roboto') ? 'selected' : ''}>Roboto</option>
-                    <option value="system-ui, sans-serif" ${(config.theme.fontFamily||'').includes('system-ui') ? 'selected' : ''}>Predeterminada del Sistema</option>
+                    <option value="'Inter', sans-serif" ${(config.theme.fontFamily || '').includes('Inter') ? 'selected' : ''}>Inter</option>
+                    <option value="'Roboto', sans-serif" ${(config.theme.fontFamily || '').includes('Roboto') ? 'selected' : ''}>Roboto</option>
+                    <option value="system-ui, sans-serif" ${(config.theme.fontFamily || '').includes('system-ui') ? 'selected' : ''}>Predeterminada del Sistema</option>
                 </select>
             </div>
 
@@ -170,20 +170,20 @@ function openGeneralSettingsModal() {
     showModal(html);
 }
 
-window.setDebugLevel = function(level) {
+window.setDebugLevel = function (level) {
     document.querySelectorAll('.debug-toggle-btn').forEach(b => {
         b.classList.toggle('active', parseInt(b.dataset.level) === level);
     });
     window._pendingDebugLevel = level;
 };
 
-window.saveGeneralSettings = function() {
+window.saveGeneralSettings = function () {
     window.CVConfig.theme.primaryColor = document.getElementById('inline-theme-primary').value;
     window.CVConfig.theme.sidebarColor = document.getElementById('inline-theme-sidebar').value;
     window.CVConfig.theme.backgroundColor = document.getElementById('inline-theme-bg').value;
     window.CVConfig.theme.textColor = document.getElementById('inline-theme-text').value;
     window.CVConfig.theme.fontFamily = document.getElementById('inline-theme-font').value;
-    
+
     const activeDebugBtn = document.querySelector('.debug-toggle-btn.active');
     const debugLevel = window._pendingDebugLevel !== undefined
         ? window._pendingDebugLevel
@@ -392,7 +392,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId, forc
             }
             input.value = val;
             input.className = 'dynamic-input';
-            
+
             input.addEventListener('change', (e) => {
                 const finalVal = typeof val === 'number' ? parseFloat(e.target.value) : e.target.value;
                 updateNestedValue(window.CVSectionsData[sectionId], currentPath, finalVal);
@@ -423,7 +423,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId, forc
                 const itemTitleSpan = document.createElement('span');
                 itemTitleSpan.className = 'array-item-title';
                 itemTitleSpan.innerText = itemTitleText;
-                
+
                 const caretSpan = document.createElement('span');
                 caretSpan.className = 'array-item-caret';
                 caretSpan.innerHTML = '▼';
@@ -451,7 +451,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId, forc
 
                 const controls = document.createElement('div');
                 controls.className = 'array-controls';
-                
+
                 const btnDel = document.createElement('button');
                 btnDel.innerText = 'Eliminar';
                 btnDel.className = 'btn-delete-item';
@@ -492,7 +492,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId, forc
             btnAdd.innerText = `+ Añadir elemento a ${labelText}`;
             btnAdd.onclick = (e) => {
                 e.preventDefault();
-                let newItem = typeof val[0] === 'object' ? Object.keys(val[0]).reduce((acc, k) => ({...acc, [k]: ""}), {}) : "";
+                let newItem = typeof val[0] === 'object' ? Object.keys(val[0]).reduce((acc, k) => ({ ...acc, [k]: "" }), {}) : "";
                 val.push(newItem);
                 localStorage.setItem(`cv_section_data_${sectionId}`, JSON.stringify(window.CVSectionsData[sectionId]));
                 window.refreshSection(sectionId);
@@ -560,7 +560,7 @@ function openBackupsModal() {
     showModal(html);
 }
 
-window.exportBackup = function() {
+window.exportBackup = function () {
     const fullBackup = {
         masterConfig: window.CVConfig,
         sectionsData: window.CVSectionsData
@@ -572,7 +572,7 @@ window.exportBackup = function() {
     dlAnchorElem.click();
 };
 
-window.resetToFactory = function() {
+window.resetToFactory = function () {
     if (confirm('¿Estás seguro de que deseas restablecer todos los datos del currículum de fábrica? Se perderán todas tus personalizaciones.')) {
         localStorage.clear();
         location.reload();
@@ -588,8 +588,10 @@ function changeSectionComponent(sectionId) {
     if (!sec) return;
 
     let options = [];
+
     if (sectionId === 'languages') {
         const current = sec.component || 'bars';
+
         options = [
             {
                 id: 'bars',
@@ -599,11 +601,15 @@ function changeSectionComponent(sectionId) {
                     <div class="component-preview-visual bars-preview">
                         <div class="preview-bar-row">
                             <span class="preview-lbl">Inglés</span>
-                            <div class="preview-bar-line"><div class="preview-bar-fill" style="width: 85%;"></div></div>
+                            <div class="preview-bar-line">
+                                <div class="preview-bar-fill" style="width: 85%;"></div>
+                            </div>
                         </div>
                         <div class="preview-bar-row">
                             <span class="preview-lbl">Francés</span>
-                            <div class="preview-bar-line"><div class="preview-bar-fill" style="width: 60%;"></div></div>
+                            <div class="preview-bar-line">
+                                <div class="preview-bar-fill" style="width: 60%;"></div>
+                            </div>
                         </div>
                     </div>
                 `,
@@ -628,8 +634,10 @@ function changeSectionComponent(sectionId) {
                 }
             }
         ];
+
     } else {
         const currentMode = sec.mode || 'detailed';
+
         options = [
             {
                 id: 'detailed',
@@ -670,29 +678,39 @@ function changeSectionComponent(sectionId) {
     }
 
     const sectionNameStr = sectionNames[sectionId] || sectionId.toUpperCase();
+
     let html = `
         <div class="modal-header">
             <h2>Diseño Visual: ${sectionNameStr}</h2>
             <button class="btn-close" onclick="closeModal()">×</button>
         </div>
-        <p class="modal-desc-text">Selecciona la variante de visualización preferida para esta sección de tu CV.</p>
+
+        <p class="modal-desc-text">
+            Selecciona la variante de visualización preferida para esta sección de tu CV.
+        </p>
+
         <div class="modal-body">
             <div class="component-options-grid">
     `;
 
     options.forEach((opt, idx) => {
         html += `
-            <div class="component-option-card ${opt.active ? 'active' : ''}" onclick="selectComponentOption('${sectionId}', ${idx})">
+            <div class="component-option-card ${opt.active ? 'active' : ''}"
+                 onclick="selectComponentOption('${sectionId}', ${idx})">
+
                 <div class="option-card-preview">
                     ${opt.previewHtml}
                 </div>
+
                 <div class="option-card-meta">
                     <div class="option-card-title-row">
                         <span class="option-card-title">${opt.name}</span>
                         ${opt.active ? '<span class="active-badge">Seleccionado</span>' : ''}
                     </div>
+
                     <p class="option-card-desc">${opt.desc}</p>
                 </div>
+
             </div>
         `;
     });
@@ -703,19 +721,41 @@ function changeSectionComponent(sectionId) {
     `;
 
     showModal(html);
+
     const modalEl = document.getElementById('general-settings-modal');
     if (modalEl) {
         modalEl.classList.add('modal-medium');
     }
 
+    // Guardamos las opciones para poder seleccionarlas desde el modal
     window._tempOptions = options;
+
+    // Guardamos la configuración actual
+    localStorage.setItem(
+        'cv_master_config',
+        JSON.stringify(config)
+    );
+
+    // Refrescamos la sección actual
+    window.refreshSection(sectionId);
 }
 
-window.selectComponentOption = function(sectionId, index) {
+window.selectComponentOption = function (sectionId, index) {
     if (window._tempOptions && window._tempOptions[index]) {
+
+        // Aplicar la variante seleccionada
         window._tempOptions[index].apply();
-        localStorage.setItem('cv_master_config', JSON.stringify(window.CVConfig));
+
+        // Guardar la configuración actualizada
+        localStorage.setItem(
+            'cv_master_config',
+            JSON.stringify(window.CVConfig)
+        );
+
+        // Cerrar el modal
         closeModal();
+
+        // Refrescar el CV completo
         window.refreshCV();
     }
 };
