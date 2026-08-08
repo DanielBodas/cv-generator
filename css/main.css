@@ -79,6 +79,19 @@ body {
 /* ============================================================
    HOJA A4
    ============================================================ */
+.cv-viewport {
+    min-width: 0;
+    max-width: 100%;
+}
+
+#cv-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: auto;
+    height: auto;
+}
+
 .page-a4 {
     width: var(--a4-w);
     height: var(--a4-h);
@@ -87,6 +100,21 @@ body {
     display: grid;
     overflow: hidden;
     position: relative;
+}
+
+/* ============================================================
+   RESPONSIVE Y ESCALADO MÓVIL
+   ============================================================ */
+@media (max-width: 768px) {
+    #cv-wrapper {
+        flex-shrink: 0;
+    }
+
+    .page-a4 {
+        flex-shrink: 0;
+        min-width: var(--a4-w);
+        min-height: var(--a4-h);
+    }
 }
 
 .area-container {

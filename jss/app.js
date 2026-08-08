@@ -148,6 +148,13 @@ async function renderAllCV() {
     if (document.getElementById('loading-screen')) {
         document.getElementById('loading-screen').remove();
     }
+
+    // Autoajustar escalado de la página A4
+    setTimeout(() => {
+        if (typeof window.adjustCVScale === 'function') {
+            window.adjustCVScale();
+        }
+    }, 50);
 }
 
 /**
@@ -403,3 +410,83 @@ async function loadSectionScript(id, path, data, cfg, el) {
         console.error(`[Script] Error en ${id}:`, e);
     }
 }
+
+/**
+ * Función de escalado inteligente para encajar la hoja A4 en la pantalla en dispositivos móviles o pequeños.
+ */
+window.adjustCVScale = function() {
+    const viewport = document.querySelector('.cv-viewport');
+    const page = document.getElementById('cv-page');
+    const wrapper = document.getElementById('cv-wrapper');
+    if (!viewport || !page || !wrapper) return;
+
+    // Resetear transformaciones previas para cálculos limpios
+    page.style.transform = 'none';
+    page.style.position = 'static';
+    page.style.left = 'auto';
+    page.style.top = 'auto';
+    wrapper.style.width = '100%';
+    wrapper.style.height = 'auto';
+    wrapper.style.position = 'relative';
+
+    // Determinar el ancho de pantalla disponible de forma extremadamente robusta
+    const screenWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
+    const isMobile = screenWidth <= 768;
+    const padding = isMobile ? 32 : 80; // Padding de 16px por lado en móvil, 40px en escritorio
+    const availableWidth = screenWidth - padding;
+    const pageOriginalWidth = page.offsetWidth || 794;
+    const pageOriginalHeight = page.offsetHeight || 1123;
+
+    console.log("adjustCVScale - screenWidth:", screenWidth, "padding:", padding, "availableWidth:", availableWidth, "pageOriginalWidth:", pageOriginalWidth);
+
+    if (availableWidth < pageOriginalWidth) {
+        const scale = availableWidth / pageOriginalWidth;
+        console.log("adjustCVScale - scaling to:", scale);
+
+        // Usamos posicionamiento absoluto para que no dependa del centrado de flexbox del padre al transformarse
+        page.style.position = 'absolute';
+        page.style.left = '0';
+        page.style.top = '0';
+        page.style.transform = `scale(${scale})`;
+        page.style.transformOrigin = 'top left';
+
+        // El contenedor externo debe adaptarse al tamaño escalado exacto para centrarse y fluir correctamente
+        const scaledWidth = pageOriginalWidth * scale;
+        const scaledHeight = pageOriginalHeight * scale;
+        wrapper.style.width = `${scaledWidth}px`;
+        wrapper.style.height = `${scaledHeight}px`;
+    } else {
+        page.style.transform = 'none';
+        page.style.position = 'static';
+        page.style.left = 'auto';
+        page.style.top = 'auto';
+        wrapper.style.width = 'auto';
+        wrapper.style.height = 'auto';
+    }
+};
+
+// Registrar eventos de redimensionamiento y preparación para impresión
+window.addEventListener('resize', () => {
+    if (typeof window.adjustCVScale === 'function') {
+        window.adjustCVScale();
+    }
+});
+
+// Desactivar el escalado de pantalla móvil al imprimir para que el PDF se genere en un folio A4 real y normal
+window.addEventListener('beforeprint', () => {
+    const page = document.getElementById('cv-page');
+    const wrapper = document.getElementById('cv-wrapper');
+    if (page) {
+        page.style.transform = 'none';
+        page.style.transformOrigin = 'initial';
+    }
+    if (wrapper) {
+        wrapper.style.height = 'auto';
+    }
+});
+
+window.addEventListener('afterprint', () => {
+    if (typeof window.adjustCVScale === 'function') {
+        window.adjustCVScale();
+    }
+});
