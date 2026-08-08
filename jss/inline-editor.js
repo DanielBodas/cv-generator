@@ -397,7 +397,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId, forc
                 const finalVal = typeof val === 'number' ? parseFloat(e.target.value) : e.target.value;
                 updateNestedValue(window.CVSectionsData[sectionId], currentPath, finalVal);
                 localStorage.setItem(`cv_section_data_${sectionId}`, JSON.stringify(window.CVSectionsData[sectionId]));
-                window.refreshSection(sectionId);
+                window.refreshCV();
             });
             formGroup.appendChild(input);
             parentElement.appendChild(formGroup);

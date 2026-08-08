@@ -572,7 +572,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
             input.addEventListener('change', (e) => {
                 updateNestedValue(window.CVSectionsData[sectionId], currentPath, e.target.value);
                 saveSectionData(sectionId);
-                window.refreshCV();
+                window.refreshSection(sectionId);
                 triggerSaveAnimation();
             });
 
@@ -587,7 +587,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
             input.addEventListener('change', (e) => {
                 updateNestedValue(window.CVSectionsData[sectionId], currentPath, parseFloat(e.target.value));
                 saveSectionData(sectionId);
-                window.refreshCV();
+                window.refreshSection(sectionId);
                 triggerSaveAnimation();
             });
             formGroup.appendChild(input);
@@ -630,7 +630,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
                     if (idx > 0) {
                         val.splice(idx - 1, 0, val.splice(idx, 1)[0]);
                         saveSectionData(sectionId);
-                        window.refreshCV();
+                        window.refreshSection(sectionId);
                         renderPremiumContentTab();
                         triggerSaveAnimation();
                     }
@@ -645,7 +645,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
                     if (idx < val.length - 1) {
                         val.splice(idx + 1, 0, val.splice(idx, 1)[0]);
                         saveSectionData(sectionId);
-                        window.refreshCV();
+                        window.refreshSection(sectionId);
                         renderPremiumContentTab();
                         triggerSaveAnimation();
                     }
@@ -663,7 +663,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
                     if (confirm('¿Seguro que deseas eliminar este elemento de la lista?')) {
                         val.splice(idx, 1);
                         saveSectionData(sectionId);
-                        window.refreshCV();
+                        window.refreshSection(sectionId);
                         renderPremiumContentTab();
                         triggerSaveAnimation();
                     }
@@ -685,7 +685,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
                     input.addEventListener('change', (e) => {
                         updateNestedValue(window.CVSectionsData[sectionId], [...currentPath, idx], e.target.value);
                         saveSectionData(sectionId);
-                        window.refreshCV();
+                        window.refreshSection(sectionId);
                         triggerSaveAnimation();
                     });
                     itemCard.appendChild(input);
@@ -715,7 +715,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
 
                 val.push(newItem);
                 saveSectionData(sectionId);
-                window.refreshCV();
+                window.refreshSection(sectionId);
                 renderPremiumContentTab();
                 triggerSaveAnimation();
             });

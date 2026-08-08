@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="cGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" class="c-stop-1" />
+      <stop offset="100%" class="c-stop-2" />
+    </linearGradient>
+    <linearGradient id="vGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" class="v-stop-1" />
+      <stop offset="100%" class="v-stop-2" />
+    </linearGradient>
+  </defs>
+
+  <style>
+    /* Default light/standard styles */
+    stop {
+      transition: stop-color 0.4s ease;
+    }
+
+    .c-stop-1 { stop-color: #6366f1; } /* Indigo */
+    .c-stop-2 { stop-color: #8b5cf6; } /* Violet */
+
+    .v-stop-1 { stop-color: #06b6d4; } /* Cyan */
+    .v-stop-2 { stop-color: #3b82f6; } /* Blue */
+
+    .c-path {
+      stroke: url(#cGrad);
+      stroke-width: 48;
+      stroke-linecap: round;
+      fill: none;
+      filter: drop-shadow(0px 10px 20px rgba(99, 102, 241, 0.25));
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .v-path {
+      stroke: url(#vGrad);
+      stroke-width: 48;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      filter: drop-shadow(0px 10px 20px rgba(6, 182, 212, 0.25));
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .monogram-group {
+      transform-origin: 256px 256px;
+      animation: float 5s ease-in-out infinite;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(1.5deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+
+    /* Hover interactions */
+    svg:hover .monogram-group {
+      transform: scale(1.05);
+    }
+
+    svg:hover .c-path {
+      filter: drop-shadow(0px 15px 30px rgba(99, 102, 241, 0.45));
+    }
+
+    svg:hover .v-path {
+      filter: drop-shadow(0px 15px 30px rgba(6, 182, 212, 0.45));
+    }
+
+    /* Dynamic Dark Mode adjustments */
+    @media (prefers-color-scheme: dark) {
+      .c-stop-1 { stop-color: #818cf8; } /* Lighter Indigo */
+      .c-stop-2 { stop-color: #a78bfa; } /* Lighter Violet */
+
+      .v-stop-1 { stop-color: #22d3ee; } /* Lighter Cyan */
+      .v-stop-2 { stop-color: #60a5fa; } /* Lighter Blue */
+
+      .c-path {
+        filter: drop-shadow(0px 12px 25px rgba(129, 140, 248, 0.4));
+      }
+      .v-path {
+        filter: drop-shadow(0px 12px 25px rgba(34, 211, 238, 0.4));
+      }
+
+      svg:hover .c-path {
+        filter: drop-shadow(0px 18px 35px rgba(129, 140, 248, 0.6));
+      }
+
+      svg:hover .v-path {
+        filter: drop-shadow(0px 18px 35px rgba(34, 211, 238, 0.6));
+      }
+    }
+  </style>
+
+  <!-- Animated Monogram Group -->
+  <g class="monogram-group">
+    <!-- 'C' Path (Elegant Left Curve) -->
+    <path d="M 321,140 C 121,140 121,372 321,372" class="c-path" />
+
+    <!-- 'V' Path (Sharp Modern Chevron) -->
+    <path d="M 211,190 L 301,350 L 391,190" class="v-path" />
+  </g>
+</svg>

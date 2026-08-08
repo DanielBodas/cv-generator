@@ -130,27 +130,20 @@ async function renderAllCV() {
         }
     });
 
-    // Renderizar secciones activas en el orden de la configuración
-    for (const sec of config.sections) {
-        if (sec.disabled) continue; // Omitir secciones deshabilitadas
+    // 1. Crear de forma síncrona los "caparazones" (shells) de las secciones para renderizar el layout primero.
+    const activeShells = [];
+    config.sections.forEach(sec => {
+        if (sec.disabled) return;
         const target = areaEls[sec.area];
         if (target) {
-            const el = await renderSection(sec, target);
-            if (debugLvl > 0 && el) {
-                const tag = document.createElement('div');
-                tag.className = 'debug-section-tag';
-                const w = sec.weight;
-                if (w === true || w === 0 || !w) {
-                    tag.innerText = `ID: ${sec.id} | W: AUTO`;
-                } else if (typeof w === 'number') {
-                    const totalW = areaWeights[sec.area];
-                    const pct = totalW > 0 ? Math.round((w / totalW) * 100) : 0;
-                    tag.innerText = `ID: ${sec.id} | W: ${w}/${totalW} (${pct}%)`;
-                }
-                el.prepend(tag);
-            }
+            const el = createSectionShell(sec, target);
+            activeShells.push({ cfg: sec, el });
         }
-    }
+    });
+
+    // 2. Cargar y renderizar cada sección individualmente y en paralelo.
+    const renderPromises = activeShells.map(({ cfg, el }) => populateSection(cfg, el, areaWeights));
+    await Promise.all(renderPromises);
 
     if (document.getElementById('loading-screen')) {
         document.getElementById('loading-screen').remove();
@@ -158,65 +151,65 @@ async function renderAllCV() {
 }
 
 /**
- * Función global expuesta para volver a renderizar el CV en tiempo real al editar.
+ * Crea el caparazón HTML de una sección en el área de layout correspondiente de forma síncrona.
  */
-window.refreshCV = async function() {
-    console.log('🔄 Re-renderizando CV en tiempo real...');
-    await renderAllCV();
-    // Emitir evento para indicar que el CV se redibujó
-    document.dispatchEvent(new CustomEvent('cv-refreshed'));
-};
+function createSectionShell(cfg, container) {
+    const el = document.createElement('section');
+    el.id = `section-${cfg.id}`;
+    el.className = `cv-section section-${cfg.id} mode-${cfg.mode || 'detailed'}`;
+    el.style.position = 'relative';
 
-function applyTheme(theme, layout) {
-    const r = document.documentElement;
-    if (theme.primaryColor) r.style.setProperty('--primary', theme.primaryColor);
-    if (theme.secondaryColor) r.style.setProperty('--accent', theme.secondaryColor);
-    if (theme.sidebarColor) r.style.setProperty('--sidebar-bg', theme.sidebarColor);
-    if (theme.textColor) r.style.setProperty('--text', theme.textColor);
-    if (theme.backgroundColor) r.style.setProperty('--main-bg', theme.backgroundColor);
-    if (theme.fontFamily) r.style.setProperty('--font', theme.fontFamily);
-    if (layout && layout.sectionGap) r.style.setProperty('--section-gap', layout.sectionGap);
+    const w = cfg.weight;
+    if (typeof w === 'number' && w > 0) {
+        el.style.flex = `${w} 1 0%`;
+    } else if (w === true) {
+        el.style.flex = '0 1 auto'; // Flexible pero puede encoger
+    } else {
+        el.style.flex = '0 0 auto'; // Fijo
+    }
+
+    container.appendChild(el);
+    return el;
 }
 
-function setupGrid(layout) {
-    const page = document.getElementById('cv-page');
-    page.style.gridTemplateColumns = layout.columns || '200px 1fr';
-    page.style.gridTemplateAreas = layout.gridAreas.map(r => `"${r}"`).join(' ');
-}
-
-async function renderSection(cfg, container) {
-    const sectionRootPath = `./sections/${cfg.id}`;
+/**
+ * Carga de forma asíncrona la plantilla, datos, estilos y scripts de una sección concreta y la renderiza.
+ */
+async function populateSection(cfg, el, areaWeights = null) {
+    if (!el) return;
+    const sectionId = cfg.id;
+    const sectionRootPath = `./sections/${sectionId}`;
     let templatePath = sectionRootPath;
     if (cfg.component) {
         templatePath = `${sectionRootPath}/components/${cfg.component}`;
     }
     // Para retrocompatibilidad o por si languages no tiene componente en config inicial
-    if (cfg.id === 'languages' && !cfg.component) {
+    if (sectionId === 'languages' && !cfg.component) {
         templatePath = `${sectionRootPath}/components/bars`;
         cfg.component = 'bars';
     }
 
     try {
         const htmlRes = await fetch(`${templatePath}/template.html`);
-        if (!htmlRes.ok) throw new Error(`Error al cargar plantilla de ${cfg.id}`);
+        if (!htmlRes.ok) throw new Error(`Error al cargar plantilla de ${sectionId}`);
         let tpl = await htmlRes.text();
 
         // Cargar Datos de la Sección (de Memoria, localStorage o Red)
-        let data = window.CVSectionsData[cfg.id];
+        let data = window.CVSectionsData[sectionId];
         if (!data) {
-            const savedData = localStorage.getItem(`cv_section_data_${cfg.id}`);
+            const savedData = localStorage.getItem(`cv_section_data_${sectionId}`);
             if (savedData) {
                 data = JSON.parse(savedData);
-                window.CVSectionsData[cfg.id] = data;
+                window.CVSectionsData[sectionId] = data;
             } else {
                 const dataRes = await fetch(`${sectionRootPath}/data.json`);
                 data = dataRes.ok ? await dataRes.json() : {};
-                window.CVSectionsData[cfg.id] = data;
-                localStorage.setItem(`cv_section_data_${cfg.id}`, JSON.stringify(data));
+                window.CVSectionsData[sectionId] = data;
+                localStorage.setItem(`cv_section_data_${sectionId}`, JSON.stringify(data));
             }
         }
 
-        await injectStyles(cfg.id, templatePath);
+        await injectStyles(sectionId, templatePath);
 
         // Soporte básico para condicionales {{#if key}} ... {{/if}}
         tpl = tpl.replace(/{{\s*#if\s+(\w+)\s*}}([\s\S]*?){{\s*\/if\s*}}/g, (_, key, sub) => {
@@ -258,18 +251,15 @@ async function renderSection(cfg, container) {
             if (typeof v !== 'object') tpl = tpl.replaceAll(`{{${k}}}`, String(v));
         });
 
-        const el = document.createElement('section');
+        // Asegurar clases del caparazón
         el.className = `cv-section section-${cfg.id} mode-${cfg.mode || 'detailed'}`;
-        // Añadimos position relative para posicionar la toolbar absoluta
-        el.style.position = 'relative';
-
         const w = cfg.weight;
         if (typeof w === 'number' && w > 0) {
             el.style.flex = `${w} 1 0%`;
         } else if (w === true) {
-            el.style.flex = '0 1 auto'; // Flexible pero puede encoger
+            el.style.flex = '0 1 auto';
         } else {
-            el.style.flex = '0 0 auto'; // Fijo
+            el.style.flex = '0 0 auto';
         }
 
         const toolbarHtml = `
@@ -285,16 +275,92 @@ async function renderSection(cfg, container) {
         `;
 
         el.innerHTML = toolbarHtml + tpl;
-        container.appendChild(el);
 
         // Solo intentar cargar script.js si está marcado explícitamente
         if (cfg.hasScript === true) {
             await loadSectionScript(cfg.id, templatePath, data, cfg, el);
         }
+
+        const debugLvl = window.CVConfig.layout.debugLayout || 0;
+        if (debugLvl > 0) {
+            // Eliminar debug previa si existía
+            const oldTag = el.querySelector('.debug-section-tag');
+            if (oldTag) oldTag.remove();
+
+            const tag = document.createElement('div');
+            tag.className = 'debug-section-tag';
+            const w = cfg.weight;
+
+            let totalW = 0;
+            if (areaWeights && areaWeights[cfg.area] !== undefined) {
+                totalW = areaWeights[cfg.area];
+            } else {
+                window.CVConfig.sections.forEach(sec => {
+                    if (sec.disabled) return;
+                    const sw = sec.weight;
+                    if (sec.area === cfg.area && typeof sw === 'number' && sw > 0) {
+                        totalW += sw;
+                    }
+                });
+            }
+
+            if (w === true || w === 0 || !w) {
+                tag.innerText = `ID: ${cfg.id} | W: AUTO`;
+            } else if (typeof w === 'number') {
+                const pct = totalW > 0 ? Math.round((w / totalW) * 100) : 0;
+                tag.innerText = `ID: ${cfg.id} | W: ${w}/${totalW} (${pct}%)`;
+            }
+            el.prepend(tag);
+        }
+
         return el;
     } catch (e) {
         console.warn(`[CV] ${cfg.id} omitido o error de renderizado:`, e.message);
     }
+}
+
+/**
+ * Función global expuesta para volver a renderizar el CV completo.
+ */
+window.refreshCV = async function() {
+    console.log('🔄 Re-renderizando CV completo en tiempo real...');
+    await renderAllCV();
+    // Emitir evento para indicar que el CV se redibujó
+    document.dispatchEvent(new CustomEvent('cv-refreshed'));
+};
+
+/**
+ * Función global expuesta para volver a renderizar únicamente una sección.
+ */
+window.refreshSection = async function(sectionId) {
+    console.log(`🔄 Re-renderizando sección individual: ${sectionId}...`);
+    const config = window.CVConfig;
+    if (!config) return;
+    const sec = config.sections.find(s => s.id === sectionId);
+    if (!sec || sec.disabled) return;
+    const el = document.getElementById(`section-${sectionId}`);
+    if (el) {
+        await populateSection(sec, el);
+    }
+    // Emitir evento para indicar que el CV se redibujó de alguna forma
+    document.dispatchEvent(new CustomEvent('cv-refreshed'));
+};
+
+function applyTheme(theme, layout) {
+    const r = document.documentElement;
+    if (theme.primaryColor) r.style.setProperty('--primary', theme.primaryColor);
+    if (theme.secondaryColor) r.style.setProperty('--accent', theme.secondaryColor);
+    if (theme.sidebarColor) r.style.setProperty('--sidebar-bg', theme.sidebarColor);
+    if (theme.textColor) r.style.setProperty('--text', theme.textColor);
+    if (theme.backgroundColor) r.style.setProperty('--main-bg', theme.backgroundColor);
+    if (theme.fontFamily) r.style.setProperty('--font', theme.fontFamily);
+    if (layout && layout.sectionGap) r.style.setProperty('--section-gap', layout.sectionGap);
+}
+
+function setupGrid(layout) {
+    const page = document.getElementById('cv-page');
+    page.style.gridTemplateColumns = layout.columns || '200px 1fr';
+    page.style.gridTemplateAreas = layout.gridAreas.map(r => `"${r}"`).join(' ');
 }
 
 function injectStyles(sectionId, path) {
