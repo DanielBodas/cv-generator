@@ -343,7 +343,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
                 const finalVal = typeof val === 'number' ? parseFloat(e.target.value) : e.target.value;
                 updateNestedValue(window.CVSectionsData[sectionId], currentPath, finalVal);
                 localStorage.setItem(`cv_section_data_${sectionId}`, JSON.stringify(window.CVSectionsData[sectionId]));
-                window.refreshCV();
+                window.refreshSection(sectionId);
             });
             formGroup.appendChild(input);
             parentElement.appendChild(formGroup);
@@ -372,7 +372,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
                 btnDel.onclick = () => {
                     val.splice(idx, 1);
                     localStorage.setItem(`cv_section_data_${sectionId}`, JSON.stringify(window.CVSectionsData[sectionId]));
-                    window.refreshCV();
+                    window.refreshSection(sectionId);
                     openDataEditorModal(sectionId); // re-render modal
                 };
 
@@ -389,7 +389,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
                     input.onchange = (e) => {
                         updateNestedValue(window.CVSectionsData[sectionId], [...currentPath, idx], e.target.value);
                         localStorage.setItem(`cv_section_data_${sectionId}`, JSON.stringify(window.CVSectionsData[sectionId]));
-                        window.refreshCV();
+                        window.refreshSection(sectionId);
                     };
                     itemCard.appendChild(input);
                 }
@@ -406,7 +406,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
                 let newItem = typeof val[0] === 'object' ? Object.keys(val[0]).reduce((acc, k) => ({...acc, [k]: ""}), {}) : "";
                 val.push(newItem);
                 localStorage.setItem(`cv_section_data_${sectionId}`, JSON.stringify(window.CVSectionsData[sectionId]));
-                window.refreshCV();
+                window.refreshSection(sectionId);
                 openDataEditorModal(sectionId);
             };
 
@@ -513,5 +513,5 @@ function changeSectionComponent(sectionId) {
     }
 
     localStorage.setItem('cv_master_config', JSON.stringify(config));
-    window.refreshCV();
+    window.refreshSection(sectionId);
 }
