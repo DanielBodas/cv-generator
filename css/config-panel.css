@@ -750,6 +750,255 @@ body {
 }
 
 /* ============================================================
+   ESTILOS EVALUADOR Y OPTIMIZACIÓN ATS (SaaS PREMIUM STYLE)
+   ============================================================ */
+
+/* Score Card & Gauge */
+.ats-score-card {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%);
+    border: 1px solid var(--panel-border);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.ats-gauge-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+.ats-gauge-svg {
+    transform: rotate(-90deg);
+    width: 100%;
+    height: 100%;
+}
+
+.gauge-bg {
+    fill: none;
+    stroke: #1e293b;
+    stroke-width: 8;
+}
+
+.gauge-progress {
+    fill: none;
+    stroke: var(--color-primary-electric);
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.5s ease;
+}
+
+.ats-score-display {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#ats-score-value {
+    font-size: 26px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1;
+}
+
+.ats-score-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    color: var(--panel-text-muted);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+.ats-status-badge {
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    background: rgba(99, 102, 241, 0.1);
+    color: #a5b4fc;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+}
+
+.ats-status-badge.optimal {
+    background: rgba(16, 185, 129, 0.1);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+.ats-status-badge.warning {
+    background: rgba(245, 158, 11, 0.1);
+    color: #fbbf24;
+    border-color: rgba(245, 158, 11, 0.2);
+}
+
+.ats-status-badge.danger {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+/* Metric Cards */
+.ats-audit-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.ats-metric-card {
+    background: var(--panel-surface);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.ats-metric-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--panel-border);
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+}
+
+.metric-icon {
+    font-size: 16px;
+}
+
+.metric-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    flex: 1;
+}
+
+.metric-score {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--panel-text-muted);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+/* Checklists */
+.ats-checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ats-checklist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 12px;
+    color: #cbd5e1;
+    line-height: 1.4;
+}
+
+.ats-checklist-item .item-bullet {
+    flex-shrink: 0;
+    font-size: 12px;
+}
+
+.ats-checklist-item.pass .item-bullet {
+    color: var(--color-success);
+}
+
+.ats-checklist-item.fail .item-bullet {
+    color: var(--color-danger);
+}
+
+/* Keywords Grid */
+.ats-keywords-analysis {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ats-keywords-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.ats-keyword-pill {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s;
+}
+
+.ats-keyword-pill.found {
+    background: rgba(16, 185, 129, 0.1);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.ats-keyword-pill.missing {
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--panel-text-muted);
+    border: 1px dashed var(--panel-border);
+}
+
+/* Recommendations Section */
+.ats-recommendations-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ats-recommendations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ats-tip-card {
+    background: rgba(245, 158, 11, 0.05);
+    border-left: 3px solid #fbbf24;
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    font-size: 12px;
+    color: #cbd5e1;
+    line-height: 1.5;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.ats-tip-card.success-tip {
+    background: rgba(16, 185, 129, 0.05);
+    border-left-color: var(--color-success);
+}
+
+.ats-tip-card .tip-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+/* ============================================================
    MEDIAS DE IMPRESIÓN (Ocultar Todo)
    ============================================================ */
 @media print {

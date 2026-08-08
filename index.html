@@ -30,6 +30,7 @@
                 <button class="tab-btn active" data-tab="tab-theme">🎨 Estilo</button>
                 <button class="tab-btn" data-tab="tab-sections">🗂️ Estructura</button>
                 <button class="tab-btn" data-tab="tab-content">📝 Contenido</button>
+                <button class="tab-btn" data-tab="tab-ats">📊 ATS</button>
                 <button class="tab-btn" data-tab="tab-actions">💾 Guardar</button>
             </nav>
 
@@ -119,6 +120,84 @@
                         <p class="json-warning">⚠️ La edición cruda permite modificar la estructura del JSON directamente. Una sintaxis rota podría invalidar la sección.</p>
                         <textarea id="raw-json-textarea" spellcheck="false"></textarea>
                         <button id="apply-json-btn" class="btn btn-primary">Aplicar JSON</button>
+                    </div>
+                </div>
+
+                <!-- PESTAÑA: EVALUACIÓN Y OPTIMIZACIÓN ATS -->
+                <div id="tab-ats" class="tab-content-item">
+                    <h3>Evaluador ATS Integrado</h3>
+                    <p class="tab-desc">Analiza tu currículum en tiempo real según los criterios de los sistemas de filtrado de RRHH (ATS).</p>
+
+                    <div class="ats-score-card">
+                        <div class="ats-gauge-container">
+                            <svg class="ats-gauge-svg" viewBox="0 0 100 100">
+                                <circle class="gauge-bg" cx="50" cy="50" r="40"></circle>
+                                <circle class="gauge-progress" cx="50" cy="50" r="40" style="stroke-dasharray: 251.2; stroke-dashoffset: 251.2;"></circle>
+                            </svg>
+                            <div class="ats-score-display">
+                                <span id="ats-score-value">0%</span>
+                                <span class="ats-score-label">Optimizado</span>
+                            </div>
+                        </div>
+                        <div class="ats-status-badge" id="ats-status-text">Analizando...</div>
+                    </div>
+
+                    <div class="ats-audit-section">
+                        <h3>🔍 Resultados del Análisis</h3>
+
+                        <div class="ats-metric-card">
+                            <div class="ats-metric-header">
+                                <span class="metric-icon">📂</span>
+                                <span class="metric-title">Estructura del CV</span>
+                                <span class="metric-score" id="ats-structure-score">0/30 pts</span>
+                            </div>
+                            <ul class="ats-checklist" id="ats-structure-checklist">
+                                <!-- Generado dinámicamente -->
+                            </ul>
+                        </div>
+
+                        <div class="ats-metric-card">
+                            <div class="ats-metric-header">
+                                <span class="metric-icon">📞</span>
+                                <span class="metric-title">Información de Contacto</span>
+                                <span class="metric-score" id="ats-contact-score">0/20 pts</span>
+                            </div>
+                            <ul class="ats-checklist" id="ats-contact-checklist">
+                                <!-- Generado dinámicamente -->
+                            </ul>
+                        </div>
+
+                        <div class="ats-metric-card">
+                            <div class="ats-metric-header">
+                                <span class="metric-icon">🔑</span>
+                                <span class="metric-title">Palabras Clave (Keywords)</span>
+                                <span class="metric-score" id="ats-keywords-score">0/30 pts</span>
+                            </div>
+                            <div class="ats-keywords-analysis">
+                                <p class="desc">Términos clave de ingeniería, metodologías y tecnología detectados:</p>
+                                <div class="ats-keywords-grid" id="ats-keywords-list">
+                                    <!-- Generado dinámicamente -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ats-metric-card">
+                            <div class="ats-metric-header">
+                                <span class="metric-icon">📝</span>
+                                <span class="metric-title">Densidad y Longitud</span>
+                                <span class="metric-score" id="ats-density-score">0/20 pts</span>
+                            </div>
+                            <ul class="ats-checklist" id="ats-density-checklist">
+                                <!-- Generado dinámicamente -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="ats-recommendations-section">
+                        <h3>💡 Recomendaciones Clave</h3>
+                        <div class="ats-recommendations-list" id="ats-recommendations">
+                            <!-- Recomendaciones dinámicas generadas aquí -->
+                        </div>
                     </div>
                 </div>
 
