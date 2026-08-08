@@ -39,6 +39,17 @@ async function initCVStart() {
 
     } catch (err) {
         console.error('❌ Error crítico en inicio:', err);
+        const loadingScreen = document.getElementById('loading-screen');
+        if (loadingScreen) {
+            loadingScreen.innerHTML = `
+                <div style="color: #ef4444; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-align: center; padding: 30px 20px; max-width: 600px; margin: 40px auto; border: 1px solid #fee2e2; background-color: #fef2f2; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+                    <h3 style="margin: 0 0 10px 0; font-size: 18px; font-weight: 600;">❌ Error crítico de inicialización</h3>
+                    <p style="font-size: 14px; margin: 0 0 15px 0; color: #991b1b; line-height: 1.5;">Ocurrió un error inesperado al intentar construir o cargar tu CV:</p>
+                    <pre style="background: #ffffff; color: #b91c1c; padding: 12px; border: 1px solid #fca5a5; border-radius: 6px; font-size: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; text-align: left; overflow-x: auto; max-height: 250px; margin-bottom: 15px;">${err.stack || err.message || err}</pre>
+                    <p style="font-size: 12px; color: #7f1d1d; margin: 0; line-height: 1.5; opacity: 0.85;">Revisa la consola del navegador o el formato del archivo <strong>config/master.json</strong> y de los datos JSON de las secciones.</p>
+                </div>
+            `;
+        }
     } finally {
         console.groupEnd();
     }
