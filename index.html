@@ -21,77 +21,107 @@
         <!-- Panel de Configuración -->
         <aside id="config-panel" class="hide-on-print">
             <div class="panel-header">
-                <h2>⚙️ Configurador de CV</h2>
+                <h2>Personalizar CV</h2>
                 <button id="toggle-panel-btn" title="Ocultar Panel">◀</button>
             </div>
 
             <!-- Pestañas de Navegación -->
             <nav class="panel-tabs">
-                <button class="tab-btn active" data-tab="tab-theme">🎨 Estilo</button>
-                <button class="tab-btn" data-tab="tab-sections">🗂️ Estructura</button>
-                <button class="tab-btn" data-tab="tab-content">📝 Contenido</button>
-                <button class="tab-btn" data-tab="tab-actions">💾 Guardar</button>
+                <button class="tab-btn active" data-tab="tab-theme">Estilo</button>
+                <button class="tab-btn" data-tab="tab-sections">Secciones</button>
+                <button class="tab-btn" data-tab="tab-content">Contenido</button>
+                <button class="tab-btn" data-tab="tab-actions">Exportar</button>
             </nav>
 
             <div class="panel-body">
                 <!-- PESTAÑA 1: TEMA Y ESTILO -->
                 <div id="tab-theme" class="tab-content-item active">
-                    <h3>Colores del Tema</h3>
-                    <div class="form-group row">
-                        <label for="theme-primary">Primario (Sidebar/H2):</label>
-                        <input type="color" id="theme-primary">
-                    </div>
-                    <div class="form-group row">
-                        <label for="theme-secondary">Secundario (Acentos):</label>
-                        <input type="color" id="theme-secondary">
-                    </div>
-                    <div class="form-group row">
-                        <label for="theme-sidebar">Fondo Sidebar:</label>
-                        <input type="color" id="theme-sidebar">
-                    </div>
-                    <div class="form-group row">
-                        <label for="theme-text">Color de Texto:</label>
-                        <input type="color" id="theme-text">
-                    </div>
-                    <div class="form-group row">
-                        <label for="theme-bg">Color de Fondo:</label>
-                        <input type="color" id="theme-bg">
-                    </div>
-
-                    <h3>Tipografía y Espaciado</h3>
-                    <div class="form-group">
-                        <label for="theme-font">Tipografía:</label>
-                        <select id="theme-font">
-                            <option value="'Inter', 'Segoe UI', sans-serif">Inter (Por defecto)</option>
-                            <option value="'Roboto', sans-serif">Roboto</option>
-                            <option value="'Open Sans', sans-serif">Open Sans</option>
-                            <option value="system-ui, -apple-system, sans-serif">Sistema (San Francisco/Segoe UI)</option>
-                            <option value="Georgia, serif">Georgia (Elegante)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="layout-section-gap">Separación entre Secciones:</label>
-                        <input type="text" id="layout-section-gap" placeholder="ej. 12px, 18px">
-                    </div>
-                    <div class="form-group">
-                        <label for="layout-sidebar-width">Ancho de Columna Sidebar:</label>
-                        <input type="text" id="layout-sidebar-width" placeholder="ej. 200px, 220px">
+                    <!-- ACORDEÓN 1: COLORES DEL TEMA -->
+                    <div class="accordion-item expanded">
+                        <div class="accordion-header">
+                            <div class="accordion-title">
+                                <strong>Colores de diseño</strong>
+                            </div>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="form-group row">
+                                <label for="theme-primary">Primario (Sidebar/H2):</label>
+                                <input type="color" id="theme-primary">
+                            </div>
+                            <div class="form-group row">
+                                <label for="theme-secondary">Secundario (Acentos):</label>
+                                <input type="color" id="theme-secondary">
+                            </div>
+                            <div class="form-group row">
+                                <label for="theme-sidebar">Fondo Sidebar:</label>
+                                <input type="color" id="theme-sidebar">
+                            </div>
+                            <div class="form-group row">
+                                <label for="theme-text">Color de Texto:</label>
+                                <input type="color" id="theme-text">
+                            </div>
+                            <div class="form-group row">
+                                <label for="theme-bg">Color de Fondo:</label>
+                                <input type="color" id="theme-bg">
+                            </div>
+                        </div>
                     </div>
 
-                    <h3>Visualización y Diagnóstico</h3>
-                    <div class="form-group">
-                        <label for="layout-debug">Modo de Diagnóstico (Debug):</label>
-                        <select id="layout-debug">
-                            <option value="0">Apagado</option>
-                            <option value="1">Nivel 1: Líneas de Guía</option>
-                            <option value="2">Nivel 2: Diagnóstico de Margen</option>
-                        </select>
+                    <!-- ACORDEÓN 2: TIPOGRAFÍA Y ESPACIADO -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <div class="accordion-title">
+                                <strong>Tipografía y diseño</strong>
+                            </div>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="form-group">
+                                <label for="theme-font">Tipografía:</label>
+                                <select id="theme-font">
+                                    <option value="'Inter', 'Segoe UI', sans-serif">Inter (Predeterminada)</option>
+                                    <option value="'Roboto', sans-serif">Roboto</option>
+                                    <option value="'Open Sans', sans-serif">Open Sans</option>
+                                    <option value="system-ui, -apple-system, sans-serif">Sistema</option>
+                                    <option value="Georgia, serif">Georgia (Serif)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="layout-section-gap">Espaciado de secciones:</label>
+                                <input type="text" id="layout-section-gap" placeholder="ej. 12px, 18px">
+                            </div>
+                            <div class="form-group">
+                                <label for="layout-sidebar-width">Ancho de columna lateral:</label>
+                                <input type="text" id="layout-sidebar-width" placeholder="ej. 200px, 220px">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ACORDEÓN 3: VISUALIZACIÓN Y DIAGNÓSTICO -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">
+                            <div class="accordion-title">
+                                <strong>Opciones de visualización</strong>
+                            </div>
+                            <span class="accordion-arrow">▼</span>
+                        </div>
+                        <div class="accordion-body">
+                            <div class="form-group">
+                                <label for="layout-debug">Modo de Diagnóstico (Debug):</label>
+                                <select id="layout-debug">
+                                    <option value="0">Apagado</option>
+                                    <option value="1">Nivel 1: Líneas de Guía</option>
+                                    <option value="2">Nivel 2: Diagnóstico de Margen</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- PESTAÑA 2: SECCIONES Y ESTRUCTURA -->
                 <div id="tab-sections" class="tab-content-item">
-                    <p class="tab-desc">Activa, desactiva, ordena o cambia el área de las secciones del CV.</p>
+                    <p class="tab-desc">Activa, desactiva, ordena o cambia la ubicación de las secciones del CV de forma sencilla.</p>
                     <div id="sections-list" class="sections-drag-list">
                         <!-- Se generará dinámicamente -->
                     </div>
@@ -124,26 +154,26 @@
 
                 <!-- PESTAÑA 4: EXPORTACIÓN Y BACKUPS -->
                 <div id="tab-actions" class="tab-content-item">
-                    <h3>Persistencia Local</h3>
-                    <p class="desc">Los cambios se guardan automáticamente en tu navegador (localStorage) para que no se pierdan al recargar.</p>
+                    <h3>Guardar datos</h3>
+                    <p class="desc">Los cambios se guardan automáticamente en tu navegador para que no se pierdan al recargar.</p>
 
                     <div class="action-buttons">
-                        <button id="btn-export-consolidated" class="btn btn-success">
-                            📥 Descargar Todo (Consolidado)
+                        <button id="btn-export-consolidated" class="btn btn-primary" style="margin-bottom: 8px;">
+                            Descargar copia de seguridad
                         </button>
-                        <button id="btn-import-config-trigger" class="btn btn-secondary">
-                            📤 Importar Configuración
+                        <button id="btn-import-config-trigger" class="btn btn-secondary" style="margin-bottom: 8px;">
+                            Restaurar copia de seguridad
                         </button>
                         <input type="file" id="import-config-file" style="display: none;" accept=".json">
 
                         <button id="btn-reset-default" class="btn btn-danger">
-                            🔄 Restablecer de Fábrica
+                            Restablecer diseño predeterminado
                         </button>
                     </div>
 
                     <div style="margin-top: 20px;">
-                        <h3>Descargas Individuales</h3>
-                        <p class="desc">Descarga los archivos específicos listos para reemplazar en tu código fuente (`config/master.json` y `data.json` de cada sección).</p>
+                        <h3>Archivos individuales</h3>
+                        <p class="desc">Descarga los archivos JSON individuales para guardarlos directamente en el servidor (`config/master.json` y `data.json`).</p>
                         <div id="individual-downloads" class="individual-downloads-list">
                             <!-- Lista de descargas individuales generada dinámicamente -->
                         </div>
@@ -167,18 +197,31 @@
                 </button>
             </div>
 
-            <!-- Hoja A4 pura, sin botones dentro -->
-            <main id="cv-page" class="page-a4">
-                <div id="loading-screen">
-                    <span>Generando CV…</span>
-                </div>
-            </main>
+            <!-- Contenedor para escalado del A4 en móvil -->
+            <div id="cv-wrapper">
+                <!-- Hoja A4 pura, sin botones dentro -->
+                <main id="cv-page" class="page-a4">
+                    <div id="loading-screen">
+                        <span>Generando CV…</span>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <!-- Barra de navegación inferior para móvil -->
+        <div class="mobile-toggle-bar hide-on-print">
+            <button id="mobile-edit-btn" class="mobile-tab-btn active">
+                <span>Editar</span>
+            </button>
+            <button id="mobile-preview-btn" class="mobile-tab-btn">
+                <span>Vista previa</span>
+            </button>
         </div>
     </div>
 
     <!-- Botón flotante para abrir el panel si está colapsado -->
     <button id="floating-settings-btn" class="hide-on-print" title="Configurar CV">
-        ⚙️ Ajustes
+        Ajustes
     </button>
 
     <script src="jss/app.js"></script>

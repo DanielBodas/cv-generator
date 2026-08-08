@@ -40,6 +40,41 @@ function initConfigPanel() {
     togglePanelBtn.addEventListener('click', () => togglePanel(true));
     floatingSettingsBtn.addEventListener('click', () => togglePanel(false));
 
+    // GESTIÓN DE PESTAÑAS MÓVILES (Editar vs Vista Previa)
+    const appContainer = document.querySelector('.app-container');
+    const mobileEditBtn = document.getElementById('mobile-edit-btn');
+    const mobilePreviewBtn = document.getElementById('mobile-preview-btn');
+
+    if (appContainer && mobileEditBtn && mobilePreviewBtn) {
+        // Inicializar estado por defecto en móvil
+        appContainer.classList.add('show-editor');
+
+        mobileEditBtn.addEventListener('click', () => {
+            mobileEditBtn.classList.add('active');
+            mobilePreviewBtn.classList.remove('active');
+            appContainer.classList.remove('show-preview');
+            appContainer.classList.add('show-editor');
+
+            if (typeof window.adjustCVScale === 'function') {
+                window.adjustCVScale();
+            }
+        });
+
+        mobilePreviewBtn.addEventListener('click', () => {
+            mobilePreviewBtn.classList.add('active');
+            mobileEditBtn.classList.remove('active');
+            appContainer.classList.remove('show-editor');
+            appContainer.classList.add('show-preview');
+
+            // Al cambiar a vista previa, necesitamos asegurar el reajuste del escalado
+            setTimeout(() => {
+                if (typeof window.adjustCVScale === 'function') {
+                    window.adjustCVScale();
+                }
+            }, 50);
+        });
+    }
+
     // 2. NAVEGACIÓN POR PESTAÑAS CON TRANSICIONES
     const tabButtons = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content-item');
@@ -119,46 +154,54 @@ function initThemeTab() {
 
     const themeContainer = document.getElementById('tab-theme');
 
-    // Crear y añadir la sección de "Presets" al principio de la pestaña Estilos
+    // Crear y añadir la sección de "Presets" al principio de la pestaña Estilos en formato Acordeón
     if (!document.getElementById('presets-section')) {
         const presetsSection = document.createElement('div');
         presetsSection.id = 'presets-section';
+        presetsSection.className = 'accordion-item';
         presetsSection.innerHTML = `
-            <h3>Temas Rápidos SaaS</h3>
-            <p class="desc">Aplica combinaciones de colores premium prediseñadas al instante.</p>
-            <div class="presets-grid">
-                <button class="preset-btn" data-preset="navy">
-                    <span>⚓ Classic Navy</span>
-                    <div class="preset-colors">
-                        <div class="preset-color-dot" style="background: #1d3557;"></div>
-                        <div class="preset-color-dot" style="background: #457b9d;"></div>
-                        <div class="preset-color-dot" style="background: #1d3557;"></div>
-                    </div>
-                </button>
-                <button class="preset-btn" data-preset="midnight">
-                    <span>🌌 Midnight Executive</span>
-                    <div class="preset-colors">
-                        <div class="preset-color-dot" style="background: #0f172a;"></div>
-                        <div class="preset-color-dot" style="background: #3b82f6;"></div>
-                        <div class="preset-color-dot" style="background: #0f172a;"></div>
-                    </div>
-                </button>
-                <button class="preset-btn" data-preset="emerald">
-                    <span>🌲 Minimal Forest</span>
-                    <div class="preset-colors">
-                        <div class="preset-color-dot" style="background: #064e3b;"></div>
-                        <div class="preset-color-dot" style="background: #10b981;"></div>
-                        <div class="preset-color-dot" style="background: #064e3b;"></div>
-                    </div>
-                </button>
-                <button class="preset-btn" data-preset="charcoal">
-                    <span>🎸 Slate Rose</span>
-                    <div class="preset-colors">
-                        <div class="preset-color-dot" style="background: #27272a;"></div>
-                        <div class="preset-color-dot" style="background: #f43f5e;"></div>
-                        <div class="preset-color-dot" style="background: #27272a;"></div>
-                    </div>
-                </button>
+            <div class="accordion-header">
+                <div class="accordion-title">
+                    <strong>Temas recomendados</strong>
+                </div>
+                <span class="accordion-arrow">▼</span>
+            </div>
+            <div class="accordion-body">
+                <p class="desc">Aplica combinaciones de colores de estilo corporativo al instante.</p>
+                <div class="presets-grid">
+                    <button class="preset-btn" data-preset="navy">
+                        <span>Azul Ejecutivo</span>
+                        <div class="preset-colors">
+                            <div class="preset-color-dot" style="background: #1d3557;"></div>
+                            <div class="preset-color-dot" style="background: #457b9d;"></div>
+                            <div class="preset-color-dot" style="background: #1d3557;"></div>
+                        </div>
+                    </button>
+                    <button class="preset-btn" data-preset="midnight">
+                        <span>Gris Carbón</span>
+                        <div class="preset-colors">
+                            <div class="preset-color-dot" style="background: #0f172a;"></div>
+                            <div class="preset-color-dot" style="background: #3b82f6;"></div>
+                            <div class="preset-color-dot" style="background: #0f172a;"></div>
+                        </div>
+                    </button>
+                    <button class="preset-btn" data-preset="emerald">
+                        <span>Verde Oxford</span>
+                        <div class="preset-colors">
+                            <div class="preset-color-dot" style="background: #064e3b;"></div>
+                            <div class="preset-color-dot" style="background: #10b981;"></div>
+                            <div class="preset-color-dot" style="background: #064e3b;"></div>
+                        </div>
+                    </button>
+                    <button class="preset-btn" data-preset="charcoal">
+                        <span>Negro Clásico</span>
+                        <div class="preset-colors">
+                            <div class="preset-color-dot" style="background: #27272a;"></div>
+                            <div class="preset-color-dot" style="background: #f43f5e;"></div>
+                            <div class="preset-color-dot" style="background: #27272a;"></div>
+                        </div>
+                    </button>
+                </div>
             </div>
         `;
         // Inyectar antes del primer elemento hijo de la pestaña
@@ -173,7 +216,8 @@ function initThemeTab() {
         };
 
         document.querySelectorAll('.preset-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Evitar que colapse el acordeón al hacer clic en un preset
                 const id = btn.getAttribute('data-preset');
                 const colors = presets[id];
                 if (colors) {
@@ -193,6 +237,23 @@ function initThemeTab() {
             });
         });
     }
+
+    // Inicializar lógica de toggle para todos los acordeones del tab de Temas
+    themeContainer.querySelectorAll('.accordion-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const item = header.closest('.accordion-item');
+            const wasExpanded = item.classList.contains('expanded');
+
+            // Colapsar todos los acordeones del tab de estilo para mantener una sola vista limpia
+            themeContainer.querySelectorAll('.accordion-item').forEach(el => {
+                el.classList.remove('expanded');
+            });
+
+            if (!wasExpanded) {
+                item.classList.add('expanded');
+            }
+        });
+    });
 
     // Obtener campos de entrada
     const primaryInput = document.getElementById('theme-primary');
@@ -297,7 +358,7 @@ function renderSectionsTab() {
 
         const title = document.createElement('div');
         title.className = 'section-card-title';
-        title.innerHTML = `<span>📂</span> <strong>${sec.id}</strong>`;
+        title.innerHTML = `<strong>${sec.id.toUpperCase()}</strong>`;
 
         const controls = document.createElement('div');
         controls.className = 'section-card-controls';
@@ -482,7 +543,7 @@ function renderPremiumContentTab() {
 
         const textContainer = document.createElement('div');
         textContainer.className = 'accordion-title';
-        textContainer.innerHTML = `<span>📝</span> <strong>${sec.id.toUpperCase()}</strong> ${sec.disabled ? '<span style="font-size:10px; opacity:0.5;">(Oculta)</span>' : ''}`;
+        textContainer.innerHTML = `<strong>${sec.id.toUpperCase()}</strong> ${sec.disabled ? '<span style="font-size:10px; opacity:0.5;">(Oculta)</span>' : ''}`;
 
         const arrow = document.createElement('span');
         arrow.className = 'accordion-arrow';
@@ -606,7 +667,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
             gridContainer = null; // Reiniciar rejilla para dar paso a la lista
 
             const label = document.createElement('label');
-            label.innerHTML = `<strong style="color: #818cf8;">📁 ${labelText} (Colección)</strong>`;
+            label.innerHTML = `<strong>${labelText} (Colección)</strong>`;
             formGroup.appendChild(label);
 
             const arrayContainer = document.createElement('div');
@@ -697,7 +758,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
             // Botón para añadir un nuevo elemento de estilo premium
             const btnAdd = document.createElement('button');
             btnAdd.className = 'btn-add-item';
-            btnAdd.innerText = `➕ Añadir nuevo elemento a ${labelText.toLowerCase()}`;
+            btnAdd.innerText = `Añadir elemento a ${labelText.toLowerCase()}`;
             btnAdd.addEventListener('click', (e) => {
                 e.preventDefault();
                 let newItem = "";
@@ -728,7 +789,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
             gridContainer = null; // Reiniciar rejilla
 
             const label = document.createElement('label');
-            label.innerHTML = `<strong>📦 ${labelText}</strong>`;
+            label.innerHTML = `<strong>${labelText}</strong>`;
             formGroup.appendChild(label);
 
             const subContainer = document.createElement('div');
@@ -844,7 +905,7 @@ function renderActionsTab() {
     const masterItem = document.createElement('div');
     masterItem.className = 'download-link-item';
     masterItem.innerHTML = `
-        <span>📄 config/master.json</span>
+        <span>config/master.json</span>
         <a href="#" class="download-link" data-type="master">Descargar</a>
     `;
     masterItem.querySelector('.download-link').addEventListener('click', (e) => {
@@ -858,7 +919,7 @@ function renderActionsTab() {
         const secItem = document.createElement('div');
         secItem.className = 'download-link-item';
         secItem.innerHTML = `
-            <span>📄 sections/${sec.id}/data.json</span>
+            <span>sections/${sec.id}/data.json</span>
             <a href="#" class="download-link" data-type="section" data-id="${sec.id}">Descargar</a>
         `;
         secItem.querySelector('.download-link').addEventListener('click', (e) => {
