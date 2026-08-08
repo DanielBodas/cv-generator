@@ -1,5 +1,5 @@
 /* ============================================================
-   ESTILOS INLINE EDITOR - ESTÉTICA VERCEL / LINEAR (ULTRA PREMIUM)
+   ESTILOS INLINE EDITOR - ESTÉTICA PREMIUM CORPORATIVA (LIGHT MODE)
    ============================================================ */
 
 /* 1. Fondo del Canvas (Dot Matrix) */
@@ -15,9 +15,7 @@
 }
 
 /* 2. Secciones del CV (Hover Outline Mágico) */
-/* IMPORTANTE: No usar ::after con offsets negativos — inflaria scrollHeight
-   y rompería los cálculos de espacio del ResizeObserver de experience/script.js.
-   En su lugar usamos outline que no afecta el box model ni scrollHeight. */
+/* Usamos outline para que no afecte el box model ni scrollHeight */
 .cv-section {
     position: relative;
     border-radius: 6px;
@@ -134,26 +132,24 @@
     transform: scale(1.05);
 }
 
-/* Modal Ajustes Generales */
+/* 5. Modales Premium (Light Mode Corporativo) */
 .modal {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.95);
-    background: rgba(15, 15, 15, 0.85);
-    backdrop-filter: blur(32px);
-    -webkit-backdrop-filter: blur(32px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
+    background: #ffffff; /* Blanco puro corporativo */
+    border: 1px solid #e2e8f0; /* Borde zinc suave */
+    border-radius: 12px;
     padding: 24px;
-    width: 360px;
+    width: 480px;
     max-width: 90vw;
     z-index: 10001;
-    color: #ededed;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+    color: #1e293b; /* Texto oscuro slate */
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     font-family: 'Inter', sans-serif;
     opacity: 0;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .modal.show {
@@ -164,12 +160,12 @@
 .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.4);
+    background: rgba(15, 23, 42, 0.3); /* Slate oscuro con transparencia */
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     z-index: 10000;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.2s ease;
 }
 .modal-overlay.show {
     opacity: 1;
@@ -179,26 +175,29 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 12px;
 }
 
 .modal-header h2 {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 600;
     margin: 0;
-    color: #fff;
+    color: #0f172a;
 }
 
 .btn-close {
     background: transparent;
     border: none;
-    color: #666;
-    font-size: 20px;
+    color: #94a3b8;
+    font-size: 24px;
     cursor: pointer;
+    line-height: 1;
     transition: color 0.2s;
 }
 .btn-close:hover {
-    color: #fff;
+    color: #1e293b;
 }
 
 .form-group {
@@ -210,7 +209,8 @@
 
 .form-group label {
     font-size: 13px;
-    color: #a1a1aa;
+    font-weight: 500;
+    color: #475569;
 }
 
 .form-group input[type="color"] {
@@ -228,45 +228,46 @@
     padding: 2px;
 }
 .form-group input[type="color"]::-webkit-color-swatch {
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid #cbd5e1;
     border-radius: 6px;
 }
 
 .modal-btn {
     width: 100%;
-    padding: 12px;
-    background: #fff;
-    color: #000;
+    padding: 10px 16px;
+    background: #0f172a; /* Slate oscuro corporativo */
+    color: #ffffff;
     border: none;
-    border-radius: 8px;
-    font-weight: 600;
+    border-radius: 6px;
+    font-weight: 500;
     font-size: 14px;
     cursor: pointer;
     margin-top: 16px;
-    transition: transform 0.2s, opacity 0.2s;
+    transition: all 0.2s ease;
 }
 .modal-btn:hover {
-    opacity: 0.9;
+    background: #1e293b;
     transform: translateY(-1px);
 }
 
 /* ==========================================
-   ESTILOS DINÁMICOS PARA FORMULARIOS (APP JS)
+   ESTILOS DINÁMICOS PARA FORMULARIOS
    ========================================== */
 .dynamic-input {
     width: 100%;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #fff;
-    padding: 10px;
-    border-radius: 8px;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #0f172a;
+    padding: 10px 12px;
+    border-radius: 6px;
     font-family: inherit;
     outline: none;
     box-sizing: border-box;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 .dynamic-input:focus {
-    border-color: #8b5cf6;
+    border-color: #0f172a;
+    box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.08);
 }
 
 textarea.dynamic-input {
@@ -280,10 +281,10 @@ textarea.dynamic-input {
 }
 
 .array-item {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 12px;
-    border-radius: 12px;
+    background: #f8fafc; /* Fondo grisáceo muy suave para items de listas */
+    border: 1px solid #e2e8f0;
+    padding: 14px;
+    border-radius: 8px;
     position: relative;
 }
 
@@ -291,13 +292,8 @@ textarea.dynamic-input {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 8px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid #e2e8f0;
     padding-bottom: 8px;
-}
-
-/* Modificar ancho de Modal para formularios más anchos si es necesario */
-#general-settings-modal {
-    width: 480px;
 }
 
 /* ==========================================
@@ -306,8 +302,8 @@ textarea.dynamic-input {
 .structure-columns {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    padding: 20px;
+    gap: 16px;
+    padding: 10px 0;
 }
 
 .structure-column {
@@ -325,20 +321,20 @@ textarea.dynamic-input {
     letter-spacing: 1.5px;
     text-transform: uppercase;
     padding: 8px 10px;
-    border-radius: 8px;
+    border-radius: 6px;
     margin-bottom: 4px;
 }
 
 .sidebar-header {
-    background: rgba(99, 102, 241, 0.12);
-    color: #818cf8;
-    border: 1px solid rgba(99, 102, 241, 0.2);
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
 }
 
 .main-header {
-    background: rgba(16, 185, 129, 0.1);
-    color: #34d399;
-    border: 1px solid rgba(16, 185, 129, 0.2);
+    background: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
 }
 
 .structure-area-list {
@@ -351,26 +347,26 @@ textarea.dynamic-input {
     display: flex;
     align-items: center;
     gap: 8px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 8px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
     padding: 8px 10px;
     transition: all 0.2s;
 }
 
 .structure-item:hover {
-    background: rgba(255,255,255,0.07);
-    border-color: rgba(255,255,255,0.15);
+    background: #f8fafc;
+    border-color: #cbd5e1;
 }
 
 .structure-item.is-disabled {
-    opacity: 0.4;
+    opacity: 0.5;
 }
 
 .struct-name {
     font-size: 12px;
     font-weight: 500;
-    color: #e2e8f0;
+    color: #334155;
     flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -386,7 +382,7 @@ textarea.dynamic-input {
 .struct-btn {
     background: transparent;
     border: none;
-    color: #555;
+    color: #94a3b8;
     cursor: pointer;
     padding: 2px 4px;
     font-size: 8px;
@@ -396,7 +392,7 @@ textarea.dynamic-input {
 }
 
 .struct-btn:hover:not(:disabled) {
-    color: #fff;
+    color: #0f172a;
 }
 
 .struct-btn:disabled {
@@ -404,7 +400,7 @@ textarea.dynamic-input {
     cursor: default;
 }
 
-/* Toggle Switch personalizado */
+/* Toggle Switch personalizado (Light Theme) */
 .struct-toggle {
     position: relative;
     width: 28px;
@@ -423,10 +419,10 @@ textarea.dynamic-input {
     position: absolute;
     cursor: pointer;
     inset: 0;
-    background: rgba(255,255,255,0.1);
+    background: #cbd5e1;
     border-radius: 20px;
     transition: background 0.2s;
-    border: 1px solid rgba(255,255,255,0.15);
+    border: 1px solid #e2e8f0;
 }
 
 .struct-slider::before {
@@ -435,41 +431,41 @@ textarea.dynamic-input {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: #888;
+    background: #ffffff;
     top: 2px;
     left: 2px;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
 .struct-toggle input:checked + .struct-slider {
-    background: rgba(99, 102, 241, 0.4);
-    border-color: #818cf8;
+    background: #0f172a;
+    border-color: #0f172a;
 }
 
 .struct-toggle input:checked + .struct-slider::before {
-    background: #818cf8;
     transform: translateX(12px);
 }
 
 /* ==========================================
-   DEBUG TOGGLE GROUP
+   DEBUG TOGGLE GROUP (Light Theme)
    ========================================== */
 .debug-toggle-group {
     display: flex;
     gap: 4px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
     padding: 4px;
-    border-radius: 10px;
+    border-radius: 8px;
 }
 
 .debug-toggle-btn {
     flex: 1;
     padding: 6px 10px;
     border: none;
-    border-radius: 7px;
+    border-radius: 6px;
     background: transparent;
-    color: #666;
+    color: #64748b;
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
@@ -478,14 +474,14 @@ textarea.dynamic-input {
 }
 
 .debug-toggle-btn.active {
-    background: rgba(239, 68, 68, 0.2);
-    color: #f87171;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .debug-toggle-btn:hover:not(.active) {
-    background: rgba(255,255,255,0.06);
-    color: #aaa;
+    background: rgba(0, 0, 0, 0.03);
+    color: #475569;
 }
 
 /* Secciones dentro del modal de Ajustes Generales */
@@ -494,7 +490,217 @@ textarea.dynamic-input {
     font-weight: 700;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    color: #555;
+    color: #64748b;
     margin: 0 0 8px 0;
 }
 
+/* ==========================================
+   SELECTOR DE COMPONENTES / DISEÑOS (MODAL)
+   ========================================== */
+.layout-preview-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.layout-preview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.layout-preview-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    background: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    text-align: left;
+}
+
+.layout-preview-card:hover {
+    border-color: #0f172a;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.layout-preview-card.active {
+    border-color: #0f172a;
+    background: #f8fafc;
+    box-shadow: 0 0 0 1px #0f172a;
+}
+
+.layout-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.layout-preview-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0;
+}
+
+.layout-preview-badge {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.layout-preview-card.active .layout-preview-badge {
+    background: #0f172a;
+    color: #ffffff;
+}
+
+.layout-preview-desc {
+    font-size: 12px;
+    color: #475569;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    flex-grow: 1;
+}
+
+/* Ilustraciones vectoriales minimalistas para previews */
+.layout-mini-preview {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: auto;
+}
+
+.layout-mini-preview-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.layout-mini-preview-bar-row {
+    height: 4px;
+    background: #e2e8f0;
+    border-radius: 2px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.layout-mini-preview-bar-row::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: #0f172a;
+    width: 70%;
+}
+
+.layout-mini-preview-pills {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.layout-mini-preview-pill {
+    height: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    width: 32px;
+    background: #ffffff;
+}
+
+.layout-preview-card.active .layout-mini-preview {
+    background: #ffffff;
+    border-color: #cbd5e1;
+}
+
+/* Modales genéricos optimizados */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 24px;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 16px;
+}
+
+.modal-btn-secondary {
+    padding: 10px 16px;
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modal-btn-secondary:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+
+.single-layout-info {
+    text-align: center;
+    padding: 24px 16px;
+}
+
+.single-layout-info p {
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.5;
+    margin: 12px 0 0 0;
+}
+
+/* Botón Eliminar elegante (reemplazo de emoji trash) */
+.btn-delete-item {
+    background: transparent;
+    border: 1px solid #fee2e2;
+    color: #ef4444;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-delete-item:hover {
+    background: #fee2e2;
+    border-color: #fca5a5;
+}
+
+/* Botón Añadir elegante (reemplazo de emoji plus) */
+.btn-add-item {
+    width: 100%;
+    background: #ffffff;
+    color: #334155;
+    border: 1px dashed #cbd5e1;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.2s;
+}
+
+.btn-add-item:hover {
+    background: #f8fafc;
+    border-color: #94a3b8;
+    color: #0f172a;
+}
