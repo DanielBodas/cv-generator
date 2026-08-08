@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-backups')?.addEventListener('click', openBackupsModal);
 
     // EVENT DELEGATION para toolbar inline (evita duplicados en cada re-render)
-    // Un solo listener en el document captura todos los clics en botones de toolbar
     document.addEventListener('click', (e) => {
         const editBtn = e.target.closest('.btn-edit-data');
         if (editBtn) {
@@ -20,16 +19,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
     });
+});
 
-    // Fallback: si cv-loaded ya se disparó antes de que este script cargara,
-    // bindInlineEvents habrá sido un no-op. Los eventos ya están delegados arriba.
-})
-
-// bindInlineEvents ya no es necesaria (la delegación cubre esto)
+// No-op para mantener compatibilidad si se llamara en algún lado
 function bindInlineEvents() {}
 
 function triggerSaveAnimation() {
-    // Sincronización transparente (podríamos añadir un pequeño toast minimalista)
     console.log("Sincronizado");
 }
 
@@ -70,62 +65,62 @@ window.closeModal = function() {
     setTimeout(() => {
         if (modal) modal.style.display = 'none';
         if (overlay) overlay.style.display = 'none';
-    }, 300);
+    }, 200);
 };
 
 /* ==========================================
-   MODAL 1: AJUSTES GENERALES
+   MODAL 1: AJUSTES GENERALES (SIN EMOJIS)
    ========================================== */
 function openGeneralSettingsModal() {
     const config = window.CVConfig;
     const debugLevel = config.layout?.debugLayout || 0;
     const html = `
         <div class="modal-header">
-            <h2>⚙️ Ajustes Generales</h2>
+            <h2>Ajustes Generales</h2>
             <button class="btn-close" onclick="closeModal()">×</button>
         </div>
         <div class="modal-body">
 
-            <p class="modal-section-label">Colores</p>
+            <p class="modal-section-label">Colores del Tema</p>
             <div class="form-group">
                 <label>Color Principal</label>
                 <input type="color" id="inline-theme-primary" value="${config.theme.primaryColor || '#1d3557'}">
             </div>
             <div class="form-group">
-                <label>Color Sidebar</label>
+                <label>Color de Barra Lateral</label>
                 <input type="color" id="inline-theme-sidebar" value="${config.theme.sidebarColor || '#1d3557'}">
             </div>
             <div class="form-group">
-                <label>Color Fondo</label>
+                <label>Color de Fondo</label>
                 <input type="color" id="inline-theme-bg" value="${config.theme.backgroundColor || '#ffffff'}">
             </div>
             <div class="form-group">
-                <label>Color Texto</label>
+                <label>Color de Texto</label>
                 <input type="color" id="inline-theme-text" value="${config.theme.textColor || '#1e293b'}">
             </div>
 
             <p class="modal-section-label" style="margin-top:20px;">Tipografía</p>
             <div class="form-group">
-                <label>Fuente</label>
-                <select id="inline-theme-font">
+                <label>Familia de Fuentes</label>
+                <select id="inline-theme-font" class="dynamic-input">
                     <option value="'Inter', sans-serif" ${(config.theme.fontFamily||'').includes('Inter') ? 'selected' : ''}>Inter</option>
                     <option value="'Roboto', sans-serif" ${(config.theme.fontFamily||'').includes('Roboto') ? 'selected' : ''}>Roboto</option>
                     <option value="system-ui, sans-serif" ${(config.theme.fontFamily||'').includes('system-ui') ? 'selected' : ''}>Sistema</option>
                 </select>
             </div>
 
-            <p class="modal-section-label" style="margin-top:20px;">Debug Layout</p>
+            <p class="modal-section-label" style="margin-top:20px;">Depuración de Diseño (Debug)</p>
             <div class="form-group">
-                <label>Modo de visualización de debug</label>
+                <label>Modo de visualización</label>
                 <div class="debug-toggle-group" id="debug-toggle-group">
-                    <button class="debug-toggle-btn ${debugLevel === 0 ? 'active' : ''}" data-level="0" onclick="setDebugLevel(0)">Off</button>
+                    <button class="debug-toggle-btn ${debugLevel === 0 ? 'active' : ''}" data-level="0" onclick="setDebugLevel(0)">Desactivado</button>
                     <button class="debug-toggle-btn ${debugLevel === 1 ? 'active' : ''}" data-level="1" onclick="setDebugLevel(1)">Nivel 1</button>
                     <button class="debug-toggle-btn ${debugLevel === 2 ? 'active' : ''}" data-level="2" onclick="setDebugLevel(2)">Nivel 2</button>
                 </div>
             </div>
-            <p style="font-size:11px; color:#555; margin-top:-8px;">El debug se resetea automáticamente al recargar la página.</p>
+            <p style="font-size:11px; color:#64748b; margin-top:-8px; line-height: 1.4;">La depuración visual se restaura al recargar la página.</p>
 
-            <button class="modal-btn" onclick="saveGeneralSettings()">Aplicar Cambios</button>
+            <button class="modal-btn" onclick="saveGeneralSettings()">Guardar Cambios</button>
         </div>
     `;
     showModal(html);
@@ -135,7 +130,6 @@ window.setDebugLevel = function(level) {
     document.querySelectorAll('.debug-toggle-btn').forEach(b => {
         b.classList.toggle('active', parseInt(b.dataset.level) === level);
     });
-    // Guardar en variable temporal para leerla al aplicar
     window._pendingDebugLevel = level;
 };
 
@@ -146,7 +140,6 @@ window.saveGeneralSettings = function() {
     window.CVConfig.theme.textColor = document.getElementById('inline-theme-text').value;
     window.CVConfig.theme.fontFamily = document.getElementById('inline-theme-font').value;
     
-    // Debug: leer nivel desde pendingDebugLevel o el botón activo
     const activeDebugBtn = document.querySelector('.debug-toggle-btn.active');
     const debugLevel = window._pendingDebugLevel !== undefined
         ? window._pendingDebugLevel
@@ -160,32 +153,31 @@ window.saveGeneralSettings = function() {
 };
 
 /* ==========================================
-   MODAL 2: ESTRUCTURA (DOS COLUMNAS)
+   MODAL 2: ESTRUCTURA (DOS COLUMNAS, SIN EMOJIS)
    ========================================== */
 function openStructureModal() {
     const html = `
         <div class="modal-header">
-            <h2>🗂️ Estructura del CV</h2>
+            <h2>Estructura del CV</h2>
             <button class="btn-close" onclick="closeModal()">×</button>
         </div>
         <div class="structure-columns">
             <div class="structure-column">
                 <div class="structure-col-header sidebar-header">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="18" rx="1"/></svg>
-                    <span>Sidebar</span>
+                    <span>Columna Lateral</span>
                 </div>
                 <div id="structure-sidebar" class="structure-area-list"></div>
             </div>
             <div class="structure-column">
                 <div class="structure-col-header main-header">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="14" y="3" width="7" height="18" rx="1"/><rect x="3" y="3" width="7" height="18" rx="1" opacity="0.3"/></svg>
-                    <span>Main</span>
+                    <span>Columna Principal</span>
                 </div>
                 <div id="structure-main" class="structure-area-list"></div>
             </div>
         </div>
     `;
-    // Modal más ancho para dos columnas
     showModal(html);
     document.getElementById('general-settings-modal').style.width = '560px';
     renderStructureList();
@@ -227,10 +219,10 @@ function renderStructureList() {
         toggle.appendChild(checkbox);
         toggle.appendChild(slider);
 
-        // Nombre de la sección
+        // Nombre de la sección formateado
         const name = document.createElement('span');
         name.className = 'struct-name';
-        name.textContent = sec.id;
+        name.textContent = sec.id.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
         // Controles de orden
         const controls = document.createElement('div');
@@ -242,7 +234,6 @@ function renderStructureList() {
         btnUp.disabled = areaIndex === 0;
         btnUp.onclick = () => {
             if (areaIndex > 0) {
-                // Mover dentro del orden global (solo entre misma área)
                 const prevInArea = areaSecs[areaIndex - 1];
                 const prevGlobal = config.sections.indexOf(prevInArea);
                 config.sections.splice(globalIndex, 1);
@@ -286,18 +277,21 @@ function saveConfig() {
 }
 
 /* ==========================================
-   MODAL 3: DATOS DE SECCIÓN
+   MODAL 3: DATOS DE SECCIÓN (SANEADO, CORPORATIVO, SIN EMOJIS)
    ========================================== */
 function openDataEditorModal(sectionId) {
+    const formattedTitle = sectionId.split('-').map(w => w.toUpperCase()).join(' ');
     const html = `
         <div class="modal-header">
-            <h2>✏️ Datos: ${sectionId.toUpperCase()}</h2>
+            <h2>Editar Datos: ${formattedTitle}</h2>
             <button class="btn-close" onclick="closeModal()">×</button>
         </div>
         <div class="modal-body" id="data-editor-form" style="max-height:60vh; overflow-y:auto; padding-right:10px;">
             <!-- Generado dinámicamente -->
         </div>
-        <button class="modal-btn" onclick="closeModal()">Cerrar</button>
+        <div class="modal-footer" style="margin-top: 16px;">
+            <button class="modal-btn" onclick="closeModal()" style="margin-top: 0;">Guardar y Cerrar</button>
+        </div>
     `;
     showModal(html);
 
@@ -317,15 +311,17 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
 
         const formGroup = document.createElement('div');
         formGroup.className = 'form-group-dynamic';
-        formGroup.style.marginBottom = '12px';
+        formGroup.style.marginBottom = '14px';
 
         if (typeof val === 'string' || typeof val === 'number') {
             const label = document.createElement('label');
             label.innerText = labelText;
             label.style.display = 'block';
-            label.style.marginBottom = '4px';
+            label.style.marginBottom = '6px';
             label.style.fontSize = '11px';
-            label.style.color = '#a1a1aa';
+            label.style.fontWeight = '600';
+            label.style.letterSpacing = '0.5px';
+            label.style.color = '#475569';
             formGroup.appendChild(label);
 
             let input;
@@ -350,9 +346,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
 
         } else if (Array.isArray(val)) {
             const label = document.createElement('label');
-            label.innerHTML = `<strong style="color: #818cf8;">📁 ${labelText}</strong>`;
-            label.style.display = 'block';
-            label.style.marginBottom = '8px';
+            label.innerHTML = `<span style="font-weight: 700; color: #0f172a; font-size: 12px; display: block; margin-top: 10px; margin-bottom: 6px;">${labelText}</span>`;
             formGroup.appendChild(label);
 
             const arrayContainer = document.createElement('div');
@@ -366,9 +360,11 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
                 controls.className = 'array-controls';
                 
                 const btnDel = document.createElement('button');
-                btnDel.innerText = '🗑️';
-                btnDel.className = 'dock-btn';
-                btnDel.style.padding = '4px';
+                btnDel.className = 'btn-delete-item';
+                btnDel.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                    Eliminar
+                `;
                 btnDel.onclick = () => {
                     val.splice(idx, 1);
                     localStorage.setItem(`cv_section_data_${sectionId}`, JSON.stringify(window.CVSectionsData[sectionId]));
@@ -397,11 +393,8 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
             });
 
             const btnAdd = document.createElement('button');
-            btnAdd.className = 'modal-btn';
-            btnAdd.style.background = 'rgba(255,255,255,0.05)';
-            btnAdd.style.color = '#fff';
-            btnAdd.style.border = '1px dashed rgba(255,255,255,0.2)';
-            btnAdd.innerText = `+ Añadir ${labelText}`;
+            btnAdd.className = 'btn-add-item';
+            btnAdd.innerText = `+ Añadir elemento a ${labelText.toLowerCase()}`;
             btnAdd.onclick = () => {
                 let newItem = typeof val[0] === 'object' ? Object.keys(val[0]).reduce((acc, k) => ({...acc, [k]: ""}), {}) : "";
                 val.push(newItem);
@@ -416,13 +409,14 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
 
         } else if (typeof val === 'object' && val !== null) {
             const label = document.createElement('label');
-            label.innerHTML = `<strong>📦 ${labelText}</strong>`;
+            label.innerHTML = `<span style="font-weight: 700; color: #334155; font-size: 11px; display: block; margin-top: 8px;">Grupo: ${labelText}</span>`;
             formGroup.appendChild(label);
 
             const subContainer = document.createElement('div');
-            subContainer.style.borderLeft = '1px solid rgba(255,255,255,0.1)';
+            subContainer.style.borderLeft = '2px solid #e2e8f0';
             subContainer.style.paddingLeft = '12px';
             subContainer.style.marginLeft = '4px';
+            subContainer.style.marginTop = '6px';
 
             generatePremiumFormFields(val, subContainer, currentPath, sectionId);
             formGroup.appendChild(subContainer);
@@ -438,18 +432,18 @@ function updateNestedValue(obj, path, value) {
 }
 
 /* ==========================================
-   MODAL 4: BACKUPS Y EXPORTACIÓN
+   MODAL 4: BACKUPS Y EXPORTACIÓN (SIN EMOJIS)
    ========================================== */
 function openBackupsModal() {
     const html = `
         <div class="modal-header">
-            <h2>💾 Backups y Datos</h2>
+            <h2>Copias de Seguridad y Datos</h2>
             <button class="btn-close" onclick="closeModal()">×</button>
         </div>
         <div class="modal-body" style="display:flex; flex-direction:column; gap:12px;">
-            <button class="modal-btn" onclick="exportBackup()">📥 Descargar JSON Consolidado</button>
-            <button class="modal-btn" style="background:rgba(255,255,255,0.1); color:#fff;" onclick="document.getElementById('import-config-file').click()">📤 Importar JSON</button>
-            <button class="modal-btn" style="background:#ef4444;" onclick="resetToFactory()">🔄 Restablecer de Fábrica</button>
+            <button class="modal-btn" onclick="exportBackup()">Descargar JSON Consolidado</button>
+            <button class="modal-btn-secondary" onclick="document.getElementById('import-config-file').click()">Importar JSON</button>
+            <button class="modal-btn" style="background:#ef4444; color: #ffffff;" onclick="resetToFactory()">Restablecer de Fábrica</button>
         </div>
     `;
     showModal(html);
@@ -468,7 +462,7 @@ window.exportBackup = function() {
 };
 
 window.resetToFactory = function() {
-    if (confirm('⚠️ ¿Borrar todos los cambios y restablecer?')) {
+    if (confirm('¿Borrar todos los cambios y restablecer?')) {
         localStorage.clear();
         location.reload();
     }
@@ -497,21 +491,91 @@ document.getElementById('import-config-file').addEventListener('change', (e) => 
 });
 
 /* ==========================================
-   CAMBIO DE COMPONENTES DE DISEÑO
+   CAMBIO DE COMPONENTES DE DISEÑO (INTERACTIVO CON PREVIEWS)
    ========================================== */
 function changeSectionComponent(sectionId) {
     const config = window.CVConfig;
     const sec = config.sections.find(s => s.id === sectionId);
     if (!sec) return;
-    
+
+    let contentHtml = '';
+
     if (sectionId === 'languages') {
         const current = sec.component || 'bars';
-        sec.component = current === 'bars' ? 'pills' : 'bars';
-    } else {
-        alert(`Opciones de diseño no implementadas para: ${sectionId}`);
-        return;
-    }
+        contentHtml = `
+            <div class="modal-header">
+                <h2>Diseño de la Sección: Idiomas</h2>
+                <button class="btn-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 13px; color: #475569; margin-bottom: 16px;">Seleccione la variante visual para presentar los idiomas en su currículum. Los cambios se aplicarán en tiempo real.</p>
 
+                <div class="layout-preview-container">
+                    <div class="layout-preview-grid">
+                        <div class="layout-preview-card ${current === 'bars' ? 'active' : ''}" onclick="selectComponentOption('languages', 'bars')">
+                            <div class="layout-preview-header">
+                                <h3 class="layout-preview-title">Barras de Progreso</h3>
+                                <span class="layout-preview-badge">${current === 'bars' ? 'Activo' : 'Seleccionar'}</span>
+                            </div>
+                            <p class="layout-preview-desc">Muestra cada idioma con una barra horizontal de progreso indicando el nivel de competencia de forma muy visual.</p>
+                            <div class="layout-mini-preview">
+                                <div class="layout-mini-preview-bar">
+                                    <div class="layout-mini-preview-bar-row"></div>
+                                    <div class="layout-mini-preview-bar-row" style="opacity: 0.6;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layout-preview-card ${current === 'pills' ? 'active' : ''}" onclick="selectComponentOption('languages', 'pills')">
+                            <div class="layout-preview-header">
+                                <h3 class="layout-preview-title">Etiquetas de Nivel (Pills)</h3>
+                                <span class="layout-preview-badge">${current === 'pills' ? 'Activo' : 'Seleccionar'}</span>
+                            </div>
+                            <p class="layout-preview-desc">Presenta los idiomas como etiquetas compactas con un badge para el nivel, ideal para optimizar el espacio vertical.</p>
+                            <div class="layout-mini-preview">
+                                <div class="layout-mini-preview-pills">
+                                    <div class="layout-mini-preview-pill"></div>
+                                    <div class="layout-mini-preview-pill"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn-secondary" onclick="closeModal()">Cerrar</button>
+            </div>
+        `;
+    } else {
+        const formattedName = sectionId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        contentHtml = `
+            <div class="modal-header">
+                <h2>Diseño de la Sección: ${formattedName}</h2>
+                <button class="btn-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body single-layout-info">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 12px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                <p><strong>Diseño Estándar Ultra-Optimizado</strong></p>
+                <p>Esta sección está configurada con un diseño premium por defecto, adaptado para mantener la máxima legibilidad, espaciado automático de A4 y compatibilidad con sistemas ATS.</p>
+                <p style="font-size: 11px; color: #94a3b8; margin-top: 8px;">Variantes de diseño adicionales para esta sección estarán disponibles en futuras actualizaciones.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn" onclick="closeModal()" style="margin-top: 0;">Entendido</button>
+            </div>
+        `;
+    }
+    showModal(contentHtml);
+}
+
+window.selectComponentOption = function(sectionId, componentName) {
+    const config = window.CVConfig;
+    const sec = config.sections.find(s => s.id === sectionId);
+    if (!sec) return;
+
+    sec.component = componentName;
     localStorage.setItem('cv_master_config', JSON.stringify(config));
     window.refreshCV();
-}
+
+    // Volver a abrir para reflejar la selección en tiempo real en el modal
+    changeSectionComponent(sectionId);
+};
