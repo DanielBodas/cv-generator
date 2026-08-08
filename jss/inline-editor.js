@@ -325,7 +325,7 @@ function saveConfig() {
 }
 
 /* ==========================================
-   MODAL 3: DATOS DE SECCIÓN
+   MODAL 3: DATOS DE SECCIÓN (CON ACORDEONES/COLLAPSIBLES)
    ========================================== */
 function openDataEditorModal(sectionId) {
     const sectionNameStr = sectionNames[sectionId] || sectionId.toUpperCase();
@@ -353,6 +353,18 @@ function openDataEditorModal(sectionId) {
     if (!data) return;
 
     generatePremiumFormFields(data, formCont, [], sectionId);
+}
+
+function extractItemHeaderTitle(item, defaultTitle) {
+    if (typeof item !== 'object' || item === null) return String(item);
+    // Intentamos buscar campos descriptivos comunes
+    const candidates = ['role', 'company', 'category', 'title', 'degree', 'institution', 'name', 'label', 'idioma', 'skill'];
+    for (const key of candidates) {
+        if (item[key] && typeof item[key] === 'string' && item[key].trim() !== '') {
+            return item[key].trim();
+        }
+    }
+    return defaultTitle;
 }
 
 function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
@@ -402,8 +414,43 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
 
             val.forEach((item, idx) => {
                 const itemCard = document.createElement('div');
-                itemCard.className = 'array-item';
+                itemCard.className = 'array-item collapsed'; // Por defecto colapsado
+
+                // Header del Accordion/Colapsable
+                const itemHeader = document.createElement('div');
+                itemHeader.className = 'array-item-header';
+
+                const itemTitleText = extractItemHeaderTitle(item, `Elemento ${idx + 1}`);
+                const itemTitleSpan = document.createElement('span');
+                itemTitleSpan.className = 'array-item-title';
+                itemTitleSpan.innerText = itemTitleText;
                 
+                const caretSpan = document.createElement('span');
+                caretSpan.className = 'array-item-caret';
+                caretSpan.innerHTML = '▼';
+
+                itemHeader.appendChild(itemTitleSpan);
+                itemHeader.appendChild(caretSpan);
+
+                // Contenido del Accordion
+                const itemBody = document.createElement('div');
+                itemBody.className = 'array-item-body';
+
+                // Toggle click handler para colapsar/expandir
+                itemHeader.onclick = (e) => {
+                    // Si se hace clic en el botón de eliminar, no expandir/colapsar
+                    if (e.target.closest('.btn-delete-item')) return;
+
+                    const isCollapsed = itemCard.classList.contains('collapsed');
+                    if (isCollapsed) {
+                        itemCard.classList.remove('collapsed');
+                        caretSpan.style.transform = 'rotate(180deg)';
+                    } else {
+                        itemCard.classList.add('collapsed');
+                        caretSpan.style.transform = 'rotate(0deg)';
+                    }
+                };
+
                 const controls = document.createElement('div');
                 controls.className = 'array-controls';
                 
@@ -412,6 +459,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
                 btnDel.className = 'btn-delete-item';
                 btnDel.onclick = (e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     val.splice(idx, 1);
                     localStorage.setItem(`cv_section_data_${sectionId}`, JSON.stringify(window.CVSectionsData[sectionId]));
                     window.refreshCV();
@@ -419,10 +467,10 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
                 };
 
                 controls.appendChild(btnDel);
-                itemCard.appendChild(controls);
+                itemBody.appendChild(controls);
 
                 if (typeof item === 'object' && item !== null) {
-                    generatePremiumFormFields(item, itemCard, [...currentPath, idx], sectionId);
+                    generatePremiumFormFields(item, itemBody, [...currentPath, idx], sectionId);
                 } else {
                     const input = document.createElement('input');
                     input.type = 'text';
@@ -432,9 +480,15 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId) {
                         updateNestedValue(window.CVSectionsData[sectionId], [...currentPath, idx], e.target.value);
                         localStorage.setItem(`cv_section_data_${sectionId}`, JSON.stringify(window.CVSectionsData[sectionId]));
                         window.refreshCV();
+
+                        // Actualizar título del header en tiempo real
+                        itemTitleSpan.innerText = e.target.value || `Elemento ${idx + 1}`;
                     };
-                    itemCard.appendChild(input);
+                    itemBody.appendChild(input);
                 }
+
+                itemCard.appendChild(itemHeader);
+                itemCard.appendChild(itemBody);
                 arrayContainer.appendChild(itemCard);
             });
 

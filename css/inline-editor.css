@@ -400,9 +400,58 @@ textarea.dynamic-input {
 .array-item {
     background: #fafafa;
     border: 1px solid #e4e4e7;
-    padding: 12px;
+    padding: 0;
     border-radius: 8px;
     position: relative;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+/* ESTILOS ACORDEÓN / COLLAPSIBLE */
+.array-item-header {
+    background: #f4f4f5;
+    border-bottom: 1px solid #e4e4e7;
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s ease;
+}
+
+.array-item-header:hover {
+    background: #e4e4e7;
+}
+
+.array-item-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #27272a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80%;
+}
+
+.array-item-caret {
+    font-size: 9px;
+    color: #71717a;
+    transition: transform 0.2s ease;
+}
+
+.array-item-body {
+    padding: 14px;
+    display: block;
+}
+
+/* Modificadores de estado colapsado */
+.array-item.collapsed .array-item-body {
+    display: none;
+}
+
+.array-item.collapsed .array-item-header {
+    border-bottom: none;
 }
 
 .array-controls {
