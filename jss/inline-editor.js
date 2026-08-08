@@ -677,7 +677,8 @@ function changeSectionComponent(sectionId) {
         ];
     }
 
-    const sectionNameStr = sectionNames[sectionId] || sectionId.toUpperCase();
+    const sectionNameStr =
+        sectionNames[sectionId] || sectionId.toUpperCase();
 
     let html = `
         <div class="modal-header">
@@ -705,7 +706,9 @@ function changeSectionComponent(sectionId) {
                 <div class="option-card-meta">
                     <div class="option-card-title-row">
                         <span class="option-card-title">${opt.name}</span>
-                        ${opt.active ? '<span class="active-badge">Seleccionado</span>' : ''}
+                        ${opt.active
+                ? '<span class="active-badge">Seleccionado</span>'
+                : ''}
                     </div>
 
                     <p class="option-card-desc">${opt.desc}</p>
@@ -722,40 +725,38 @@ function changeSectionComponent(sectionId) {
 
     showModal(html);
 
-    const modalEl = document.getElementById('general-settings-modal');
+    const modalEl =
+        document.getElementById('general-settings-modal');
+
     if (modalEl) {
         modalEl.classList.add('modal-medium');
     }
 
-    // Guardamos las opciones para poder seleccionarlas desde el modal
+    // Guardamos las opciones para poder seleccionarlas
     window._tempOptions = options;
-
-    // Guardamos la configuración actual
-    localStorage.setItem(
-        'cv_master_config',
-        JSON.stringify(config)
-    );
-
-    // Refrescamos la sección actual
-    window.refreshSection(sectionId);
 }
 
+
+/*
+ * Selecciona una variante de diseño
+ */
 window.selectComponentOption = function (sectionId, index) {
-    if (window._tempOptions && window._tempOptions[index]) {
-
-        // Aplicar la variante seleccionada
-        window._tempOptions[index].apply();
-
-        // Guardar la configuración actualizada
-        localStorage.setItem(
-            'cv_master_config',
-            JSON.stringify(window.CVConfig)
-        );
-
-        // Cerrar el modal
-        closeModal();
-
-        // Refrescar el CV completo
-        window.refreshCV();
+    if (!window._tempOptions || !window._tempOptions[index]) {
+        return;
     }
+
+    // Aplicar la opción seleccionada
+    window._tempOptions[index].apply();
+
+    // Guardar configuración
+    localStorage.setItem(
+        'cv_master_config',
+        JSON.stringify(window.CVConfig)
+    );
+
+    // Cerrar modal
+    closeModal();
+
+    // Actualizar CV
+    window.refreshCV();
 };
