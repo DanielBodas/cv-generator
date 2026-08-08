@@ -14,13 +14,19 @@ async function initCVStart() {
     try {
         // 1. Cargar Configuración Maestra
         const savedConfig = localStorage.getItem('cv_master_config');
+
+        // Siempre cargamos el master.json como referencia de defectos
+        const configRes = await fetch('./config/master.json');
+        if (!configRes.ok) throw new Error('No se pudo cargar config/master.json');
+        const defaultConfig = await configRes.json();
+
         if (savedConfig) {
             window.CVConfig = JSON.parse(savedConfig);
-            console.log('📦 Configuración cargada de localStorage');
+            // Sanear valores problemáticos que no deben persistir entre sesiones
+            sanitizeConfig(window.CVConfig, defaultConfig);
+            console.log('📦 Configuración cargada de localStorage (saneada)');
         } else {
-            const configRes = await fetch('./config/master.json');
-            if (!configRes.ok) throw new Error('No se pudo cargar config/master.json');
-            window.CVConfig = await configRes.json();
+            window.CVConfig = defaultConfig;
             localStorage.setItem('cv_master_config', JSON.stringify(window.CVConfig));
             console.log('📡 Configuración cargada del servidor por defecto');
         }
@@ -35,6 +41,31 @@ async function initCVStart() {
         console.error('❌ Error crítico en inicio:', err);
     } finally {
         console.groupEnd();
+    }
+}
+
+/**
+ * Sanea la configuración cargada de localStorage para corregir valores
+ * problemáticos o desactualizados vs el master.json de referencia.
+ */
+function sanitizeConfig(config, defaultConfig) {
+    // debugLayout nunca debe persistir entre sesiones
+    if (config.layout) {
+        config.layout.debugLayout = 0;
+    }
+
+    // Asegurar que todas las secciones del default existen en el config guardado
+    // y tienen los campos de estructura correctos (mode, area, weight)
+    if (config.sections && defaultConfig.sections) {
+        defaultConfig.sections.forEach(defSec => {
+            const saved = config.sections.find(s => s.id === defSec.id);
+            if (saved) {
+                // Restaurar campos estructurales si han quedado en un estado no válido
+                if (!saved.area) saved.area = defSec.area;
+                if (!saved.mode) saved.mode = defSec.mode;
+                if (saved.weight === undefined) saved.weight = defSec.weight;
+            }
+        });
     }
 }
 
@@ -143,9 +174,19 @@ function setupGrid(layout) {
 }
 
 async function renderSection(cfg, container) {
-    const path = `./sections/${cfg.id}`;
+    const sectionRootPath = `./sections/${cfg.id}`;
+    let templatePath = sectionRootPath;
+    if (cfg.component) {
+        templatePath = `${sectionRootPath}/components/${cfg.component}`;
+    }
+    // Para retrocompatibilidad o por si languages no tiene componente en config inicial
+    if (cfg.id === 'languages' && !cfg.component) {
+        templatePath = `${sectionRootPath}/components/bars`;
+        cfg.component = 'bars';
+    }
+
     try {
-        const htmlRes = await fetch(`${path}/template.html`);
+        const htmlRes = await fetch(`${templatePath}/template.html`);
         if (!htmlRes.ok) throw new Error(`Error al cargar plantilla de ${cfg.id}`);
         let tpl = await htmlRes.text();
 
@@ -157,14 +198,14 @@ async function renderSection(cfg, container) {
                 data = JSON.parse(savedData);
                 window.CVSectionsData[cfg.id] = data;
             } else {
-                const dataRes = await fetch(`${path}/data.json`);
+                const dataRes = await fetch(`${sectionRootPath}/data.json`);
                 data = dataRes.ok ? await dataRes.json() : {};
                 window.CVSectionsData[cfg.id] = data;
                 localStorage.setItem(`cv_section_data_${cfg.id}`, JSON.stringify(data));
             }
         }
 
-        injectStyles(cfg.id, path);
+        await injectStyles(cfg.id, templatePath);
 
         // Soporte básico para condicionales {{#if key}} ... {{/if}}
         tpl = tpl.replace(/{{\s*#if\s+(\w+)\s*}}([\s\S]*?){{\s*\/if\s*}}/g, (_, key, sub) => {
@@ -208,6 +249,8 @@ async function renderSection(cfg, container) {
 
         const el = document.createElement('section');
         el.className = `cv-section section-${cfg.id} mode-${cfg.mode || 'detailed'}`;
+        // Añadimos position relative para posicionar la toolbar absoluta
+        el.style.position = 'relative';
 
         const w = cfg.weight;
         if (typeof w === 'number' && w > 0) {
@@ -218,12 +261,24 @@ async function renderSection(cfg, container) {
             el.style.flex = '0 0 auto'; // Fijo
         }
 
-        el.innerHTML = tpl;
+        const toolbarHtml = `
+            <div class="inline-toolbar hide-on-print">
+                <button class="toolbar-btn btn-edit-data" data-section="${cfg.id}" title="Editar Datos">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                </button>
+                <div class="toolbar-divider"></div>
+                <button class="toolbar-btn btn-change-layout" data-section="${cfg.id}" title="Cambiar Componente">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                </button>
+            </div>
+        `;
+
+        el.innerHTML = toolbarHtml + tpl;
         container.appendChild(el);
 
         // Solo intentar cargar script.js si está marcado explícitamente
         if (cfg.hasScript === true) {
-            await loadSectionScript(cfg.id, path, data, cfg, el);
+            await loadSectionScript(cfg.id, templatePath, data, cfg, el);
         }
         return el;
     } catch (e) {
@@ -231,11 +286,30 @@ async function renderSection(cfg, container) {
     }
 }
 
-function injectStyles(id, path) {
-    if (document.getElementById(`style-${id}`)) return;
-    const l = document.createElement('link');
-    l.id = `style-${id}`; l.rel = 'stylesheet'; l.href = `${path}/style.css`;
-    document.head.appendChild(l);
+function injectStyles(sectionId, path) {
+    return new Promise((resolve) => {
+        // Usar la ruta completa como id para distinguir componentes distintos
+        const styleId = `style-${path.replace(/[^a-z0-9]/gi, '-')}`;
+
+        // Si ya existe este estilo concreto, no hace falta recargarlo
+        if (document.getElementById(styleId)) {
+            return resolve();
+        }
+
+        // Eliminar el estilo previo de esta sección si existía con otra ruta (cambio de componente)
+        const oldStyle = document.querySelector(`link[id^="style-"][id*="${sectionId}"]`);
+        if (oldStyle && oldStyle.id !== styleId) {
+            oldStyle.remove();
+        }
+
+        const l = document.createElement('link');
+        l.id = styleId;
+        l.rel = 'stylesheet'; 
+        l.href = `${path}/style.css`;
+        l.onload = () => resolve();
+        l.onerror = () => resolve();
+        document.head.appendChild(l);
+    });
 }
 
 async function loadSectionScript(id, path, data, cfg, el) {

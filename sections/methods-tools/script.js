@@ -24,7 +24,7 @@ function init(data, cfg, el) {
         }
         
         items.forEach(text => {
-            const pill = document.createElement('span');
+            const pill = document.createElement('li');
             pill.className = 'sidebar-skill-pill';
             pill.innerText = text;
             container.appendChild(pill);

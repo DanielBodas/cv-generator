@@ -1,16 +1,16 @@
 <div class="section-header">
     <div class="header-name">{{name}}</div>
     <div class="header-title">{{headline}}</div>
-    <div class="contact-row">
-        <div class="contact-item">
+    <address class="contact-row">
+        <a href="mailto:{{email}}" class="contact-item">
             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2.5">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                 <polyline points="22,6 12,13 2,6"></polyline>
             </svg>
             {{email}}
-        </div>
-        <div class="contact-item">
+        </a>
+        <a href="tel:{{phone}}" class="contact-item">
             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2.5">
                 <path
@@ -18,16 +18,16 @@
                 </path>
             </svg>
             {{phone}}
-        </div>
-        <div class="contact-item">
+        </a>
+        <span class="contact-item">
             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2.5">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                 <circle cx="12" cy="10" r="3"></circle>
             </svg>
             {{location}}
-        </div>
-        <div class="contact-item">
+        </span>
+        <a href="{{linkedin}}" class="contact-item">
             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2.5">
                 <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
@@ -35,6 +35,6 @@
                 <circle cx="4" cy="4" r="2"></circle>
             </svg>
             {{linkedin}}
-        </div>
-    </div>
+        </a>
+    </address>
 </div>
