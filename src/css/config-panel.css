@@ -744,7 +744,8 @@ body {
     }
 
     .cv-viewport {
-        height: 50%;
+        flex: 1;
+        height: auto;
         padding: 20px;
     }
 }
