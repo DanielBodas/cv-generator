@@ -1,0 +1,500 @@
+/* ============================================================
+   ESTILOS INLINE EDITOR - ESTÉTICA VERCEL / LINEAR (ULTRA PREMIUM)
+   ============================================================ */
+
+/* 1. Fondo del Canvas (Dot Matrix) */
+.cv-viewport {
+    background-color: #0a0a0a !important; /* Fondo casi negro puro */
+    background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px) !important;
+    background-size: 24px 24px !important;
+}
+
+/* Sombra decorativa del folio A4 */
+#cv-page {
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 2. Secciones del CV (Hover Outline Mágico) */
+/* IMPORTANTE: No usar ::after con offsets negativos — inflaria scrollHeight
+   y rompería los cálculos de espacio del ResizeObserver de experience/script.js.
+   En su lugar usamos outline que no afecta el box model ni scrollHeight. */
+.cv-section {
+    position: relative;
+    border-radius: 6px;
+    outline: 1px solid transparent;
+    outline-offset: 4px;
+    transition: outline-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cv-section:hover {
+    outline-color: rgba(255, 255, 255, 0.18);
+}
+
+/* 3. Toolbar In-Line Flotante Interna */
+.inline-toolbar {
+    position: absolute;
+    top: 8px;
+    right: 8px; 
+    transform: translateY(-5px) scale(0.95);
+    background: rgba(10, 10, 10, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 12px;
+    padding: 4px;
+    display: flex;
+    flex-direction: row; /* Horizontal para ser más compacta */
+    gap: 4px;
+    z-index: 100;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.cv-section:hover .inline-toolbar {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: auto 2px;
+}
+
+.toolbar-btn {
+    background: transparent;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.toolbar-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+}
+
+/* 4. Dock Central Minimalista (Menú General) */
+.floating-actions-menu {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(15, 15, 15, 0.7);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 8px;
+    border-radius: 30px;
+    z-index: 9999;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.floating-actions-menu:hover {
+    transform: translateX(-50%) translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.dock-divider {
+    width: 1px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0 4px;
+}
+
+.dock-btn {
+    background: transparent;
+    border: none;
+    color: #a1a1aa;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.dock-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    transform: scale(1.05);
+}
+
+/* Modal Ajustes Generales */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    background: rgba(15, 15, 15, 0.85);
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 24px;
+    width: 360px;
+    max-width: 90vw;
+    z-index: 10001;
+    color: #ededed;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+    font-family: 'Inter', sans-serif;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.modal-overlay.show {
+    opacity: 1;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.modal-header h2 {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0;
+    color: #fff;
+}
+
+.btn-close {
+    background: transparent;
+    border: none;
+    color: #666;
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.btn-close:hover {
+    color: #fff;
+}
+
+.form-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    font-size: 13px;
+    color: #a1a1aa;
+}
+
+.form-group input[type="color"] {
+    -webkit-appearance: none;
+    appearance: none;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    background: transparent;
+    padding: 0;
+}
+.form-group input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 2px;
+}
+.form-group input[type="color"]::-webkit-color-swatch {
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+}
+
+.modal-btn {
+    width: 100%;
+    padding: 12px;
+    background: #fff;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: transform 0.2s, opacity 0.2s;
+}
+.modal-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* ==========================================
+   ESTILOS DINÁMICOS PARA FORMULARIOS (APP JS)
+   ========================================== */
+.dynamic-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    font-family: inherit;
+    outline: none;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+.dynamic-input:focus {
+    border-color: #8b5cf6;
+}
+
+textarea.dynamic-input {
+    resize: vertical;
+}
+
+.array-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.array-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 12px;
+    border-radius: 12px;
+    position: relative;
+}
+
+.array-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-bottom: 8px;
+}
+
+/* Modificar ancho de Modal para formularios más anchos si es necesario */
+#general-settings-modal {
+    width: 480px;
+}
+
+/* ==========================================
+   MODAL ESTRUCTURA: DOS COLUMNAS
+   ========================================== */
+.structure-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 20px;
+}
+
+.structure-column {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.structure-col-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+}
+
+.sidebar-header {
+    background: rgba(99, 102, 241, 0.12);
+    color: #818cf8;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.main-header {
+    background: rgba(16, 185, 129, 0.1);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.structure-area-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.structure-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    padding: 8px 10px;
+    transition: all 0.2s;
+}
+
+.structure-item:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.15);
+}
+
+.structure-item.is-disabled {
+    opacity: 0.4;
+}
+
+.struct-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: #e2e8f0;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.struct-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.struct-btn {
+    background: transparent;
+    border: none;
+    color: #555;
+    cursor: pointer;
+    padding: 2px 4px;
+    font-size: 8px;
+    line-height: 1;
+    border-radius: 3px;
+    transition: color 0.2s;
+}
+
+.struct-btn:hover:not(:disabled) {
+    color: #fff;
+}
+
+.struct-btn:disabled {
+    opacity: 0.2;
+    cursor: default;
+}
+
+/* Toggle Switch personalizado */
+.struct-toggle {
+    position: relative;
+    width: 28px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.struct-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.struct-slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    transition: background 0.2s;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.struct-slider::before {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #888;
+    top: 2px;
+    left: 2px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.struct-toggle input:checked + .struct-slider {
+    background: rgba(99, 102, 241, 0.4);
+    border-color: #818cf8;
+}
+
+.struct-toggle input:checked + .struct-slider::before {
+    background: #818cf8;
+    transform: translateX(12px);
+}
+
+/* ==========================================
+   DEBUG TOGGLE GROUP
+   ========================================== */
+.debug-toggle-group {
+    display: flex;
+    gap: 4px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 4px;
+    border-radius: 10px;
+}
+
+.debug-toggle-btn {
+    flex: 1;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: #666;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.debug-toggle-btn.active {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.debug-toggle-btn:hover:not(.active) {
+    background: rgba(255,255,255,0.06);
+    color: #aaa;
+}
+
+/* Secciones dentro del modal de Ajustes Generales */
+.modal-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #555;
+    margin: 0 0 8px 0;
+}
+

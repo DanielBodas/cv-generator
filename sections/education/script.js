@@ -12,7 +12,7 @@ function init(data, cfg, el) {
         container.innerHTML = '';
         const tags = tagsString.split(',').map(t => t.trim()).filter(Boolean);
         tags.forEach(tag => {
-            const pill = document.createElement('span');
+            const pill = document.createElement('li');
             pill.className = 'edu-tag-pill';
             pill.innerText = tag;
             container.appendChild(pill);
