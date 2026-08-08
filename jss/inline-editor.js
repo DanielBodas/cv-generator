@@ -397,7 +397,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId, forc
                 const finalVal = typeof val === 'number' ? parseFloat(e.target.value) : e.target.value;
                 updateNestedValue(window.CVSectionsData[sectionId], currentPath, finalVal);
                 localStorage.setItem(`cv_section_data_${sectionId}`, JSON.stringify(window.CVSectionsData[sectionId]));
-                window.refreshCV();
+                window.refreshSection(sectionId);
             });
             formGroup.appendChild(input);
             parentElement.appendChild(formGroup);
@@ -460,7 +460,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId, forc
                     e.stopPropagation();
                     val.splice(idx, 1);
                     localStorage.setItem(`cv_section_data_${sectionId}`, JSON.stringify(window.CVSectionsData[sectionId]));
-                    window.refreshCV();
+                    window.refreshSection(sectionId);
                     openDataEditorModal(sectionId); // re-render modal
                 };
 
@@ -477,9 +477,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId, forc
                     input.onchange = (e) => {
                         updateNestedValue(window.CVSectionsData[sectionId], [...currentPath, idx], e.target.value);
                         localStorage.setItem(`cv_section_data_${sectionId}`, JSON.stringify(window.CVSectionsData[sectionId]));
-                        window.refreshCV();
-
-                        itemTitleSpan.innerText = e.target.value || `Elemento ${idx + 1}`;
+                        window.refreshSection(sectionId);
                     };
                     itemBody.appendChild(input);
                 }
@@ -497,7 +495,7 @@ function generatePremiumFormFields(obj, parentElement, pathKeys, sectionId, forc
                 let newItem = typeof val[0] === 'object' ? Object.keys(val[0]).reduce((acc, k) => ({...acc, [k]: ""}), {}) : "";
                 val.push(newItem);
                 localStorage.setItem(`cv_section_data_${sectionId}`, JSON.stringify(window.CVSectionsData[sectionId]));
-                window.refreshCV();
+                window.refreshSection(sectionId);
                 openDataEditorModal(sectionId);
             };
 
@@ -709,6 +707,7 @@ function changeSectionComponent(sectionId) {
     if (modalEl) {
         modalEl.classList.add('modal-medium');
     }
+
     window._tempOptions = options;
 }
 
