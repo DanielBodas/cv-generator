@@ -118,3 +118,21 @@
 
 .mode-compact .lang-list { gap: 6px; }
 .mode-compact .skill-bar { height: 2px; }
+
+/* Adaptive main-column styles for languages (ATS Mode) */
+.area-main .lang-name {
+    color: var(--text) !important;
+}
+
+.area-main .lang-item .skill-bar {
+    background: var(--border) !important;
+}
+
+.area-main .lang-item.is-minimized {
+    background: var(--main-bg) !important;
+    border: 1px solid var(--border) !important;
+}
+
+.area-main .lang-item.is-minimized .lang-name {
+    color: var(--text) !important;
+}

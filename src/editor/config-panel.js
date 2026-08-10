@@ -159,6 +159,14 @@ function initThemeTab() {
                         <div class="preset-color-dot" style="background: #27272a;"></div>
                     </div>
                 </button>
+                <button class="preset-btn" data-preset="ats" style="grid-column: span 2; background: #faf5ff; border: 1px dashed #c084fc;">
+                    <span>📊 Alineación ATS (Columna Única)</span>
+                    <div class="preset-colors">
+                        <div class="preset-color-dot" style="background: #0f172a;"></div>
+                        <div class="preset-color-dot" style="background: #475569;"></div>
+                        <div class="preset-color-dot" style="background: #ffffff; border: 1px solid #cbd5e1;"></div>
+                    </div>
+                </button>
             </div>
         `;
         // Inyectar antes del primer elemento hijo de la pestaña
@@ -175,6 +183,70 @@ function initThemeTab() {
         document.querySelectorAll('.preset-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const id = btn.getAttribute('data-preset');
+
+                if (id === 'ats') {
+                    config.layout.columns = '1fr';
+                    config.layout.gridAreas = ['main'];
+                    config.sections.forEach(sec => {
+                        sec.area = 'main';
+                        if (sec.id === 'profile') sec.weight = 0;
+                        else if (sec.id === 'experience') sec.weight = 6;
+                        else if (sec.id === 'education') sec.weight = 3;
+                        else if (sec.id === 'about') sec.weight = 2;
+                        else sec.weight = 1;
+                    });
+
+                    // Ordenar las secciones de forma óptima y lógica para el procesamiento de los ATS (Workday, etc.)
+                    const optimalOrder = [
+                        'profile',
+                        'about',
+                        'experience',
+                        'education',
+                        'executive-highlights',
+                        'methods-tools',
+                        'iniciatives',
+                        'languages',
+                        'references'
+                    ];
+                    config.sections.sort((a, b) => optimalOrder.indexOf(a.id) - optimalOrder.indexOf(b.id));
+
+                    config.theme.primaryColor = '#0f172a';
+                    config.theme.secondaryColor = '#475569';
+                    config.theme.sidebarColor = '#0f172a';
+                    config.theme.textColor = '#1e293b';
+                    config.theme.backgroundColor = '#ffffff';
+
+                    // Sincronizar inputs
+                    document.getElementById('theme-primary').value = '#0f172a';
+                    document.getElementById('theme-secondary').value = '#475569';
+                    document.getElementById('theme-sidebar').value = '#0f172a';
+                    document.getElementById('theme-text').value = '#1e293b';
+                    document.getElementById('theme-bg').value = '#ffffff';
+                    document.getElementById('layout-sidebar-width').value = '1fr';
+
+                    saveConfig();
+                    window.refreshCV();
+                    triggerSaveAnimation();
+                    if (document.getElementById('sections-list')) {
+                        renderSectionsTab();
+                    }
+                    return;
+                }
+
+                // Si estaba en Columna Única, restaurar el layout a 2 columnas con sidebar
+                if (config.layout.columns === '1fr') {
+                    config.layout.columns = '200px 1fr';
+                    config.layout.gridAreas = ['sidebar main'];
+                    config.sections.forEach(sec => {
+                        if (['profile', 'iniciatives', 'methods-tools', 'languages', 'references'].includes(sec.id)) {
+                            sec.area = 'sidebar';
+                        } else {
+                            sec.area = 'main';
+                        }
+                    });
+                    document.getElementById('layout-sidebar-width').value = '200px';
+                }
+
                 const colors = presets[id];
                 if (colors) {
                     config.theme.primaryColor = colors.primary;
@@ -189,6 +261,9 @@ function initThemeTab() {
                     saveConfig();
                     window.refreshCV();
                     triggerSaveAnimation();
+                    if (document.getElementById('sections-list')) {
+                        renderSectionsTab();
+                    }
                 }
             });
         });

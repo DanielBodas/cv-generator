@@ -117,3 +117,75 @@
 .contact-line:hover svg {
     opacity: 0.9;
 }
+
+/* ============================================================
+   ADAPTIVE MAIN COLUMN STYLES (ATS Mode / Single Column)
+   ============================================================ */
+.area-main .profile-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 16px 0;
+    border-bottom: 1.5px solid var(--border);
+    margin-bottom: 8px;
+}
+
+.area-main .profile-photo-wrap {
+    margin-top: 0;
+    margin-bottom: 12px;
+    border-color: var(--border);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.area-main .profile-name {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 6px;
+}
+
+.area-main .profile-roles {
+    flex-direction: row;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.area-main .profile-role {
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 650;
+}
+
+.area-main .profile-role:not(:last-child)::after {
+    display: none; /* Quitamos divisor vertical */
+}
+
+.area-main .profile-divider {
+    display: none; /* Quitamos divisor de la barra lateral */
+}
+
+.area-main .profile-contacts {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 20px;
+    margin-top: 8px;
+}
+
+.area-main .contact-line {
+    color: var(--text-muted);
+    font-size: 10.5px;
+    font-weight: 550;
+    transition: color 0.2s;
+}
+
+.area-main .contact-line svg {
+    color: var(--accent);
+    opacity: 0.85;
+}
+
+.area-main .contact-line:hover {
+    color: var(--primary);
+}
