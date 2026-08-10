@@ -635,6 +635,45 @@ function changeSectionComponent(sectionId) {
             }
         ];
 
+    } else if (sectionId === 'executive-highlights') {
+        const current = sec.component || 'cards';
+
+        options = [
+            {
+                id: 'cards',
+                name: 'Tarjetas en Cuadrícula (Cards)',
+                desc: 'Disposición corporativa en cuadrícula de tres columnas con borde de acento superior.',
+                previewHtml: `
+                    <div class="component-preview-visual detailed-preview">
+                        <div class="preview-row" style="gap: 8px; width: 100%;">
+                            <div class="preview-box" style="height: 40px; flex: 1;"></div>
+                            <div class="preview-box" style="height: 40px; flex: 1;"></div>
+                            <div class="preview-box" style="height: 40px; flex: 1;"></div>
+                        </div>
+                    </div>
+                `,
+                active: current === 'cards',
+                apply: () => {
+                    sec.component = 'cards';
+                }
+            },
+            {
+                id: 'rows',
+                name: 'Filas Alineadas (Rows)',
+                desc: 'Disposición limpia en filas horizontales compactas con división interna, optimizando espacio.',
+                previewHtml: `
+                    <div class="component-preview-visual detailed-preview">
+                        <div class="preview-line title" style="width: 100%;"></div>
+                        <div class="preview-line title" style="width: 100%;"></div>
+                    </div>
+                `,
+                active: current === 'rows',
+                apply: () => {
+                    sec.component = 'rows';
+                }
+            }
+        ];
+
     } else {
         const currentMode = sec.mode || 'detailed';
 

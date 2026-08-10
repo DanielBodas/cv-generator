@@ -188,6 +188,11 @@ async function populateSection(cfg, el, areaWeights = null) {
         templatePath = `${sectionRootPath}/components/bars`;
         cfg.component = 'bars';
     }
+    // Soporte para executive-highlights con fallback a cards si no hay componente seteado
+    if (sectionId === 'executive-highlights' && !cfg.component) {
+        templatePath = `${sectionRootPath}/components/cards`;
+        cfg.component = 'cards';
+    }
 
     try {
         const htmlRes = await fetch(`${templatePath}/template.html`);

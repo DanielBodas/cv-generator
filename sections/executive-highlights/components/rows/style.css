@@ -1,0 +1,79 @@
+/* Executive Highlights - Horizontal Split-Row Layout */
+
+:root {
+    --row-label-fz: 9px;
+    --row-text-fz: 8.5px;
+    --row-text-lh: 1.4;
+    --row-padding: 8px 10px;
+    --row-gap: 8px;
+    --row-label-width: 120px;
+}
+
+.highlights-rows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--row-gap);
+    margin-top: 6px;
+}
+
+.highlight-row-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 3px solid var(--accent);
+    border-radius: 4px;
+    padding: var(--row-padding);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    min-height: 36px;
+    transition: transform 0.2s ease;
+}
+
+.row-label {
+    font-size: var(--row-label-fz);
+    font-weight: 800;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    width: var(--row-label-width);
+    flex-shrink: 0;
+    text-align: left;
+    border-right: 1px solid #e2e8f0;
+    padding-right: 8px;
+    word-wrap: break-word;
+}
+
+.row-text {
+    font-size: var(--row-text-fz);
+    color: #475569;
+    line-height: var(--row-text-lh);
+    margin: 0;
+    text-align: left;
+    flex: 1;
+}
+
+.mode-tight .row-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.mode-very-tight .row-text {
+    -webkit-line-clamp: 1;
+}
+
+.mode-ultra-compact .highlight-row-item {
+    min-height: auto;
+    padding: 3px 6px;
+    gap: 8px;
+}
+
+.mode-ultra-compact .row-label {
+    padding-right: 6px;
+}
+
+.mode-ultra-compact .row-text {
+    line-height: 1.2;
+}
