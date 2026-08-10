@@ -3,7 +3,6 @@
     {{#initiatives}}
     <div class="iniciatives-card">
         <div class="iniciatives-icon">
-            <!-- Icono dinámico según el rol (simplificado)-->
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="10"></circle>
                 <path d="M12 8l4 4-4 4M8 12h8"></path>
@@ -12,6 +11,7 @@
         <div class="iniciatives-content">
             <div class="iniciatives-role">{{role}}</div>
             <div class="iniciatives-org">{{organization}}</div>
+            <p class="iniciatives-desc">{{description}}</p>
         </div>
     </div>
     {{/initiatives}}

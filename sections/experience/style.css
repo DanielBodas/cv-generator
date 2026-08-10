@@ -99,8 +99,14 @@
     flex-direction: column;
     position: relative;
     padding-left: 10px;
-    border-left: 1.5px solid var(--border, #e2e8f0);
+    border-left: 2px solid var(--border, #e2e8f0);
     padding-bottom: var(--exp-item-pad-bottom);
+    transition: border-color 0.2s ease, padding-left 0.2s ease;
+}
+
+.exp-item:hover {
+    border-left-color: var(--accent, #457b9d);
+    padding-left: 13px;
 }
 
 .exp-header {
@@ -149,11 +155,19 @@
 .exp-tag-pill {
     font-size: 8px;
     font-weight: 650;
-    color: #334155;
-    background: #f3f6f9;
-    padding: 2px 6px;
-    border-radius: 3px;
-    border: 1px solid #e2e8f0;
+    color: var(--accent, #457b9d);
+    background: rgba(69, 123, 157, 0.05);
+    padding: 2px 7px;
+    border-radius: 4px;
+    border: 1px solid rgba(69, 123, 157, 0.12);
+    transition: all 0.2s ease;
+}
+
+.exp-tag-pill:hover {
+    color: #ffffff;
+    background: var(--accent, #457b9d);
+    border-color: var(--accent, #457b9d);
+    transform: translateY(-0.5px);
 }
 
 /* ── Mini-row: oculta por defecto, solo visible en .is-minimized ── */
@@ -161,10 +175,6 @@
 .exp-dates-mini      { display: none; }
 
 /* ── Item MINIMIZADO: fila única ultra-compacta ── */
-/*
-   Diseño: [● Role  ·  Company]               [dates]
-   Sin descripción, sin tags, sin padding vertical.
-*/
 .is-minimized {
     /* Fila horizontal en lugar de columna */
     flex-direction: row;
@@ -179,9 +189,12 @@
     padding-bottom: 4px;
     padding-right: 4px;
 
-    /* Fondo levemente diferenciado */
+    /* Fondo levemente de calidad superior */
     background: #f8fafc;
-    border-radius: 0 3px 3px 0;
+    border-radius: 0 4px 4px 0;
+    border-top: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f1f5f9;
+    border-right: 1px solid #f1f5f9;
 }
 
 /* Metadatos agrupados a la izquierda */
@@ -243,13 +256,8 @@
 }
 
 /* ── Gap reducido entre minimizados consecutivos ── */
-/*
-   Cuando dos .is-minimized van seguidos, el gap normal se ve enorme.
-   Usamos el selector de hermano adyacente para reducirlo.
-*/
 .exp-item.is-minimized + .exp-item.is-minimized {
     margin-top: calc(var(--exp-mini-gap) - var(--exp-gap));
-    /* Anula el gap del flex con margen negativo + mini-gap */
 }
 
 /* ── Modo compact ── */

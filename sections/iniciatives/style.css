@@ -5,6 +5,7 @@
     --init-padding: 8px 10px 8px 14px;
     --init-role-fz: 9.8px;
     --init-org-fz: 8.3px;
+    --init-desc-fz: 7.8px;
     --init-mini-gap: 4px;
 }
 
@@ -23,11 +24,21 @@
     align-items: flex-start;
     width: 100%;
     box-sizing: border-box;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.04);
     padding: var(--init-padding);
-    border-radius: 7px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 3px solid var(--accent, #457b9d);
     overflow: hidden;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.iniciatives-card:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* 🔥 Watermark REAL usando pseudo-elemento */
@@ -51,6 +62,11 @@
     <circle cx='12' cy='12' r='10'/>\
     <path d='M12 8l4 4-4 4M8 12h8'/>\
     </svg>");
+    transition: opacity 0.2s ease;
+}
+
+.iniciatives-card:hover::after {
+    opacity: 0.08;
 }
 
 /* Eliminamos el icono real del flujo */
@@ -80,7 +96,7 @@
 
 .iniciatives-org {
     font-size: var(--init-org-fz);
-    font-weight: 560;
+    font-weight: 600;
     color: rgba(255, 255, 255, 0.58);
     letter-spacing: 0.1px;
     white-space: normal;
@@ -88,7 +104,15 @@
     line-height: 1.25;
 }
 
-.init-desc { display: none; }
+/* ── Descripción de iniciativas ── */
+.iniciatives-desc {
+    font-size: var(--init-desc-fz);
+    color: rgba(255, 255, 255, 0.62);
+    line-height: 1.4;
+    margin-top: 4px;
+    text-align: justify;
+    display: block;
+}
 
 /* ── Card MINIMIZADA ── */
 .iniciatives-card.is-minimized {
@@ -96,6 +120,7 @@
     border-radius: 4px;
     background: rgba(255, 255, 255, 0.03);
     border-color: rgba(255, 255, 255, 0.07);
+    border-left: 2px solid var(--accent, #457b9d);
 }
 
 .iniciatives-card.is-minimized::after {
@@ -105,7 +130,8 @@
     right: -15px;
 }
 
-.iniciatives-card.is-minimized .iniciatives-org {
+.iniciatives-card.is-minimized .iniciatives-org,
+.iniciatives-card.is-minimized .iniciatives-desc {
     display: none;
 }
 
