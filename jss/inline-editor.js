@@ -277,39 +277,119 @@ function renderStructureList() {
         name.className = 'struct-name';
         name.textContent = sectionNames[sec.id] || sec.id;
 
-        // Campo de peso (weight)
+        // Campo de peso (weight) intuitivo con selector y stepper
         const weightContainer = document.createElement('div');
         weightContainer.className = 'struct-weight-container';
 
-        const weightLabel = document.createElement('span');
-        weightLabel.className = 'struct-weight-label';
-        weightLabel.textContent = 'Peso:';
+        const weightSelect = document.createElement('select');
+        weightSelect.className = 'struct-weight-select';
+        weightSelect.disabled = !!sec.disabled;
 
-        const weightInput = document.createElement('input');
-        weightInput.type = 'text';
-        weightInput.className = 'struct-weight-input';
-        const weightVal = (sec.weight === true) ? 'true' : (sec.weight || 0);
-        weightInput.value = weightVal;
-        weightInput.placeholder = 'ej. 1, true';
-        weightInput.disabled = !!sec.disabled;
-        weightInput.title = 'Peso de la sección (ej. 1, 3 o true para auto/flexible)';
+        const optFixed = document.createElement('option');
+        optFixed.value = 'fixed';
+        optFixed.textContent = '📍 Fijo (Mínimo)';
 
-        weightInput.onchange = (e) => {
-            const val = e.target.value.trim();
-            if (val === 'true') {
-                sec.weight = true;
-            } else if (val === 'false' || val === '0' || !val) {
-                sec.weight = 0;
-            } else {
-                const num = parseInt(val, 10);
-                sec.weight = isNaN(num) ? 0 : num;
-            }
+        const optAuto = document.createElement('option');
+        optAuto.value = 'auto';
+        optAuto.textContent = '⚡ Flexible (Auto)';
+
+        const optProp = document.createElement('option');
+        optProp.value = 'proportional';
+        optProp.textContent = '📊 Proporcional';
+
+        weightSelect.appendChild(optFixed);
+        weightSelect.appendChild(optAuto);
+        weightSelect.appendChild(optProp);
+
+        // Determinar el valor seleccionado actual
+        if (sec.weight === true) {
+            weightSelect.value = 'auto';
+        } else if (typeof sec.weight === 'number' && sec.weight > 0) {
+            weightSelect.value = 'proportional';
+        } else {
+            weightSelect.value = 'fixed';
+        }
+
+        // Stepper para el modo proporcional
+        const stepperContainer = document.createElement('div');
+        stepperContainer.className = 'struct-weight-stepper';
+        if (weightSelect.value !== 'proportional') {
+            stepperContainer.style.display = 'none';
+        }
+
+        const btnMinus = document.createElement('button');
+        btnMinus.className = 'stepper-btn';
+        btnMinus.textContent = '-';
+        btnMinus.disabled = !!sec.disabled;
+
+        const numInput = document.createElement('input');
+        numInput.type = 'number';
+        numInput.className = 'stepper-input';
+        numInput.min = '1';
+        numInput.max = '99';
+        numInput.value = (typeof sec.weight === 'number' && sec.weight > 0) ? sec.weight : 1;
+        numInput.disabled = !!sec.disabled;
+
+        const btnPlus = document.createElement('button');
+        btnPlus.className = 'stepper-btn';
+        btnPlus.textContent = '+';
+        btnPlus.disabled = !!sec.disabled;
+
+        const updateWeightFromUI = (newVal) => {
+            sec.weight = newVal;
             saveConfig();
-            renderStructureList();
+            // Refrescar el CV en vivo además de la lista
+            window.refreshCV();
         };
 
-        weightContainer.appendChild(weightLabel);
-        weightContainer.appendChild(weightInput);
+        weightSelect.onchange = () => {
+            if (weightSelect.value === 'fixed') {
+                stepperContainer.style.display = 'none';
+                updateWeightFromUI(0);
+            } else if (weightSelect.value === 'auto') {
+                stepperContainer.style.display = 'none';
+                updateWeightFromUI(true);
+            } else {
+                stepperContainer.style.display = 'flex';
+                const val = parseInt(numInput.value, 10) || 1;
+                updateWeightFromUI(val);
+            }
+        };
+
+        btnMinus.onclick = (e) => {
+            e.stopPropagation();
+            let val = parseInt(numInput.value, 10) || 1;
+            if (val > 1) {
+                val--;
+                numInput.value = val;
+                updateWeightFromUI(val);
+            }
+        };
+
+        btnPlus.onclick = (e) => {
+            e.stopPropagation();
+            let val = parseInt(numInput.value, 10) || 1;
+            if (val < 99) {
+                val++;
+                numInput.value = val;
+                updateWeightFromUI(val);
+            }
+        };
+
+        numInput.onchange = () => {
+            let val = parseInt(numInput.value, 10);
+            if (isNaN(val) || val < 1) val = 1;
+            if (val > 99) val = 99;
+            numInput.value = val;
+            updateWeightFromUI(val);
+        };
+
+        stepperContainer.appendChild(btnMinus);
+        stepperContainer.appendChild(numInput);
+        stepperContainer.appendChild(btnPlus);
+
+        weightContainer.appendChild(weightSelect);
+        weightContainer.appendChild(stepperContainer);
 
         // Controles de ordenamiento lineal
         const controls = document.createElement('div');

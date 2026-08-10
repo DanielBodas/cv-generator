@@ -374,28 +374,133 @@ function renderSectionsTab() {
                 triggerSaveAnimation();
             });
 
-            // Campo de Peso (Weight)
+            // Campo de Peso (Weight) intuitivo con selector y stepper
             const fieldWeight = document.createElement('div');
             fieldWeight.className = 'card-field';
-            const weightVal = (sec.weight === true) ? 'true' : (sec.weight || 0);
-            fieldWeight.innerHTML = `
-                <label>Peso (Flex)</label>
-                <input type="text" class="sec-weight-input" value="${weightVal}" placeholder="ej. 1, 3, true">
-            `;
-            fieldWeight.querySelector('input').addEventListener('change', (e) => {
-                const val = e.target.value.trim();
-                if (val === 'true') {
-                    sec.weight = true;
-                } else if (val === 'false' || val === '0' || !val) {
-                    sec.weight = 0;
-                } else {
-                    const num = parseInt(val, 10);
-                    sec.weight = isNaN(num) ? 0 : num;
-                }
+            fieldWeight.style.display = 'flex';
+            fieldWeight.style.flexDirection = 'column';
+            fieldWeight.style.gap = '6px';
+
+            const weightLabel = document.createElement('label');
+            weightLabel.textContent = 'Peso / Distribución';
+            fieldWeight.appendChild(weightLabel);
+
+            const weightRow = document.createElement('div');
+            weightRow.style.display = 'flex';
+            weightRow.style.gap = '8px';
+            weightRow.style.alignItems = 'center';
+
+            const weightSelect = document.createElement('select');
+            weightSelect.className = 'sec-weight-select';
+            weightSelect.style.flex = '1';
+
+            const optFixed = document.createElement('option');
+            optFixed.value = 'fixed';
+            optFixed.textContent = '📍 Fijo (Mínimo)';
+
+            const optAuto = document.createElement('option');
+            optAuto.value = 'auto';
+            optAuto.textContent = '⚡ Flexible (Auto)';
+
+            const optProp = document.createElement('option');
+            optProp.value = 'proportional';
+            optProp.textContent = '📊 Proporcional';
+
+            weightSelect.appendChild(optFixed);
+            weightSelect.appendChild(optAuto);
+            weightSelect.appendChild(optProp);
+
+            // Determinar el valor seleccionado actual
+            if (sec.weight === true) {
+                weightSelect.value = 'auto';
+            } else if (typeof sec.weight === 'number' && sec.weight > 0) {
+                weightSelect.value = 'proportional';
+            } else {
+                weightSelect.value = 'fixed';
+            }
+
+            // Stepper para el modo proporcional
+            const stepperContainer = document.createElement('div');
+            stepperContainer.className = 'sec-weight-stepper';
+            stepperContainer.style.display = weightSelect.value === 'proportional' ? 'flex' : 'none';
+            stepperContainer.style.alignItems = 'center';
+            stepperContainer.style.gap = '4px';
+
+            const btnMinus = document.createElement('button');
+            btnMinus.className = 'stepper-btn';
+            btnMinus.textContent = '-';
+            btnMinus.type = 'button';
+
+            const numInput = document.createElement('input');
+            numInput.type = 'number';
+            numInput.className = 'stepper-input';
+            numInput.style.width = '40px';
+            numInput.style.textAlign = 'center';
+            numInput.min = '1';
+            numInput.max = '99';
+            numInput.value = (typeof sec.weight === 'number' && sec.weight > 0) ? sec.weight : 1;
+
+            const btnPlus = document.createElement('button');
+            btnPlus.className = 'stepper-btn';
+            btnPlus.textContent = '+';
+            btnPlus.type = 'button';
+
+            const updateWeightFromUI = (newVal) => {
+                sec.weight = newVal;
                 saveConfig();
                 window.refreshCV();
                 triggerSaveAnimation();
-            });
+            };
+
+            weightSelect.onchange = () => {
+                if (weightSelect.value === 'fixed') {
+                    stepperContainer.style.display = 'none';
+                    updateWeightFromUI(0);
+                } else if (weightSelect.value === 'auto') {
+                    stepperContainer.style.display = 'none';
+                    updateWeightFromUI(true);
+                } else {
+                    stepperContainer.style.display = 'flex';
+                    const val = parseInt(numInput.value, 10) || 1;
+                    updateWeightFromUI(val);
+                }
+            };
+
+            btnMinus.onclick = (e) => {
+                e.stopPropagation();
+                let val = parseInt(numInput.value, 10) || 1;
+                if (val > 1) {
+                    val--;
+                    numInput.value = val;
+                    updateWeightFromUI(val);
+                }
+            };
+
+            btnPlus.onclick = (e) => {
+                e.stopPropagation();
+                let val = parseInt(numInput.value, 10) || 1;
+                if (val < 99) {
+                    val++;
+                    numInput.value = val;
+                    updateWeightFromUI(val);
+                }
+            };
+
+            numInput.onchange = () => {
+                let val = parseInt(numInput.value, 10);
+                if (isNaN(val) || val < 1) val = 1;
+                if (val > 99) val = 99;
+                numInput.value = val;
+                updateWeightFromUI(val);
+            };
+
+            stepperContainer.appendChild(btnMinus);
+            stepperContainer.appendChild(numInput);
+            stepperContainer.appendChild(btnPlus);
+
+            weightRow.appendChild(weightSelect);
+            weightRow.appendChild(stepperContainer);
+            fieldWeight.appendChild(weightRow);
 
             body.appendChild(fieldArea);
             body.appendChild(fieldWeight);

@@ -578,54 +578,98 @@ textarea.dynamic-input {
     white-space: nowrap;
 }
 
-/* Campo de peso (weight) en el selector de estructura */
+/* Campo de peso (weight) intuitivo en el selector de estructura */
 .struct-weight-container {
     display: flex;
     align-items: center;
     gap: 6px;
-    background: #f4f4f5;
-    border: 1px solid #e4e4e7;
-    border-radius: 6px;
-    padding: 2px 6px;
     flex-shrink: 0;
 }
 
-.struct-weight-label {
-    font-size: 10px;
-    font-weight: 600;
-    color: #71717a;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    user-select: none;
+.struct-weight-select {
+    padding: 6px 12px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    color: #27272a;
+    background-color: #ffffff;
+    border: 1px solid #e4e4e7;
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
 }
 
-.struct-weight-input {
-    width: 36px;
+.struct-weight-select:hover:not(:disabled) {
+    border-color: #a1a1aa;
+    background-color: #fafafa;
+}
+
+.struct-weight-select:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+.struct-weight-stepper {
+    display: flex;
+    align-items: center;
+    background: #f4f4f5;
+    border: 1px solid #e4e4e7;
+    border-radius: 6px;
+    padding: 2px;
+    gap: 2px;
+}
+
+.stepper-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: #ffffff;
+    color: #18181b;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: all 0.1s ease;
+}
+
+.stepper-btn:hover:not(:disabled) {
+    background: #f4f4f5;
+    color: #000000;
+}
+
+.stepper-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.stepper-input {
+    width: 28px;
     border: none;
     background: transparent;
     font-family: inherit;
     font-size: 11px;
     font-weight: 600;
     color: #18181b;
-    padding: 2px 0;
     text-align: center;
     outline: none;
+    -moz-appearance: textfield;
 }
 
-.struct-weight-input:focus {
-    color: #000000;
+.stepper-input::-webkit-outer-spin-button,
+.stepper-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 /* Soporte para estados deshabilitados de la sección */
 .structure-item.is-disabled .struct-weight-container {
-    opacity: 0.6;
-    background: #f4f4f5;
-    border-color: #e4e4e7;
-}
-
-.struct-weight-input:disabled {
-    cursor: not-allowed;
-    color: #a1a1aa;
+    opacity: 0.5;
+    pointer-events: none;
 }
 
 .struct-controls {
