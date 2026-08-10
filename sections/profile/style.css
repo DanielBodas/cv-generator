@@ -15,16 +15,16 @@
 
 /* ── Foto con anillo doble ── */
 .profile-photo-wrap {
-    width: 114px;
-    height: 114px;
+    width: 110px;
+    height: 110px;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid rgba(255, 255, 255, 0.25);
-    outline: 2px solid var(--accent, #457b9d);
-    outline-offset: 2px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-    margin-top: -12px;
-    margin-bottom: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    outline: 1.5px solid var(--accent, #457b9d);
+    outline-offset: 1.5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    margin-top: -18px;
+    margin-bottom: 12px;
     background: rgba(255, 255, 255, 0.08);
     flex-shrink: 0;
     transition: all 0.3s ease;
@@ -39,10 +39,10 @@
 
 /* ── Nombre Premium ── */
 .profile-name {
-    font-size: 14.5px;
+    font-size: 14px;
     font-weight: 800;
     color: #ffffff;
-    line-height: 1.2;
+    line-height: 1.15;
     letter-spacing: -0.1px;
     margin-bottom: 8px;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -54,13 +54,13 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 4px 6px;
+    gap: 4px;
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
 
 .profile-role {
-    font-size: 7.5px;
+    font-size: 7.4px;
     font-weight: 700;
     color: #ffffff;
     background: rgba(255, 255, 255, 0.12);
@@ -76,31 +76,31 @@
 
 /* ── Divider ── */
 .profile-divider {
-    width: 60px;
-    height: 1.5px;
+    width: 50px;
+    height: 1px;
     background: linear-gradient(90deg, transparent, var(--accent, #457b9d), transparent);
     border-radius: 2px;
-    margin: 8px auto 12px;
+    margin: 6px auto 10px;
 }
 
 /* ── Contactos Premium en Caja Estilizada ── */
 .profile-contacts {
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 5px;
     width: 100%;
     text-align: left;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 8px;
-    padding: 10px 12px;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 6px;
+    padding: 6px 10px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .contact-line {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
     font-size: 9.2px;
     color: rgba(255, 255, 255, 0.82);
     text-decoration: none;

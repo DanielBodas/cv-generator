@@ -5,7 +5,6 @@
     --init-padding: 8px 10px 8px 14px;
     --init-role-fz: 9.8px;
     --init-org-fz: 8.3px;
-    --init-desc-fz: 7.8px;
     --init-mini-gap: 4px;
 }
 
@@ -31,14 +30,14 @@
     border-left: 3px solid var(--accent, #457b9d);
     overflow: hidden;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .iniciatives-card:hover {
     background: rgba(255, 255, 255, 0.07);
     border-color: rgba(255, 255, 255, 0.15);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-0.5px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 /* 🔥 Watermark REAL usando pseudo-elemento */
@@ -104,16 +103,6 @@
     line-height: 1.25;
 }
 
-/* ── Descripción de iniciativas ── */
-.iniciatives-desc {
-    font-size: var(--init-desc-fz);
-    color: rgba(255, 255, 255, 0.62);
-    line-height: 1.4;
-    margin-top: 4px;
-    text-align: justify;
-    display: block;
-}
-
 /* ── Card MINIMIZADA ── */
 .iniciatives-card.is-minimized {
     padding: 4px 8px;
@@ -130,8 +119,7 @@
     right: -15px;
 }
 
-.iniciatives-card.is-minimized .iniciatives-org,
-.iniciatives-card.is-minimized .iniciatives-desc {
+.iniciatives-card.is-minimized .iniciatives-org {
     display: none;
 }
 

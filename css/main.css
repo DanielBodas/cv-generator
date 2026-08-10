@@ -365,8 +365,8 @@ h2 {
     text-transform: uppercase;
     letter-spacing: 1.4px;
     color: var(--primary);
-    margin-bottom: 10px;
-    padding-bottom: 6px;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
     position: relative;
     border-bottom: none;
 }
@@ -382,7 +382,7 @@ h2::after {
 }
 
 .area-main h2 {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .area-sidebar h2 {
