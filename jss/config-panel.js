@@ -396,15 +396,15 @@ function renderSectionsTab() {
 
             const optFixed = document.createElement('option');
             optFixed.value = 'fixed';
-            optFixed.textContent = '📍 Fijo (Mínimo)';
+            optFixed.textContent = 'Fijo';
 
             const optAuto = document.createElement('option');
             optAuto.value = 'auto';
-            optAuto.textContent = '⚡ Flexible (Auto)';
+            optAuto.textContent = 'Flexible';
 
             const optProp = document.createElement('option');
             optProp.value = 'proportional';
-            optProp.textContent = '📊 Proporcional';
+            optProp.textContent = 'Proporcional';
 
             weightSelect.appendChild(optFixed);
             weightSelect.appendChild(optAuto);

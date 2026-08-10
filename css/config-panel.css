@@ -785,9 +785,9 @@
 
 /* Estilos para el seleccionador de peso y stepper en el panel de control */
 .sec-weight-select {
-    padding: 6px 12px;
+    padding: 6px 10px;
     font-family: inherit;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
     color: #1f2937;
     background-color: #ffffff;
@@ -796,6 +796,10 @@
     outline: none;
     cursor: pointer;
     transition: all 0.15s ease;
+    max-width: 120px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .sec-weight-select:hover {
