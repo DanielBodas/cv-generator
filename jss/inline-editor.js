@@ -635,6 +635,50 @@ function changeSectionComponent(sectionId) {
             }
         ];
 
+    } else if (sectionId === 'executive-highlights') {
+        const current = sec.component || 'cards';
+
+        options = [
+            {
+                id: 'cards',
+                name: 'Tarjetas en Cuadrícula (Cards)',
+                desc: 'Disposición corporativa en cuadrícula de tres columnas con borde de acento superior.',
+                previewHtml: `
+                    <div class="component-preview-visual detailed-preview">
+                        <div class="preview-row" style="gap: 8px; width: 100%;">
+                            <div class="preview-box" style="height: 40px; flex: 1;"></div>
+                            <div class="preview-box" style="height: 40px; flex: 1;"></div>
+                            <div class="preview-box" style="height: 40px; flex: 1;"></div>
+                        </div>
+                    </div>
+                `,
+                active: current === 'cards',
+                apply: () => {
+                    sec.component = 'cards';
+                }
+            },
+            {
+                id: 'inline-paragraph',
+                name: 'Párrafo de Flujo Continuo (Flow)',
+                desc: 'Hitos en párrafo horizontal continuo con separadores y etiquetas compactas. Diseñado para un ajuste ultra compacto contra desbordamientos.',
+                previewHtml: `
+                    <div class="component-preview-visual detailed-preview">
+                        <div class="preview-row" style="gap: 4px; width: 100%; align-items: center;">
+                            <span class="preview-box" style="height: 12px; width: 30px; border-radius: 2px;"></span>
+                            <div class="preview-line title" style="width: 40%; margin: 0;"></div>
+                            <span style="font-size: 8px; color: var(--accent);">•</span>
+                            <span class="preview-box" style="height: 12px; width: 30px; border-radius: 2px;"></span>
+                            <div class="preview-line title" style="width: 30%; margin: 0;"></div>
+                        </div>
+                    </div>
+                `,
+                active: current === 'inline-paragraph',
+                apply: () => {
+                    sec.component = 'inline-paragraph';
+                }
+            }
+        ];
+
     } else {
         const currentMode = sec.mode || 'detailed';
 
