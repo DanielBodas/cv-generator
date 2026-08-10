@@ -436,3 +436,32 @@ h2 {
         box-shadow: none !important;
     }
 }
+
+/* ============================================================
+   SINGLE COLUMN ATS PRESET STYLE ADAPTATIONS
+   ============================================================ */
+.page-a4.layout-single-column {
+    height: auto !important;
+    min-height: var(--a4-h) !important;
+    overflow: visible !important;
+}
+
+.page-a4.layout-single-column .area-container,
+.page-a4.layout-single-column .area-main {
+    height: auto !important;
+    overflow: visible !important;
+}
+
+.page-a4.layout-single-column .cv-section {
+    height: auto !important;
+    flex: 0 0 auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+}
+
+@media print {
+    .page-a4.layout-single-column {
+        height: auto !important;
+        min-height: 0 !important;
+    }
+}
