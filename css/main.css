@@ -25,6 +25,11 @@
 /* ============================================================
    RESET
    ============================================================ */
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
 *,
 *::before,
 *::after {
@@ -79,9 +84,18 @@ body {
 /* ============================================================
    HOJA A4
    ============================================================ */
+.app-container {
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
 .cv-viewport {
-    min-width: 0;
-    max-width: 100%;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 #cv-wrapper {
@@ -106,6 +120,10 @@ body {
    RESPONSIVE Y ESCALADO MÓVIL
    ============================================================ */
 @media (max-width: 768px) {
+    body {
+        padding: 16px 0 40px;
+    }
+
     #cv-wrapper {
         flex-shrink: 0;
     }

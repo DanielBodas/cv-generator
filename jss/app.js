@@ -415,29 +415,25 @@ async function loadSectionScript(id, path, data, cfg, el) {
  * Función de escalado inteligente para encajar la hoja A4 en la pantalla en dispositivos móviles o pequeños.
  */
 window.adjustCVScale = function() {
-    const viewport = document.querySelector('.cv-viewport');
     const page = document.getElementById('cv-page');
     const wrapper = document.getElementById('cv-wrapper');
-    if (!viewport || !page || !wrapper) return;
+    if (!page || !wrapper) return;
 
-    // Resetear transformaciones previas para cálculos limpios
-    page.style.transform = 'none';
-    page.style.position = 'static';
-    page.style.left = 'auto';
-    page.style.top = 'auto';
-    wrapper.style.width = '100%';
-    wrapper.style.height = 'auto';
-    wrapper.style.position = 'relative';
+    const viewport = wrapper.parentElement;
+    if (!viewport) return;
 
-    // Determinar el ancho de pantalla disponible de forma extremadamente robusta
-    const screenWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
-    const isMobile = screenWidth <= 768;
-    const padding = isMobile ? 32 : 80; // Padding de 16px por lado en móvil, 40px en escritorio
-    const availableWidth = screenWidth - padding;
-    const pageOriginalWidth = page.offsetWidth || 794;
-    const pageOriginalHeight = page.offsetHeight || 1123;
+    // Obtener de forma robusta las dimensiones reales del contenedor padre (.cv-viewport)
+    // restando sus paddings dinámicos (que varían por CSS o en móvil/escritorio)
+    const style = window.getComputedStyle(viewport);
+    const paddingLeft = parseFloat(style.paddingLeft) || 0;
+    const paddingRight = parseFloat(style.paddingRight) || 0;
+    const availableWidth = viewport.clientWidth - paddingLeft - paddingRight;
 
-    console.log("adjustCVScale - screenWidth:", screenWidth, "padding:", padding, "availableWidth:", availableWidth, "pageOriginalWidth:", pageOriginalWidth);
+    // Dimensiones originales del folio A4 según la hoja de estilos CSS (794px x 1123px)
+    const pageOriginalWidth = 794;
+    const pageOriginalHeight = 1123;
+
+    console.log("adjustCVScale - availableWidth:", availableWidth, "pageOriginalWidth:", pageOriginalWidth);
 
     if (availableWidth < pageOriginalWidth) {
         const scale = availableWidth / pageOriginalWidth;
@@ -455,6 +451,7 @@ window.adjustCVScale = function() {
         const scaledHeight = pageOriginalHeight * scale;
         wrapper.style.width = `${scaledWidth}px`;
         wrapper.style.height = `${scaledHeight}px`;
+        wrapper.style.position = 'relative';
     } else {
         page.style.transform = 'none';
         page.style.position = 'static';
@@ -462,6 +459,7 @@ window.adjustCVScale = function() {
         page.style.top = 'auto';
         wrapper.style.width = 'auto';
         wrapper.style.height = 'auto';
+        wrapper.style.position = 'relative';
     }
 };
 
@@ -469,6 +467,18 @@ window.adjustCVScale = function() {
 window.addEventListener('resize', () => {
     if (typeof window.adjustCVScale === 'function') {
         window.adjustCVScale();
+    }
+});
+
+// Usar ResizeObserver para detectar de manera proactiva cualquier cambio de dimensiones en .cv-viewport
+// (por ejemplo al colapsar/expandir paneles laterales) y auto-ajustar el escalado instantáneamente.
+document.addEventListener('DOMContentLoaded', () => {
+    const viewport = document.querySelector('.cv-viewport');
+    if (viewport && typeof window.adjustCVScale === 'function') {
+        const resizeObserver = new ResizeObserver(() => {
+            window.adjustCVScale();
+        });
+        resizeObserver.observe(viewport);
     }
 });
 
