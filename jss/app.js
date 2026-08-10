@@ -148,6 +148,13 @@ async function renderAllCV() {
     if (document.getElementById('loading-screen')) {
         document.getElementById('loading-screen').remove();
     }
+
+    // Autoajustar escalado de la página A4
+    setTimeout(() => {
+        if (typeof window.adjustCVScale === 'function') {
+            window.adjustCVScale();
+        }
+    }, 50);
 }
 
 /**
@@ -403,3 +410,93 @@ async function loadSectionScript(id, path, data, cfg, el) {
         console.error(`[Script] Error en ${id}:`, e);
     }
 }
+
+/**
+ * Función de escalado inteligente para encajar la hoja A4 en la pantalla en dispositivos móviles o pequeños.
+ */
+window.adjustCVScale = function() {
+    const page = document.getElementById('cv-page');
+    const wrapper = document.getElementById('cv-wrapper');
+    if (!page || !wrapper) return;
+
+    const viewport = wrapper.parentElement;
+    if (!viewport) return;
+
+    // Obtener de forma robusta las dimensiones reales del contenedor padre (.cv-viewport)
+    // restando sus paddings dinámicos (que varían por CSS o en móvil/escritorio)
+    const style = window.getComputedStyle(viewport);
+    const paddingLeft = parseFloat(style.paddingLeft) || 0;
+    const paddingRight = parseFloat(style.paddingRight) || 0;
+    const availableWidth = viewport.clientWidth - paddingLeft - paddingRight;
+
+    // Dimensiones originales del folio A4 según la hoja de estilos CSS (794px x 1123px)
+    const pageOriginalWidth = 794;
+    const pageOriginalHeight = 1123;
+
+    console.log("adjustCVScale - availableWidth:", availableWidth, "pageOriginalWidth:", pageOriginalWidth);
+
+    if (availableWidth < pageOriginalWidth) {
+        const scale = availableWidth / pageOriginalWidth;
+        console.log("adjustCVScale - scaling to:", scale);
+
+        // Usamos posicionamiento absoluto para que no dependa del centrado de flexbox del padre al transformarse
+        page.style.position = 'absolute';
+        page.style.left = '0';
+        page.style.top = '0';
+        page.style.transform = `scale(${scale})`;
+        page.style.transformOrigin = 'top left';
+
+        // El contenedor externo debe adaptarse al tamaño escalado exacto para centrarse y fluir correctamente
+        const scaledWidth = pageOriginalWidth * scale;
+        const scaledHeight = pageOriginalHeight * scale;
+        wrapper.style.width = `${scaledWidth}px`;
+        wrapper.style.height = `${scaledHeight}px`;
+        wrapper.style.position = 'relative';
+    } else {
+        page.style.transform = 'none';
+        page.style.position = 'static';
+        page.style.left = 'auto';
+        page.style.top = 'auto';
+        wrapper.style.width = 'auto';
+        wrapper.style.height = 'auto';
+        wrapper.style.position = 'relative';
+    }
+};
+
+// Registrar eventos de redimensionamiento y preparación para impresión
+window.addEventListener('resize', () => {
+    if (typeof window.adjustCVScale === 'function') {
+        window.adjustCVScale();
+    }
+});
+
+// Usar ResizeObserver para detectar de manera proactiva cualquier cambio de dimensiones en .cv-viewport
+// (por ejemplo al colapsar/expandir paneles laterales) y auto-ajustar el escalado instantáneamente.
+document.addEventListener('DOMContentLoaded', () => {
+    const viewport = document.querySelector('.cv-viewport');
+    if (viewport && typeof window.adjustCVScale === 'function') {
+        const resizeObserver = new ResizeObserver(() => {
+            window.adjustCVScale();
+        });
+        resizeObserver.observe(viewport);
+    }
+});
+
+// Desactivar el escalado de pantalla móvil al imprimir para que el PDF se genere en un folio A4 real y normal
+window.addEventListener('beforeprint', () => {
+    const page = document.getElementById('cv-page');
+    const wrapper = document.getElementById('cv-wrapper');
+    if (page) {
+        page.style.transform = 'none';
+        page.style.transformOrigin = 'initial';
+    }
+    if (wrapper) {
+        wrapper.style.height = 'auto';
+    }
+});
+
+window.addEventListener('afterprint', () => {
+    if (typeof window.adjustCVScale === 'function') {
+        window.adjustCVScale();
+    }
+});

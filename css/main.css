@@ -12,8 +12,8 @@
     --border: #e2e8f0;
     --font: 'Inter', system-ui, sans-serif;
 
-    --a4-w: 210mm;
-    --a4-h: 297mm;
+    --a4-w: 794px;
+    --a4-h: 1123px;
 
     --sidebar-w: 200px;
     --sidebar-pad: 20px;
@@ -25,6 +25,11 @@
 /* ============================================================
    RESET
    ============================================================ */
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
 *,
 *::before,
 *::after {
@@ -79,6 +84,28 @@ body {
 /* ============================================================
    HOJA A4
    ============================================================ */
+.app-container {
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+.cv-viewport {
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+#cv-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: auto;
+    height: auto;
+}
+
 .page-a4 {
     width: var(--a4-w);
     height: var(--a4-h);
@@ -87,6 +114,25 @@ body {
     display: grid;
     overflow: hidden;
     position: relative;
+}
+
+/* ============================================================
+   RESPONSIVE Y ESCALADO MÓVIL
+   ============================================================ */
+@media (max-width: 768px) {
+    body {
+        padding: 16px 0 40px;
+    }
+
+    #cv-wrapper {
+        flex-shrink: 0;
+    }
+
+    .page-a4 {
+        flex-shrink: 0;
+        min-width: var(--a4-w);
+        min-height: var(--a4-h);
+    }
 }
 
 .area-container {
