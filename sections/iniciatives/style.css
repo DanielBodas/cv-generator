@@ -125,3 +125,26 @@
     height: 40px;
     opacity: 0.02;
 }
+
+/* Adaptive main-column styles for initiatives (ATS Mode) */
+.area-main .iniciatives-card {
+    background: #f8fafc !important;
+    border: 1px solid var(--border) !important;
+}
+
+.area-main .iniciatives-role {
+    color: var(--text) !important;
+}
+
+.area-main .iniciatives-org {
+    color: var(--text-muted) !important;
+}
+
+.area-main .iniciatives-card.is-minimized {
+    background: var(--main-bg) !important;
+    border-color: var(--border) !important;
+}
+
+.area-main .iniciatives-card.is-minimized .iniciatives-role {
+    color: var(--text) !important;
+}
