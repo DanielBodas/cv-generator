@@ -658,21 +658,6 @@ function changeSectionComponent(sectionId) {
                 }
             },
             {
-                id: 'rows',
-                name: 'Filas Alineadas (Rows)',
-                desc: 'Disposición limpia en filas horizontales compactas con división interna, optimizando espacio.',
-                previewHtml: `
-                    <div class="component-preview-visual detailed-preview">
-                        <div class="preview-line title" style="width: 100%;"></div>
-                        <div class="preview-line title" style="width: 100%;"></div>
-                    </div>
-                `,
-                active: current === 'rows',
-                apply: () => {
-                    sec.component = 'rows';
-                }
-            },
-            {
                 id: 'inline-paragraph',
                 name: 'Párrafo de Flujo Continuo (Flow)',
                 desc: 'Hitos en párrafo horizontal continuo con separadores y etiquetas compactas. Diseñado para un ajuste ultra compacto contra desbordamientos.',
