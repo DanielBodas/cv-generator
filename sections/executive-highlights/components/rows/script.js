@@ -1,6 +1,6 @@
 /**
  * Executive Highlights - Horizontal rows component
- * With local overflow adjustment to dynamically fit content and prevent any overflow.
+ * With local multi-stage overflow adjustment to dynamically fit content and prevent any overflow.
  */
 
 function init(data, cfg, el) {
@@ -16,11 +16,11 @@ function onOverflow(el, cfg) {
         return selfOver || areaOver;
     };
 
-    // Base row design values
+    // Design-parameters base
     let fzLabel = 9;
     let fzText = 8.5;
     let padY = 8;
-    let padX = 10;
+    let padX = 12;
     let gap = 8;
     let labelWidth = 120;
 
@@ -32,27 +32,61 @@ function onOverflow(el, cfg) {
         el.style.setProperty('--row-label-width', `${labelWidth}px`);
     };
 
-    el.classList.remove('mode-ultra-compact');
+    // Reset layout modes
+    el.classList.remove('mode-tight', 'mode-very-tight', 'mode-ultra-compact');
     update();
 
-    // Compression mechanism to perfectly fit within bounds
+    if (!isOver()) return;
+
+    // Stage 1: Minor compression
     let safety = 0;
-    while (isOver() && safety < 50) {
-        if (fzText > 7.0) {
-            fzText -= 0.15;
-            fzLabel -= 0.1;
-        }
-        if (padY > 3) padY -= 0.5;
-        if (padX > 5) padX -= 0.5;
-        if (gap > 4) gap -= 0.5;
-        if (labelWidth > 90) labelWidth -= 2;
+    while (isOver() && safety < 10) {
+        if (fzText > 8.0) fzText -= 0.1;
+        if (padY > 6) padY -= 0.5;
+        if (gap > 6) gap -= 0.5;
         update();
-        if (!isOver()) break;
         safety++;
     }
 
-    if (isOver()) {
-        el.classList.add('mode-ultra-compact');
+    if (!isOver()) return;
+
+    // Stage 2: Tight clamping (allow max 2 lines)
+    el.classList.add('mode-tight');
+    if (!isOver()) return;
+
+    // Stage 3: Medium compression
+    safety = 0;
+    while (isOver() && safety < 15) {
+        if (fzText > 7.5) fzText -= 0.1;
+        if (fzLabel > 8.0) fzLabel -= 0.1;
+        if (padY > 4) padY -= 0.5;
+        if (padX > 8) padX -= 0.5;
+        if (labelWidth > 100) labelWidth -= 2;
+        update();
+        safety++;
+    }
+
+    if (!isOver()) return;
+
+    // Stage 4: Very tight clamping (allow max 1 line)
+    el.classList.remove('mode-tight');
+    el.classList.add('mode-very-tight');
+    if (!isOver()) return;
+
+    // Stage 5: Ultra compact mode and maximum compression
+    el.classList.remove('mode-very-tight');
+    el.classList.add('mode-ultra-compact');
+
+    safety = 0;
+    while (isOver() && safety < 25) {
+        if (fzText > 7.0) fzText -= 0.1;
+        if (fzLabel > 7.5) fzLabel -= 0.1;
+        if (padY > 2) padY -= 0.5;
+        if (padX > 5) padX -= 0.5;
+        if (gap > 3) gap -= 0.5;
+        if (labelWidth > 80) labelWidth -= 2;
+        update();
+        safety++;
     }
 }
 

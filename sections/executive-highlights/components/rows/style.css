@@ -1,12 +1,14 @@
-/* Executive Highlights - Horizontal Split-Row Layout */
+/* Executive Highlights - Premium, Ultra-Modern Horizontal Split-Row Layout */
 
 :root {
     --row-label-fz: 9px;
     --row-text-fz: 8.5px;
-    --row-text-lh: 1.4;
-    --row-padding: 8px 10px;
+    --row-text-lh: 1.45;
+    --row-padding: 8px 12px;
     --row-gap: 8px;
     --row-label-width: 120px;
+    --row-bg: #ffffff;
+    --row-border-color: #f1f5f9;
 }
 
 .highlights-rows {
@@ -14,20 +16,28 @@
     flex-direction: column;
     gap: var(--row-gap);
     margin-top: 6px;
+    box-sizing: border-box;
 }
 
 .highlight-row-item {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    background: var(--row-bg);
+    border: 1px solid var(--row-border-color);
     border-left: 3px solid var(--accent);
-    border-radius: 4px;
+    border-radius: 6px;
     padding: var(--row-padding);
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 12px;
-    min-height: 36px;
-    transition: transform 0.2s ease;
+    gap: 14px;
+    box-sizing: border-box;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03), 0 1px 3px rgba(15, 23, 42, 0.01);
+}
+
+.highlight-row-item:hover {
+    transform: translateY(-1px);
+    border-color: #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 2px 4px -2px rgba(15, 23, 42, 0.03);
 }
 
 .row-label {
@@ -35,13 +45,17 @@
     font-weight: 800;
     color: var(--primary);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
     width: var(--row-label-width);
     flex-shrink: 0;
     text-align: left;
-    border-right: 1px solid #e2e8f0;
-    padding-right: 8px;
+    background: rgba(29, 53, 87, 0.04);
+    color: var(--primary);
+    border: 1px solid rgba(29, 53, 87, 0.08);
+    padding: 4px 8px;
+    border-radius: 4px;
     word-wrap: break-word;
+    box-sizing: border-box;
 }
 
 .row-text {
@@ -51,8 +65,10 @@
     margin: 0;
     text-align: left;
     flex: 1;
+    font-weight: 500;
 }
 
+/* Modificadores de Clamping con transiciones elegantes */
 .mode-tight .row-text {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -61,17 +77,22 @@
 }
 
 .mode-very-tight .row-text {
+    display: -webkit-box;
     -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
+/* Modo Ultra Compacto para Overflow Severo */
 .mode-ultra-compact .highlight-row-item {
-    min-height: auto;
     padding: 3px 6px;
     gap: 8px;
+    border-radius: 4px;
 }
 
 .mode-ultra-compact .row-label {
-    padding-right: 6px;
+    padding: 2px 4px;
+    letter-spacing: 0.5px;
 }
 
 .mode-ultra-compact .row-text {
