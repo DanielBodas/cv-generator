@@ -1,6 +1,7 @@
 /**
  * Executive Highlights - Horizontal continuous flow (inline-paragraph) component
- * With local multi-stage overflow adjustment to dynamically fit content and prevent any overflow.
+ * Focuses purely on elegant, responsive scaling down of font sizes, gaps, and paddings
+ * to fit the space seamlessly without line clamping or text truncation.
  */
 
 function init(data, cfg, el) {
@@ -20,7 +21,7 @@ function onOverflow(el, cfg) {
     // Design-parameters base
     let fzLabel = 8;
     let fzText = 8.5;
-    let padY = 2;
+    let padY = 0;
     let gapX = 12;
     let gapY = 6;
     let labelPadY = 2;
@@ -36,12 +37,12 @@ function onOverflow(el, cfg) {
     };
 
     // Reset layout modes
-    el.classList.remove('mode-tight', 'mode-very-tight', 'mode-ultra-compact');
+    el.classList.remove('mode-ultra-compact');
     update();
 
     if (!isOver()) return;
 
-    // Stage 1: Minor compression
+    // Stage 1: Minor compression of spacings and size
     let safety = 0;
     while (isOver() && safety < 15) {
         if (fzText > 7.8) fzText -= 0.1;
@@ -53,11 +54,7 @@ function onOverflow(el, cfg) {
 
     if (!isOver()) return;
 
-    // Stage 2: Tight clamping (allow max 2 lines for texts if wrapping is too wide)
-    el.classList.add('mode-tight');
-    if (!isOver()) return;
-
-    // Stage 3: Medium compression
+    // Stage 2: Medium compression of label text and padding
     safety = 0;
     while (isOver() && safety < 20) {
         if (fzText > 7.4) fzText -= 0.1;
@@ -71,13 +68,7 @@ function onOverflow(el, cfg) {
 
     if (!isOver()) return;
 
-    // Stage 4: Very tight clamping (allow max 1 line)
-    el.classList.remove('mode-tight');
-    el.classList.add('mode-very-tight');
-    if (!isOver()) return;
-
-    // Stage 5: Ultra compact mode and maximum compression
-    el.classList.remove('mode-very-tight');
+    // Stage 3: Ultra compact mode and maximum fluid compression (no line-clamping)
     el.classList.add('mode-ultra-compact');
 
     safety = 0;

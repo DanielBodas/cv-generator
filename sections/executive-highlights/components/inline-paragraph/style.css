@@ -3,13 +3,18 @@
 :root {
     --flow-font-size: 8.5px;
     --flow-line-height: 1.45;
-    --flow-gap-x: 12px;
+    --flow-gap-x: 14px;
     --flow-gap-y: 6px;
-    --flow-padding: 2px 0px;
+    --flow-padding: 0px;
     --flow-label-fz: 8px;
     --flow-label-pad: 2px 5px;
     --flow-label-bg: rgba(29, 53, 87, 0.04);
     --flow-label-border: 1px solid rgba(29, 53, 87, 0.08);
+}
+
+/* Eliminate large gap between title and content */
+.section-executive-highlights h2 {
+    margin-bottom: 4px;
 }
 
 .highlights-flow-container {
@@ -18,7 +23,7 @@
     align-items: center;
     row-gap: var(--flow-gap-y);
     column-gap: var(--flow-gap-x);
-    margin-top: 6px;
+    margin-top: 4px;
     padding: var(--flow-padding);
     box-sizing: border-box;
 }
@@ -28,11 +33,6 @@
     align-items: center;
     gap: 6px;
     box-sizing: border-box;
-}
-
-/* Hide the last separator in a pure horizontal flow */
-.highlight-flow-item:last-child .flow-separator {
-    display: none;
 }
 
 .flow-label {
@@ -56,32 +56,12 @@
     line-height: var(--flow-line-height);
     font-weight: 500;
     margin: 0;
+    /* Ensure all text is fully visible (no line clamp or text truncation) */
+    word-break: normal;
+    overflow: visible;
 }
 
-.flow-separator {
-    font-size: var(--flow-font-size);
-    color: var(--accent);
-    opacity: 0.6;
-    margin-left: 6px;
-    user-select: none;
-}
-
-/* Modificadores de Clamping con transiciones elegantes */
-.mode-tight .flow-text {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.mode-very-tight .flow-text {
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-/* Modo Ultra Compacto para Overflow Severo */
+/* Modo Ultra Compacto para Overflow Severo - Shrunk spacings but still fully visible texts */
 .mode-ultra-compact .highlight-flow-item {
     gap: 4px;
 }
@@ -89,8 +69,4 @@
 .mode-ultra-compact .flow-label {
     letter-spacing: 0.3px;
     padding: 1px 3px;
-}
-
-.mode-ultra-compact .flow-separator {
-    margin-left: 4px;
 }
