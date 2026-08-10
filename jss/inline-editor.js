@@ -197,54 +197,61 @@ window.saveGeneralSettings = function () {
 };
 
 /* ==========================================
-   MODAL 2: ESTRUCTURA (DOS COLUMNAS)
+   MODAL 2: ESTRUCTURA (CON TABS DE ZONAS EN PARALELO)
    ========================================== */
+window.activeStructureZone = 'sidebar';
+
+window.setStructureZone = function (zone) {
+    window.activeStructureZone = zone;
+    document.getElementById('zone-tab-sidebar')?.classList.toggle('active', zone === 'sidebar');
+    document.getElementById('zone-tab-main')?.classList.toggle('active', zone === 'main');
+    renderStructureList();
+};
+
 function openStructureModal() {
+    window.activeStructureZone = 'sidebar'; // Default to sidebar
     const html = `
         <div class="modal-header">
             <h2>Estructura de Secciones</h2>
             <button class="btn-close" onclick="closeModal()">×</button>
         </div>
         <p class="modal-desc-text">Activa, desactiva y reorganiza las secciones en las dos columnas principales de tu diseño.</p>
-        <div class="structure-columns">
-            <div class="structure-column">
-                <div class="structure-col-header sidebar-header">
-                    <span>Columna Lateral (Sidebar)</span>
-                </div>
-                <div id="structure-sidebar" class="structure-area-list"></div>
-            </div>
-            <div class="structure-column">
-                <div class="structure-col-header main-header">
-                    <span>Columna Principal (Main)</span>
-                </div>
-                <div id="structure-main" class="structure-area-list"></div>
-            </div>
+
+        <div class="structure-zone-selector">
+            <button class="zone-tab-btn active" onclick="setStructureZone('sidebar')" id="zone-tab-sidebar">
+                <span>Columna Lateral (Sidebar)</span>
+            </button>
+            <button class="zone-tab-btn" onclick="setStructureZone('main')" id="zone-tab-main">
+                <span>Columna Principal (Main)</span>
+            </button>
+        </div>
+
+        <div class="structure-column-content">
+            <div id="structure-sections-list" class="structure-area-list"></div>
         </div>
     `;
     showModal(html);
     const modalEl = document.getElementById('general-settings-modal');
     if (modalEl) {
-        modalEl.classList.add('modal-wide');
+        modalEl.classList.remove('modal-wide');
+        modalEl.classList.add('modal-medium');
     }
     renderStructureList();
 }
 
 function renderStructureList() {
-    const sidebarList = document.getElementById('structure-sidebar');
-    const mainList = document.getElementById('structure-main');
-    if (!sidebarList || !mainList) return;
+    const listContainer = document.getElementById('structure-sections-list');
+    if (!listContainer) return;
 
-    sidebarList.innerHTML = '';
-    mainList.innerHTML = '';
+    listContainer.innerHTML = '';
 
     const config = window.CVConfig;
-    const sidebarSecs = config.sections.filter(s => s.area === 'sidebar');
-    const mainSecs = config.sections.filter(s => s.area === 'main');
+    const activeZone = window.activeStructureZone || 'sidebar';
+    const zoneSecs = config.sections.filter(s => s.area === activeZone);
 
     function buildItem(sec) {
         const globalIndex = config.sections.indexOf(sec);
-        const areaSecs = config.sections.filter(s => s.area === sec.area);
-        const areaIndex = areaSecs.indexOf(sec);
+        const areaIndex = zoneSecs.indexOf(sec);
 
         const item = document.createElement('div');
         item.className = `structure-item ${sec.disabled ? 'is-disabled' : ''}`;
@@ -315,7 +322,7 @@ function renderStructureList() {
         btnUp.disabled = areaIndex === 0;
         btnUp.onclick = () => {
             if (areaIndex > 0) {
-                const prevInArea = areaSecs[areaIndex - 1];
+                const prevInArea = zoneSecs[areaIndex - 1];
                 const prevGlobal = config.sections.indexOf(prevInArea);
                 config.sections.splice(globalIndex, 1);
                 config.sections.splice(prevGlobal, 0, sec);
@@ -328,10 +335,10 @@ function renderStructureList() {
         btnDown.innerHTML = '▼';
         btnDown.className = 'struct-btn';
         btnDown.title = 'Mover abajo';
-        btnDown.disabled = areaIndex === areaSecs.length - 1;
+        btnDown.disabled = areaIndex === zoneSecs.length - 1;
         btnDown.onclick = () => {
-            if (areaIndex < areaSecs.length - 1) {
-                const nextInArea = areaSecs[areaIndex + 1];
+            if (areaIndex < zoneSecs.length - 1) {
+                const nextInArea = zoneSecs[areaIndex + 1];
                 const nextGlobal = config.sections.indexOf(nextInArea);
                 config.sections.splice(nextGlobal + 1, 0, config.sections.splice(globalIndex, 1)[0]);
                 saveConfig();
@@ -349,8 +356,7 @@ function renderStructureList() {
         return item;
     }
 
-    sidebarSecs.forEach(sec => sidebarList.appendChild(buildItem(sec)));
-    mainSecs.forEach(sec => mainList.appendChild(buildItem(sec)));
+    zoneSecs.forEach(sec => listContainer.appendChild(buildItem(sec)));
 }
 
 function saveConfig() {

@@ -498,44 +498,53 @@ textarea.dynamic-input {
 }
 
 /* ==========================================
-   MODAL ESTRUCTURA: DOS COLUMNAS
+   MODAL ESTRUCTURA: TABS DE ZONA
    ========================================== */
-.structure-columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-
-.structure-column {
+.structure-zone-selector {
     display: flex;
-    flex-direction: column;
     gap: 8px;
+    background: #f4f4f5;
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid #e4e4e7;
+    margin-bottom: 16px;
 }
 
-.structure-col-header {
+.zone-tab-btn {
+    flex: 1;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #71717a;
     font-size: 12px;
     font-weight: 600;
-    padding: 8px 12px;
-    border-radius: 6px;
-    margin-bottom: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+    text-align: center;
 }
 
-.sidebar-header {
-    background: #eff6ff;
-    color: #1e40af;
-    border: 1px solid #bfdbfe;
+.zone-tab-btn.active {
+    background: #ffffff;
+    color: #18181b;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-.main-header {
-    background: #ecfdf5;
-    color: #065f46;
-    border: 1px solid #a7f3d0;
+.zone-tab-btn:hover:not(.active) {
+    color: #27272a;
+}
+
+.structure-column-content {
+    background: #ffffff;
+    border-radius: 8px;
+    min-height: 200px;
 }
 
 .structure-area-list {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
 }
 
 .structure-item {
