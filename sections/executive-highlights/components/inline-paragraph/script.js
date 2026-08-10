@@ -1,5 +1,5 @@
 /**
- * Executive Highlights - Horizontal rows component
+ * Executive Highlights - Horizontal continuous flow (inline-paragraph) component
  * With local multi-stage overflow adjustment to dynamically fit content and prevent any overflow.
  */
 
@@ -18,19 +18,21 @@ function onOverflow(el, cfg) {
     };
 
     // Design-parameters base
-    let fzLabel = 9;
+    let fzLabel = 8;
     let fzText = 8.5;
-    let padY = 6;
-    let padX = 10;
-    let gap = 6;
-    let labelWidth = 110;
+    let padY = 2;
+    let gapX = 12;
+    let gapY = 6;
+    let labelPadY = 2;
+    let labelPadX = 5;
 
     const update = () => {
-        el.style.setProperty('--row-label-fz', `${fzLabel}px`);
-        el.style.setProperty('--row-text-fz', `${fzText}px`);
-        el.style.setProperty('--row-padding', `${padY}px ${padX}px`);
-        el.style.setProperty('--row-gap', `${gap}px`);
-        el.style.setProperty('--row-label-width', `${labelWidth}px`);
+        el.style.setProperty('--flow-label-fz', `${fzLabel}px`);
+        el.style.setProperty('--flow-font-size', `${fzText}px`);
+        el.style.setProperty('--flow-padding', `${padY}px 0px`);
+        el.style.setProperty('--flow-gap-x', `${gapX}px`);
+        el.style.setProperty('--flow-gap-y', `${gapY}px`);
+        el.style.setProperty('--flow-label-pad', `${labelPadY}px ${labelPadX}px`);
     };
 
     // Reset layout modes
@@ -43,15 +45,15 @@ function onOverflow(el, cfg) {
     let safety = 0;
     while (isOver() && safety < 15) {
         if (fzText > 7.8) fzText -= 0.1;
-        if (padY > 4) padY -= 0.5;
-        if (gap > 4) gap -= 0.5;
+        if (gapX > 8) gapX -= 1;
+        if (gapY > 4) gapY -= 0.5;
         update();
         safety++;
     }
 
     if (!isOver()) return;
 
-    // Stage 2: Tight clamping (allow max 2 lines)
+    // Stage 2: Tight clamping (allow max 2 lines for texts if wrapping is too wide)
     el.classList.add('mode-tight');
     if (!isOver()) return;
 
@@ -59,10 +61,10 @@ function onOverflow(el, cfg) {
     safety = 0;
     while (isOver() && safety < 20) {
         if (fzText > 7.4) fzText -= 0.1;
-        if (fzLabel > 7.8) fzLabel -= 0.1;
-        if (padY > 3) padY -= 0.5;
-        if (padX > 6) padX -= 0.5;
-        if (labelWidth > 90) labelWidth -= 2;
+        if (fzLabel > 7.4) fzLabel -= 0.1;
+        if (gapX > 6) gapX -= 1;
+        if (gapY > 3) gapY -= 0.5;
+        if (labelPadX > 3) labelPadX -= 0.5;
         update();
         safety++;
     }
@@ -81,11 +83,11 @@ function onOverflow(el, cfg) {
     safety = 0;
     while (isOver() && safety < 30) {
         if (fzText > 7.0) fzText -= 0.1;
-        if (fzLabel > 7.2) fzLabel -= 0.1;
-        if (padY > 1.5) padY -= 0.5;
-        if (padX > 4) padX -= 0.5;
-        if (gap > 2) gap -= 0.5;
-        if (labelWidth > 75) labelWidth -= 2;
+        if (fzLabel > 7.0) fzLabel -= 0.1;
+        if (gapX > 4) gapX -= 0.5;
+        if (gapY > 2) gapY -= 0.5;
+        if (labelPadY > 1) labelPadY -= 0.5;
+        if (labelPadX > 2) labelPadX -= 0.5;
         update();
         safety++;
     }

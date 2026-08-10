@@ -4,9 +4,9 @@
     --row-label-fz: 9px;
     --row-text-fz: 8.5px;
     --row-text-lh: 1.45;
-    --row-padding: 8px 12px;
-    --row-gap: 8px;
-    --row-label-width: 120px;
+    --row-padding: 6px 10px;
+    --row-gap: 6px;
+    --row-label-width: 110px;
     --row-bg: #ffffff;
     --row-border-color: #f1f5f9;
 }
@@ -28,10 +28,11 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 14px;
+    gap: 10px;
     box-sizing: border-box;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03), 0 1px 3px rgba(15, 23, 42, 0.01);
+    overflow: hidden;
 }
 
 .highlight-row-item:hover {
@@ -45,14 +46,13 @@
     font-weight: 800;
     color: var(--primary);
     text-transform: uppercase;
-    letter-spacing: 0.8px;
+    letter-spacing: 0.6px;
     width: var(--row-label-width);
     flex-shrink: 0;
     text-align: left;
     background: rgba(29, 53, 87, 0.04);
-    color: var(--primary);
     border: 1px solid rgba(29, 53, 87, 0.08);
-    padding: 4px 8px;
+    padding: 3px 6px;
     border-radius: 4px;
     word-wrap: break-word;
     box-sizing: border-box;
@@ -66,6 +66,7 @@
     text-align: left;
     flex: 1;
     font-weight: 500;
+    overflow: hidden;
 }
 
 /* Modificadores de Clamping con transiciones elegantes */
@@ -85,16 +86,16 @@
 
 /* Modo Ultra Compacto para Overflow Severo */
 .mode-ultra-compact .highlight-row-item {
-    padding: 3px 6px;
-    gap: 8px;
+    padding: 2px 4px;
+    gap: 6px;
     border-radius: 4px;
 }
 
 .mode-ultra-compact .row-label {
     padding: 2px 4px;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
 }
 
 .mode-ultra-compact .row-text {
-    line-height: 1.2;
+    line-height: 1.25;
 }
