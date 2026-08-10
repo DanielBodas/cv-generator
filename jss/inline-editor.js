@@ -635,6 +635,41 @@ function changeSectionComponent(sectionId) {
             }
         ];
 
+    } else if (sectionId === 'education') {
+        options = [
+            {
+                id: 'list',
+                name: 'Estructura en Lista Clásica',
+                desc: 'Disposición lineal clásica con descripciones completas, etiquetas de cursos y años alineados verticalmente.',
+                previewHtml: `
+                    <div class="component-preview-visual detailed-preview">
+                        <div class="preview-line title"></div>
+                        <div class="preview-line text" style="width: 90%;"></div>
+                        <div class="preview-line text" style="width: 75%;"></div>
+                    </div>
+                `,
+                active: !sec.component || sec.component === 'list',
+                apply: () => {
+                    sec.component = null;
+                }
+            },
+            {
+                id: 'cards',
+                name: 'Tarjetas de Credenciales (Grid 2 Columnas)',
+                desc: 'Diseño ultra-visual en cuadrícula de dos columnas con iconos académicos, insignias y estructuración moderna.',
+                previewHtml: `
+                    <div class="component-preview-visual pills-preview">
+                        <div class="preview-pill" style="width: 42%; height: 28px;"></div>
+                        <div class="preview-pill" style="width: 42%; height: 28px;"></div>
+                    </div>
+                `,
+                active: sec.component === 'cards',
+                apply: () => {
+                    sec.component = 'cards';
+                }
+            }
+        ];
+
     } else {
         const currentMode = sec.mode || 'detailed';
 

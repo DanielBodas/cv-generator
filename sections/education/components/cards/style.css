@@ -1,0 +1,178 @@
+/* Education Cards Component */
+
+:root {
+    --edu-card-gap: 12px;
+    --edu-card-padding: 10px 12px;
+    --edu-card-degree-fz: 10.4px;
+    --edu-card-school-fz: 9px;
+    --edu-card-tag-fz: 7.2px;
+}
+
+.edu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--edu-card-gap);
+    margin-top: 6px;
+    width: 100%;
+}
+
+.edu-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: var(--edu-card-padding);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    transition: all 0.25s ease;
+    overflow: hidden;
+}
+
+.edu-card:hover {
+    transform: translateY(-1.5px);
+    border-color: var(--accent, #457b9d);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.edu-card-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: var(--primary, #1d3557);
+    color: #ffffff;
+    font-size: 7px;
+    font-weight: 850;
+    padding: 2px 7px;
+    border-bottom-left-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    z-index: 10;
+}
+
+.edu-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    min-width: 0;
+}
+
+.edu-card-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--accent, #457b9d);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edu-card-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.edu-card-degree {
+    font-size: var(--edu-card-degree-fz);
+    font-weight: 800;
+    color: var(--primary, #1d3557);
+    line-height: 1.25;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    flex: 1;
+}
+
+.edu-card-school {
+    font-size: var(--edu-card-school-fz);
+    font-weight: 680;
+    color: var(--accent, #457b9d);
+    margin-top: -2px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.edu-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: auto;
+}
+
+.edu-tag-pill {
+    font-size: var(--edu-card-tag-fz);
+    font-weight: 650;
+    color: var(--accent, #457b9d);
+    background: rgba(69, 123, 157, 0.05);
+    padding: 1.5px 5px;
+    border-radius: 3px;
+    border: 1px solid rgba(69, 123, 157, 0.1);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.edu-tag-pill:hover {
+    color: #ffffff;
+    background: var(--accent, #457b9d);
+    border-color: var(--accent, #457b9d);
+    transform: translateY(-0.5px);
+}
+
+/* ── COMPACIDAD / OVERFLOW MODES ── */
+
+.mode-compact .edu-grid {
+    gap: 8px;
+}
+
+.mode-compact .edu-card {
+    padding: 6px 8px;
+}
+
+.mode-compact .edu-tag-pill {
+    display: none; /* Hide tags in compact layout to fit perfectly */
+}
+
+/* Minimizados / Micro states */
+.edu-card.is-minimized {
+    padding: 4px 6px;
+    min-height: auto;
+    gap: 2px;
+}
+
+.edu-card.is-minimized .edu-card-badge {
+    position: static;
+    display: inline-block;
+    width: fit-content;
+    padding: 1px 4px;
+    font-size: 6px;
+    border-bottom-left-radius: 0;
+    border-radius: 2px;
+    margin-bottom: 2px;
+}
+
+.edu-card.is-minimized .edu-card-header {
+    margin-top: 0;
+}
+
+.edu-card.is-minimized .edu-card-icon {
+    width: 11px;
+    height: 11px;
+}
+
+.edu-card.is-minimized .edu-card-degree {
+    font-size: 8.8px;
+}
+
+.edu-card.is-minimized .edu-card-school {
+    font-size: 8px;
+}
+
+.edu-card.is-minimized .edu-tags-container {
+    display: none;
+}
