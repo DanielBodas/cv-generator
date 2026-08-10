@@ -569,6 +569,56 @@ textarea.dynamic-input {
     white-space: nowrap;
 }
 
+/* Campo de peso (weight) en el selector de estructura */
+.struct-weight-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #f4f4f5;
+    border: 1px solid #e4e4e7;
+    border-radius: 6px;
+    padding: 2px 6px;
+    flex-shrink: 0;
+}
+
+.struct-weight-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #71717a;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    user-select: none;
+}
+
+.struct-weight-input {
+    width: 36px;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    color: #18181b;
+    padding: 2px 0;
+    text-align: center;
+    outline: none;
+}
+
+.struct-weight-input:focus {
+    color: #000000;
+}
+
+/* Soporte para estados deshabilitados de la sección */
+.structure-item.is-disabled .struct-weight-container {
+    opacity: 0.6;
+    background: #f4f4f5;
+    border-color: #e4e4e7;
+}
+
+.struct-weight-input:disabled {
+    cursor: not-allowed;
+    color: #a1a1aa;
+}
+
 .struct-controls {
     display: flex;
     gap: 2px;

@@ -270,6 +270,40 @@ function renderStructureList() {
         name.className = 'struct-name';
         name.textContent = sectionNames[sec.id] || sec.id;
 
+        // Campo de peso (weight)
+        const weightContainer = document.createElement('div');
+        weightContainer.className = 'struct-weight-container';
+
+        const weightLabel = document.createElement('span');
+        weightLabel.className = 'struct-weight-label';
+        weightLabel.textContent = 'Peso:';
+
+        const weightInput = document.createElement('input');
+        weightInput.type = 'text';
+        weightInput.className = 'struct-weight-input';
+        const weightVal = (sec.weight === true) ? 'true' : (sec.weight || 0);
+        weightInput.value = weightVal;
+        weightInput.placeholder = 'ej. 1, true';
+        weightInput.disabled = !!sec.disabled;
+        weightInput.title = 'Peso de la sección (ej. 1, 3 o true para auto/flexible)';
+
+        weightInput.onchange = (e) => {
+            const val = e.target.value.trim();
+            if (val === 'true') {
+                sec.weight = true;
+            } else if (val === 'false' || val === '0' || !val) {
+                sec.weight = 0;
+            } else {
+                const num = parseInt(val, 10);
+                sec.weight = isNaN(num) ? 0 : num;
+            }
+            saveConfig();
+            renderStructureList();
+        };
+
+        weightContainer.appendChild(weightLabel);
+        weightContainer.appendChild(weightInput);
+
         // Controles de ordenamiento lineal
         const controls = document.createElement('div');
         controls.className = 'struct-controls';
@@ -310,6 +344,7 @@ function renderStructureList() {
 
         item.appendChild(toggle);
         item.appendChild(name);
+        item.appendChild(weightContainer);
         item.appendChild(controls);
         return item;
     }
