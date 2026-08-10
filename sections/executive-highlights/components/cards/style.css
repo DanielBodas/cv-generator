@@ -1,0 +1,71 @@
+/* Executive Highlights */
+
+:root {
+    --highlights-cols: 3;
+    --card-label-fz: 9px;
+    --card-text-fz: 8.5px;
+    --card-text-lh: 1.4;
+    --card-padding: 10px 8px;
+    --grid-gap: 10px;
+}
+
+.highlights-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--highlights-cols), minmax(0, 1fr));
+    gap: var(--grid-gap);
+    margin-top: 6px;
+}
+
+.highlight-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-top: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: var(--card-padding);
+    display: flex;
+    flex-direction: column;
+    min-height: 60px;
+    transition: transform 0.2s ease;
+}
+
+.card-label {
+    font-size: var(--card-label-fz);
+    font-weight: 800;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    text-align: center;
+}
+
+.card-text {
+    font-size: var(--card-text-fz);
+    color: #475569;
+    line-height: var(--card-text-lh);
+    margin: 0;
+    text-align: center;
+}
+
+.mode-tight .card-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.mode-very-tight .card-text {
+    -webkit-line-clamp: 2;
+}
+
+.mode-ultra-compact .highlight-card {
+    min-height: auto;
+    padding: 4px;
+}
+
+.mode-ultra-compact .card-label {
+    margin-bottom: 2px;
+}
+
+.mode-ultra-compact .card-text {
+    line-height: 1.2;
+}
