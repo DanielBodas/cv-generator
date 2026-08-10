@@ -38,6 +38,11 @@ html {
     padding: 0;
 }
 
+ul, li {
+    list-style: none !important;
+    list-style-type: none !important;
+}
+
 body {
     background: #cfd5dc;
     font-family: var(--font);
