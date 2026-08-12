@@ -1058,6 +1058,21 @@ textarea.dynamic-input {
 
 /* Responsividad para pantallas pequeñas */
 @media (max-width: 600px) {
+    /* Permitir scroll vertical en modales para pantallas con poca altura */
+    .modal {
+        max-width: 92vw !important;
+        max-height: 85vh !important;
+        overflow-y: auto !important;
+        padding: 16px !important;
+        border-radius: 12px !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) scale(0.97) !important;
+    }
+
+    .modal.show {
+        transform: translate(-50%, -50%) scale(1) !important;
+    }
+
     /* Estructura de Secciones - Evitar recortes en móviles */
     .structure-item {
         display: grid !important;
