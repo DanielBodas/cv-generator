@@ -1042,3 +1042,41 @@ textarea.dynamic-input {
     background: #e4e4e7;
     border-radius: 3px;
 }
+
+/* Nuevo grupo de control de peso/distribución de espacio en el modal individual */
+.section-modal-weight-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.section-modal-weight-select {
+    flex: 1;
+    min-width: 0; /* Evita desbordamiento */
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 600px) {
+    .section-modal-weight-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    .section-modal-weight-select {
+        width: 100%;
+    }
+    .section-modal-weight-group .struct-weight-stepper {
+        justify-content: space-between;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .section-modal-weight-group .struct-weight-stepper .stepper-btn {
+        flex: 1;
+        height: 28px;
+    }
+    .section-modal-weight-group .struct-weight-stepper .stepper-input {
+        flex: 2;
+        font-size: 13px;
+    }
+}

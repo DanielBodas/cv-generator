@@ -457,7 +457,8 @@ function openDataEditorModal(sectionId) {
         </div>
         <p class="modal-desc-text">Modifica directamente la información de esta sección del currículum. Los cambios se guardan automáticamente.</p>
         <div class="modal-body" id="data-editor-form" style="max-height:55vh; overflow-y:auto; padding-right:12px;">
-            <!-- Generado dinámicamente -->
+            <div id="section-weight-editor-container" style="margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1.5px dashed #e4e4e7;"></div>
+            <div id="section-data-fields-container"></div>
         </div>
         <div class="modal-footer" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e4e4e7; display: flex; justify-content: flex-end;">
             <button class="modal-btn secondary-btn" style="width: auto; padding: 10px 24px; margin-top: 0;" onclick="closeModal()">Finalizar Edición</button>
@@ -469,9 +470,127 @@ function openDataEditorModal(sectionId) {
         modalEl.classList.add('modal-medium');
     }
 
-    const formCont = document.getElementById('data-editor-form');
+    const weightCont = document.getElementById('section-weight-editor-container');
+    const formCont = document.getElementById('section-data-fields-container');
     const data = window.CVSectionsData[sectionId];
     if (!data) return;
+
+    // Render configuration section weight editor
+    const config = window.CVConfig;
+    const sec = config.sections.find(s => s.id === sectionId);
+    if (sec) {
+        const weightSectionLabel = document.createElement('p');
+        weightSectionLabel.className = 'modal-section-label';
+        weightSectionLabel.textContent = 'Distribución de Espacio (Peso)';
+        weightCont.appendChild(weightSectionLabel);
+
+        const weightFormGroup = document.createElement('div');
+        weightFormGroup.className = 'section-modal-weight-group';
+
+        const weightSelect = document.createElement('select');
+        weightSelect.className = 'dynamic-select section-modal-weight-select';
+
+        const optFixed = document.createElement('option');
+        optFixed.value = 'fixed';
+        optFixed.textContent = 'Fijo (Tamaño mínimo según contenido)';
+
+        const optAuto = document.createElement('option');
+        optAuto.value = 'auto';
+        optAuto.textContent = 'Flexible (Ocupa espacio restante)';
+
+        const optProp = document.createElement('option');
+        optProp.value = 'proportional';
+        optProp.textContent = 'Proporcional (Peso relativo específico)';
+
+        weightSelect.appendChild(optFixed);
+        weightSelect.appendChild(optAuto);
+        weightSelect.appendChild(optProp);
+
+        if (sec.weight === true) {
+            weightSelect.value = 'auto';
+        } else if (typeof sec.weight === 'number' && sec.weight > 0) {
+            weightSelect.value = 'proportional';
+        } else {
+            weightSelect.value = 'fixed';
+        }
+
+        const stepperContainer = document.createElement('div');
+        stepperContainer.className = 'struct-weight-stepper';
+        if (weightSelect.value !== 'proportional') {
+            stepperContainer.style.display = 'none';
+        }
+
+        const btnMinus = document.createElement('button');
+        btnMinus.className = 'stepper-btn';
+        btnMinus.textContent = '-';
+
+        const numInput = document.createElement('input');
+        numInput.type = 'number';
+        numInput.className = 'stepper-input';
+        numInput.min = '1';
+        numInput.max = '99';
+        numInput.value = (typeof sec.weight === 'number' && sec.weight > 0) ? sec.weight : 1;
+
+        const btnPlus = document.createElement('button');
+        btnPlus.className = 'stepper-btn';
+        btnPlus.textContent = '+';
+
+        const updateWeightFromUI = (newVal) => {
+            sec.weight = newVal;
+            saveConfig();
+            window.refreshCV();
+        };
+
+        weightSelect.onchange = () => {
+            if (weightSelect.value === 'fixed') {
+                stepperContainer.style.display = 'none';
+                updateWeightFromUI(0);
+            } else if (weightSelect.value === 'auto') {
+                stepperContainer.style.display = 'none';
+                updateWeightFromUI(true);
+            } else {
+                stepperContainer.style.display = 'flex';
+                const val = parseInt(numInput.value, 10) || 1;
+                updateWeightFromUI(val);
+            }
+        };
+
+        btnMinus.onclick = (e) => {
+            e.stopPropagation();
+            let val = parseInt(numInput.value, 10) || 1;
+            if (val > 1) {
+                val--;
+                numInput.value = val;
+                updateWeightFromUI(val);
+            }
+        };
+
+        btnPlus.onclick = (e) => {
+            e.stopPropagation();
+            let val = parseInt(numInput.value, 10) || 1;
+            if (val < 99) {
+                val++;
+                numInput.value = val;
+                updateWeightFromUI(val);
+            }
+        };
+
+        numInput.onchange = () => {
+            let val = parseInt(numInput.value, 10);
+            if (isNaN(val) || val < 1) val = 1;
+            if (val > 99) val = 99;
+            numInput.value = val;
+            updateWeightFromUI(val);
+        };
+
+        stepperContainer.appendChild(btnMinus);
+        stepperContainer.appendChild(numInput);
+        stepperContainer.appendChild(btnPlus);
+
+        weightFormGroup.appendChild(weightSelect);
+        weightFormGroup.appendChild(stepperContainer);
+        weightCont.appendChild(weightFormGroup);
+    }
 
     generatePremiumFormFields(data, formCont, [], sectionId, false);
 }
