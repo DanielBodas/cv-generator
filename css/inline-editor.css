@@ -498,44 +498,53 @@ textarea.dynamic-input {
 }
 
 /* ==========================================
-   MODAL ESTRUCTURA: DOS COLUMNAS
+   MODAL ESTRUCTURA: TABS DE ZONA
    ========================================== */
-.structure-columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-
-.structure-column {
+.structure-zone-selector {
     display: flex;
-    flex-direction: column;
     gap: 8px;
+    background: #f4f4f5;
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid #e4e4e7;
+    margin-bottom: 16px;
 }
 
-.structure-col-header {
+.zone-tab-btn {
+    flex: 1;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #71717a;
     font-size: 12px;
     font-weight: 600;
-    padding: 8px 12px;
-    border-radius: 6px;
-    margin-bottom: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+    text-align: center;
 }
 
-.sidebar-header {
-    background: #eff6ff;
-    color: #1e40af;
-    border: 1px solid #bfdbfe;
+.zone-tab-btn.active {
+    background: #ffffff;
+    color: #18181b;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
-.main-header {
-    background: #ecfdf5;
-    color: #065f46;
-    border: 1px solid #a7f3d0;
+.zone-tab-btn:hover:not(.active) {
+    color: #27272a;
+}
+
+.structure-column-content {
+    background: #ffffff;
+    border-radius: 8px;
+    min-height: 200px;
 }
 
 .structure-area-list {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
 }
 
 .structure-item {
@@ -567,6 +576,105 @@ textarea.dynamic-input {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+/* Campo de peso (weight) intuitivo en el selector de estructura */
+.struct-weight-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    max-width: 200px;
+}
+
+.struct-weight-select {
+    padding: 4px 8px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 500;
+    color: #27272a;
+    background-color: #ffffff;
+    border: 1px solid #e4e4e7;
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    width: 105px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.struct-weight-select:hover:not(:disabled) {
+    border-color: #a1a1aa;
+    background-color: #fafafa;
+}
+
+.struct-weight-select:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+.struct-weight-stepper {
+    display: flex;
+    align-items: center;
+    background: #f4f4f5;
+    border: 1px solid #e4e4e7;
+    border-radius: 6px;
+    padding: 2px;
+    gap: 2px;
+}
+
+.stepper-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: #ffffff;
+    color: #18181b;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: all 0.1s ease;
+}
+
+.stepper-btn:hover:not(:disabled) {
+    background: #f4f4f5;
+    color: #000000;
+}
+
+.stepper-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.stepper-input {
+    width: 28px;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    color: #18181b;
+    text-align: center;
+    outline: none;
+    -moz-appearance: textfield;
+}
+
+.stepper-input::-webkit-outer-spin-button,
+.stepper-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Soporte para estados deshabilitados de la sección */
+.structure-item.is-disabled .struct-weight-container {
+    opacity: 0.5;
+    pointer-events: none;
 }
 
 .struct-controls {
@@ -933,4 +1041,168 @@ textarea.dynamic-input {
     width: 24px;
     background: #e4e4e7;
     border-radius: 3px;
+}
+
+/* Nuevo grupo de control de peso/distribución de espacio en el modal individual */
+.section-modal-weight-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.section-modal-weight-select {
+    flex: 1;
+    min-width: 0; /* Evita desbordamiento */
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 600px) {
+    /* Permitir scroll vertical en modales para pantallas con poca altura */
+    .modal {
+        max-width: 92vw !important;
+        max-height: 85vh !important;
+        overflow-y: auto !important;
+        padding: 16px !important;
+        border-radius: 12px !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) scale(0.97) !important;
+    }
+
+    .modal.show {
+        transform: translate(-50%, -50%) scale(1) !important;
+    }
+
+    /* Estructura de Secciones - Evitar recortes en móviles */
+    .structure-item {
+        display: grid !important;
+        grid-template-columns: auto 1fr auto !important;
+        grid-template-rows: auto auto !important;
+        gap: 6px 8px !important;
+        align-items: center !important;
+        padding: 10px 12px !important;
+    }
+
+    .structure-item .struct-toggle {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+    }
+
+    .structure-item .struct-name {
+        grid-column: 2 !important;
+        grid-row: 1 !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        white-space: normal !important; /* Permitir que el texto fluya en múltiples líneas */
+        overflow: visible !important;
+        text-overflow: clip !important;
+        line-height: 1.3 !important;
+        color: #18181b !important;
+    }
+
+    .structure-item .struct-controls {
+        grid-column: 3 !important;
+        grid-row: 1 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 4px !important;
+        align-self: center !important;
+    }
+
+    .structure-item .struct-btn {
+        width: 24px !important;
+        height: 24px !important;
+        font-size: 9px !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 4px !important;
+    }
+
+    .structure-item .struct-weight-container {
+        grid-column: 1 / span 3 !important;
+        grid-row: 2 !important;
+        max-width: none !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        gap: 8px !important;
+        background: #f8fafc !important; /* Fondo elegante azul/gris muy sutil */
+        border: 1px dashed #e2e8f0 !important;
+        border-radius: 6px !important;
+        padding: 4px 8px !important;
+        margin-top: 4px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Etiqueta interna descriptiva para dar balance y profesionalismo */
+    .structure-item .struct-weight-container::before {
+        content: "Ajuste:" !important;
+        font-size: 10px !important;
+        font-weight: 600 !important;
+        color: #64748b !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+        display: inline-block !important;
+    }
+
+    .structure-item .struct-weight-select {
+        flex: 1 !important;
+        max-width: 110px !important; /* Limitar ancho para no estirarse innecesariamente */
+        height: 28px !important;
+        font-size: 11px !important;
+        padding: 2px 4px !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 4px !important;
+        background-color: #ffffff !important;
+    }
+
+    .structure-item .struct-weight-stepper {
+        flex-shrink: 0 !important;
+        height: 28px !important;
+        padding: 1px !important;
+        gap: 2px !important;
+    }
+
+    .structure-item .struct-weight-stepper .stepper-btn {
+        width: 18px !important;
+        height: 18px !important;
+        font-size: 10px !important;
+    }
+
+    .structure-item .struct-weight-stepper .stepper-input {
+        width: 24px !important;
+        font-size: 10px !important;
+    }
+
+    /* Ocultar peso por completo cuando la sección esté deshabilitada */
+    .structure-item.is-disabled .struct-weight-container {
+        display: none !important;
+    }
+
+    /* Modal Individual de Peso */
+    .section-modal-weight-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    .section-modal-weight-select {
+        width: 100%;
+    }
+    .section-modal-weight-group .struct-weight-stepper {
+        justify-content: space-between;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .section-modal-weight-group .struct-weight-stepper .stepper-btn {
+        flex: 1;
+        height: 28px;
+    }
+    .section-modal-weight-group .struct-weight-stepper .stepper-input {
+        flex: 2;
+        font-size: 13px;
+    }
 }

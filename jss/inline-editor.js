@@ -197,54 +197,61 @@ window.saveGeneralSettings = function () {
 };
 
 /* ==========================================
-   MODAL 2: ESTRUCTURA (DOS COLUMNAS)
+   MODAL 2: ESTRUCTURA (CON TABS DE ZONAS EN PARALELO)
    ========================================== */
+window.activeStructureZone = 'sidebar';
+
+window.setStructureZone = function (zone) {
+    window.activeStructureZone = zone;
+    document.getElementById('zone-tab-sidebar')?.classList.toggle('active', zone === 'sidebar');
+    document.getElementById('zone-tab-main')?.classList.toggle('active', zone === 'main');
+    renderStructureList();
+};
+
 function openStructureModal() {
+    window.activeStructureZone = 'sidebar'; // Default to sidebar
     const html = `
         <div class="modal-header">
             <h2>Estructura de Secciones</h2>
             <button class="btn-close" onclick="closeModal()">×</button>
         </div>
         <p class="modal-desc-text">Activa, desactiva y reorganiza las secciones en las dos columnas principales de tu diseño.</p>
-        <div class="structure-columns">
-            <div class="structure-column">
-                <div class="structure-col-header sidebar-header">
-                    <span>Columna Lateral (Sidebar)</span>
-                </div>
-                <div id="structure-sidebar" class="structure-area-list"></div>
-            </div>
-            <div class="structure-column">
-                <div class="structure-col-header main-header">
-                    <span>Columna Principal (Main)</span>
-                </div>
-                <div id="structure-main" class="structure-area-list"></div>
-            </div>
+
+        <div class="structure-zone-selector">
+            <button class="zone-tab-btn active" onclick="setStructureZone('sidebar')" id="zone-tab-sidebar">
+                <span>Columna Lateral (Sidebar)</span>
+            </button>
+            <button class="zone-tab-btn" onclick="setStructureZone('main')" id="zone-tab-main">
+                <span>Columna Principal (Main)</span>
+            </button>
+        </div>
+
+        <div class="structure-column-content">
+            <div id="structure-sections-list" class="structure-area-list"></div>
         </div>
     `;
     showModal(html);
     const modalEl = document.getElementById('general-settings-modal');
     if (modalEl) {
-        modalEl.classList.add('modal-wide');
+        modalEl.classList.remove('modal-wide');
+        modalEl.classList.add('modal-medium');
     }
     renderStructureList();
 }
 
 function renderStructureList() {
-    const sidebarList = document.getElementById('structure-sidebar');
-    const mainList = document.getElementById('structure-main');
-    if (!sidebarList || !mainList) return;
+    const listContainer = document.getElementById('structure-sections-list');
+    if (!listContainer) return;
 
-    sidebarList.innerHTML = '';
-    mainList.innerHTML = '';
+    listContainer.innerHTML = '';
 
     const config = window.CVConfig;
-    const sidebarSecs = config.sections.filter(s => s.area === 'sidebar');
-    const mainSecs = config.sections.filter(s => s.area === 'main');
+    const activeZone = window.activeStructureZone || 'sidebar';
+    const zoneSecs = config.sections.filter(s => s.area === activeZone);
 
     function buildItem(sec) {
         const globalIndex = config.sections.indexOf(sec);
-        const areaSecs = config.sections.filter(s => s.area === sec.area);
-        const areaIndex = areaSecs.indexOf(sec);
+        const areaIndex = zoneSecs.indexOf(sec);
 
         const item = document.createElement('div');
         item.className = `structure-item ${sec.disabled ? 'is-disabled' : ''}`;
@@ -270,6 +277,120 @@ function renderStructureList() {
         name.className = 'struct-name';
         name.textContent = sectionNames[sec.id] || sec.id;
 
+        // Campo de peso (weight) intuitivo con selector y stepper
+        const weightContainer = document.createElement('div');
+        weightContainer.className = 'struct-weight-container';
+
+        const weightSelect = document.createElement('select');
+        weightSelect.className = 'struct-weight-select';
+        weightSelect.disabled = !!sec.disabled;
+
+        const optFixed = document.createElement('option');
+        optFixed.value = 'fixed';
+        optFixed.textContent = 'Fijo';
+
+        const optAuto = document.createElement('option');
+        optAuto.value = 'auto';
+        optAuto.textContent = 'Flexible';
+
+        const optProp = document.createElement('option');
+        optProp.value = 'proportional';
+        optProp.textContent = 'Proporcional';
+
+        weightSelect.appendChild(optFixed);
+        weightSelect.appendChild(optAuto);
+        weightSelect.appendChild(optProp);
+
+        // Determinar el valor seleccionado actual
+        if (sec.weight === true) {
+            weightSelect.value = 'auto';
+        } else if (typeof sec.weight === 'number' && sec.weight > 0) {
+            weightSelect.value = 'proportional';
+        } else {
+            weightSelect.value = 'fixed';
+        }
+
+        // Stepper para el modo proporcional
+        const stepperContainer = document.createElement('div');
+        stepperContainer.className = 'struct-weight-stepper';
+        if (weightSelect.value !== 'proportional') {
+            stepperContainer.style.display = 'none';
+        }
+
+        const btnMinus = document.createElement('button');
+        btnMinus.className = 'stepper-btn';
+        btnMinus.textContent = '-';
+        btnMinus.disabled = !!sec.disabled;
+
+        const numInput = document.createElement('input');
+        numInput.type = 'number';
+        numInput.className = 'stepper-input';
+        numInput.min = '1';
+        numInput.max = '99';
+        numInput.value = (typeof sec.weight === 'number' && sec.weight > 0) ? sec.weight : 1;
+        numInput.disabled = !!sec.disabled;
+
+        const btnPlus = document.createElement('button');
+        btnPlus.className = 'stepper-btn';
+        btnPlus.textContent = '+';
+        btnPlus.disabled = !!sec.disabled;
+
+        const updateWeightFromUI = (newVal) => {
+            sec.weight = newVal;
+            saveConfig();
+            // Refrescar el CV en vivo además de la lista
+            window.refreshCV();
+        };
+
+        weightSelect.onchange = () => {
+            if (weightSelect.value === 'fixed') {
+                stepperContainer.style.display = 'none';
+                updateWeightFromUI(0);
+            } else if (weightSelect.value === 'auto') {
+                stepperContainer.style.display = 'none';
+                updateWeightFromUI(true);
+            } else {
+                stepperContainer.style.display = 'flex';
+                const val = parseInt(numInput.value, 10) || 1;
+                updateWeightFromUI(val);
+            }
+        };
+
+        btnMinus.onclick = (e) => {
+            e.stopPropagation();
+            let val = parseInt(numInput.value, 10) || 1;
+            if (val > 1) {
+                val--;
+                numInput.value = val;
+                updateWeightFromUI(val);
+            }
+        };
+
+        btnPlus.onclick = (e) => {
+            e.stopPropagation();
+            let val = parseInt(numInput.value, 10) || 1;
+            if (val < 99) {
+                val++;
+                numInput.value = val;
+                updateWeightFromUI(val);
+            }
+        };
+
+        numInput.onchange = () => {
+            let val = parseInt(numInput.value, 10);
+            if (isNaN(val) || val < 1) val = 1;
+            if (val > 99) val = 99;
+            numInput.value = val;
+            updateWeightFromUI(val);
+        };
+
+        stepperContainer.appendChild(btnMinus);
+        stepperContainer.appendChild(numInput);
+        stepperContainer.appendChild(btnPlus);
+
+        weightContainer.appendChild(weightSelect);
+        weightContainer.appendChild(stepperContainer);
+
         // Controles de ordenamiento lineal
         const controls = document.createElement('div');
         controls.className = 'struct-controls';
@@ -281,7 +402,7 @@ function renderStructureList() {
         btnUp.disabled = areaIndex === 0;
         btnUp.onclick = () => {
             if (areaIndex > 0) {
-                const prevInArea = areaSecs[areaIndex - 1];
+                const prevInArea = zoneSecs[areaIndex - 1];
                 const prevGlobal = config.sections.indexOf(prevInArea);
                 config.sections.splice(globalIndex, 1);
                 config.sections.splice(prevGlobal, 0, sec);
@@ -294,10 +415,10 @@ function renderStructureList() {
         btnDown.innerHTML = '▼';
         btnDown.className = 'struct-btn';
         btnDown.title = 'Mover abajo';
-        btnDown.disabled = areaIndex === areaSecs.length - 1;
+        btnDown.disabled = areaIndex === zoneSecs.length - 1;
         btnDown.onclick = () => {
-            if (areaIndex < areaSecs.length - 1) {
-                const nextInArea = areaSecs[areaIndex + 1];
+            if (areaIndex < zoneSecs.length - 1) {
+                const nextInArea = zoneSecs[areaIndex + 1];
                 const nextGlobal = config.sections.indexOf(nextInArea);
                 config.sections.splice(nextGlobal + 1, 0, config.sections.splice(globalIndex, 1)[0]);
                 saveConfig();
@@ -310,12 +431,12 @@ function renderStructureList() {
 
         item.appendChild(toggle);
         item.appendChild(name);
+        item.appendChild(weightContainer);
         item.appendChild(controls);
         return item;
     }
 
-    sidebarSecs.forEach(sec => sidebarList.appendChild(buildItem(sec)));
-    mainSecs.forEach(sec => mainList.appendChild(buildItem(sec)));
+    zoneSecs.forEach(sec => listContainer.appendChild(buildItem(sec)));
 }
 
 function saveConfig() {
@@ -336,7 +457,8 @@ function openDataEditorModal(sectionId) {
         </div>
         <p class="modal-desc-text">Modifica directamente la información de esta sección del currículum. Los cambios se guardan automáticamente.</p>
         <div class="modal-body" id="data-editor-form" style="max-height:55vh; overflow-y:auto; padding-right:12px;">
-            <!-- Generado dinámicamente -->
+            <div id="section-weight-editor-container" style="margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1.5px dashed #e4e4e7;"></div>
+            <div id="section-data-fields-container"></div>
         </div>
         <div class="modal-footer" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e4e4e7; display: flex; justify-content: flex-end;">
             <button class="modal-btn secondary-btn" style="width: auto; padding: 10px 24px; margin-top: 0;" onclick="closeModal()">Finalizar Edición</button>
@@ -348,9 +470,127 @@ function openDataEditorModal(sectionId) {
         modalEl.classList.add('modal-medium');
     }
 
-    const formCont = document.getElementById('data-editor-form');
+    const weightCont = document.getElementById('section-weight-editor-container');
+    const formCont = document.getElementById('section-data-fields-container');
     const data = window.CVSectionsData[sectionId];
     if (!data) return;
+
+    // Render configuration section weight editor
+    const config = window.CVConfig;
+    const sec = config.sections.find(s => s.id === sectionId);
+    if (sec) {
+        const weightSectionLabel = document.createElement('p');
+        weightSectionLabel.className = 'modal-section-label';
+        weightSectionLabel.textContent = 'Distribución de Espacio (Peso)';
+        weightCont.appendChild(weightSectionLabel);
+
+        const weightFormGroup = document.createElement('div');
+        weightFormGroup.className = 'section-modal-weight-group';
+
+        const weightSelect = document.createElement('select');
+        weightSelect.className = 'dynamic-select section-modal-weight-select';
+
+        const optFixed = document.createElement('option');
+        optFixed.value = 'fixed';
+        optFixed.textContent = 'Fijo (Tamaño mínimo según contenido)';
+
+        const optAuto = document.createElement('option');
+        optAuto.value = 'auto';
+        optAuto.textContent = 'Flexible (Ocupa espacio restante)';
+
+        const optProp = document.createElement('option');
+        optProp.value = 'proportional';
+        optProp.textContent = 'Proporcional (Peso relativo específico)';
+
+        weightSelect.appendChild(optFixed);
+        weightSelect.appendChild(optAuto);
+        weightSelect.appendChild(optProp);
+
+        if (sec.weight === true) {
+            weightSelect.value = 'auto';
+        } else if (typeof sec.weight === 'number' && sec.weight > 0) {
+            weightSelect.value = 'proportional';
+        } else {
+            weightSelect.value = 'fixed';
+        }
+
+        const stepperContainer = document.createElement('div');
+        stepperContainer.className = 'struct-weight-stepper';
+        if (weightSelect.value !== 'proportional') {
+            stepperContainer.style.display = 'none';
+        }
+
+        const btnMinus = document.createElement('button');
+        btnMinus.className = 'stepper-btn';
+        btnMinus.textContent = '-';
+
+        const numInput = document.createElement('input');
+        numInput.type = 'number';
+        numInput.className = 'stepper-input';
+        numInput.min = '1';
+        numInput.max = '99';
+        numInput.value = (typeof sec.weight === 'number' && sec.weight > 0) ? sec.weight : 1;
+
+        const btnPlus = document.createElement('button');
+        btnPlus.className = 'stepper-btn';
+        btnPlus.textContent = '+';
+
+        const updateWeightFromUI = (newVal) => {
+            sec.weight = newVal;
+            saveConfig();
+            window.refreshCV();
+        };
+
+        weightSelect.onchange = () => {
+            if (weightSelect.value === 'fixed') {
+                stepperContainer.style.display = 'none';
+                updateWeightFromUI(0);
+            } else if (weightSelect.value === 'auto') {
+                stepperContainer.style.display = 'none';
+                updateWeightFromUI(true);
+            } else {
+                stepperContainer.style.display = 'flex';
+                const val = parseInt(numInput.value, 10) || 1;
+                updateWeightFromUI(val);
+            }
+        };
+
+        btnMinus.onclick = (e) => {
+            e.stopPropagation();
+            let val = parseInt(numInput.value, 10) || 1;
+            if (val > 1) {
+                val--;
+                numInput.value = val;
+                updateWeightFromUI(val);
+            }
+        };
+
+        btnPlus.onclick = (e) => {
+            e.stopPropagation();
+            let val = parseInt(numInput.value, 10) || 1;
+            if (val < 99) {
+                val++;
+                numInput.value = val;
+                updateWeightFromUI(val);
+            }
+        };
+
+        numInput.onchange = () => {
+            let val = parseInt(numInput.value, 10);
+            if (isNaN(val) || val < 1) val = 1;
+            if (val > 99) val = 99;
+            numInput.value = val;
+            updateWeightFromUI(val);
+        };
+
+        stepperContainer.appendChild(btnMinus);
+        stepperContainer.appendChild(numInput);
+        stepperContainer.appendChild(btnPlus);
+
+        weightFormGroup.appendChild(weightSelect);
+        weightFormGroup.appendChild(stepperContainer);
+        weightCont.appendChild(weightFormGroup);
+    }
 
     generatePremiumFormFields(data, formCont, [], sectionId, false);
 }
