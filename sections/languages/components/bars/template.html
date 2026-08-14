@@ -3,7 +3,10 @@
     {{#languages}}
     <li class="lang-item">
         <div class="lang-row">
-            <span class="lang-name">{{name}}</span>
+            <div class="lang-left">
+                <span class="lang-flag">{{flag}}</span>
+                <span class="lang-name">{{name}}</span>
+            </div>
             <span class="lang-code">{{code}}</span>
         </div>
         <div class="lang-bar-wrap">
@@ -12,6 +15,7 @@
             </div>
         </div>
         <div class="lang-mini-row">
+            <span class="lang-flag">{{flag}}</span>
             <span class="lang-name">{{name}}</span>
             <span class="lang-code">{{code}}</span>
         </div>

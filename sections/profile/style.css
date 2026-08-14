@@ -13,18 +13,21 @@
     padding-bottom: 4px;
 }
 
-/* ── Foto ── */
+/* ── Foto con anillo doble ── */
 .profile-photo-wrap {
     width: 110px;
     height: 110px;
     border-radius: 50%;
     overflow: hidden;
-    border: 2.5px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.32);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    outline: 1.5px solid var(--accent, #457b9d);
+    outline-offset: 1.5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     margin-top: -18px;
     margin-bottom: 12px;
     background: rgba(255, 255, 255, 0.08);
     flex-shrink: 0;
+    transition: all 0.3s ease;
 }
 
 .profile-photo {
@@ -34,86 +37,92 @@
     object-position: center top;
 }
 
-/* ── Nombre ── */
+/* ── Nombre Premium ── */
 .profile-name {
     font-size: 14px;
     font-weight: 800;
     color: #ffffff;
     line-height: 1.15;
-    letter-spacing: -0.2px;
+    letter-spacing: -0.1px;
     margin-bottom: 8px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* ── Roles: una línea por rol ── */
+/* ── Roles como elegantes badges horizontales ── */
 .profile-roles {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
     width: 100%;
+    margin-bottom: 6px;
 }
 
 .profile-role {
-    font-size: 8.4px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.52);
+    font-size: 7.4px;
+    font-weight: 700;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 12px;
+    padding: 2px 7px;
     text-transform: uppercase;
-    letter-spacing: 0.8px;
-    line-height: 1.4;
-}
-
-/* Separador visual entre roles */
-.profile-role:not(:last-child)::after {
-    content: '';
-    display: block;
-    width: 16px;
-    height: 1px;
-    background: rgba(255, 255, 255, 0.15);
-    margin: 3px auto 0;
+    letter-spacing: 0.6px;
+    line-height: 1.2;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* ── Divider ── */
 .profile-divider {
-    width: 40px;
-    height: 1.5px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    width: 50px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent, #457b9d), transparent);
     border-radius: 2px;
-    margin: 12px auto 12px;
+    margin: 6px auto 10px;
 }
 
-/* ── Contactos ── */
+/* ── Contactos Premium en Caja Estilizada ── */
 .profile-contacts {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 5px;
     width: 100%;
     text-align: left;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 6px;
+    padding: 6px 10px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .contact-line {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 7px;
-    font-size: 9.4px;
-    color: rgba(255, 255, 255, 0.70);
+    font-size: 9.2px;
+    color: rgba(255, 255, 255, 0.82);
     text-decoration: none;
     line-height: 1.35;
-    /* Salto de línea natural, sin romper palabras a mitad */
     word-break: normal;
     overflow-wrap: anywhere;
+    transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .contact-line svg {
     flex-shrink: 0;
-    margin-top: 1px;
-    opacity: 0.55;
+    opacity: 0.75;
     color: var(--accent, #457b9d);
+    transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .contact-line:hover {
     color: #ffffff;
+    transform: translateX(2px);
 }
 
 .contact-line:hover svg {
-    opacity: 0.9;
+    opacity: 1;
+    color: #ffffff;
 }

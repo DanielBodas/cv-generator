@@ -2,7 +2,7 @@
 
 :root {
     --highlights-cols: 3;
-    --card-label-fz: 9px;
+    --card-label-fz: 8px;
     --card-text-fz: 8.5px;
     --card-text-lh: 1.4;
     --card-padding: 10px 8px;
@@ -17,25 +17,61 @@
 }
 
 .highlight-card {
-    background: #f8fafc;
+    background: #ffffff;
     border: 1px solid #e2e8f0;
-    border-top: 3px solid var(--accent);
+    border-top: 3px solid var(--accent, #457b9d);
     border-radius: 6px;
     padding: var(--card-padding);
     display: flex;
     flex-direction: column;
     min-height: 60px;
-    transition: transform 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.highlight-card:hover {
+    transform: translateY(-1.5px);
+    border-top-color: var(--primary, #1d3557);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Elegante marca de agua métrica en el fondo */
+.highlight-card::after {
+    content: "";
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    width: 24px;
+    height: 24px;
+    opacity: 0.03;
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='2' xmlns='http://www.w3.org/2000/svg'><path d='M22 11.08V12a10 10 0 1 1-5.93-9.14'></path><polyline points='22 4 12 14.01 9 11.01'></polyline></svg>");
+    transition: opacity 0.2s ease;
+}
+
+.highlight-card:hover::after {
+    opacity: 0.06;
 }
 
 .card-label {
     font-size: var(--card-label-fz);
     font-weight: 800;
-    color: var(--primary);
+    color: var(--primary, #1d3557);
+    background: rgba(29, 53, 87, 0.05);
+    border: 1px solid rgba(29, 53, 87, 0.08);
+    border-radius: 4px;
+    padding: 2px 6px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: 6px;
     text-align: center;
+    align-self: center;
+    white-space: nowrap;
 }
 
 .card-text {

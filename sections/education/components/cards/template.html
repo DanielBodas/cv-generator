@@ -1,0 +1,23 @@
+<h2>Education & Training</h2>
+<div class="edu-grid">
+    {{#education}}
+    <div class="edu-card">
+        <div class="edu-card-badge">
+            <span class="edu-card-year">{{year}}</span>
+        </div>
+        <div class="edu-card-header">
+            <div class="edu-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                    <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path>
+                </svg>
+            </div>
+            <h3 class="edu-card-degree">{{degree}}</h3>
+        </div>
+        <div class="edu-card-school">{{school}}</div>
+        <ul class="edu-tags-container" data-tags="{{tags}}">
+            <!-- Pills generadas por script.js -->
+        </ul>
+    </div>
+    {{/education}}
+</div>

@@ -1,35 +1,50 @@
 .languages-pills {
-    margin-bottom: var(--section-gap);
+    margin-top: 4px;
 }
 
 .pills-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 10px;
+    gap: 6px;
 }
 
 .lang-pill {
-    background: rgba(0, 0, 0, 0.04);
-    border: 1px solid var(--primary);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
-    padding: 6px 12px;
+    padding: 3px 9px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    color: var(--text);
+    gap: 5px;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.lang-pill:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--accent, #457b9d);
+    transform: translateY(-0.5px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.lang-flag {
+    font-size: 10.5px;
+    line-height: 1;
 }
 
 .lang-name {
-    font-weight: 600;
+    font-size: 8.8px;
+    font-weight: 650;
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .lang-level-badge {
-    background: var(--primary);
-    color: #fff;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 700;
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--accent, #457b9d);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 1px 5px;
+    border-radius: 10px;
+    font-size: 7.2px;
+    font-weight: 750;
+    text-transform: uppercase;
 }
