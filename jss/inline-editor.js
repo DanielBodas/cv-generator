@@ -823,6 +823,8 @@ window.resetToFactory = function () {
    CAMBIO DE COMPONENTES DE DISEÑO (CON VISUAL PREVIEWS)
    ========================================== */
 function changeSectionComponent(sectionId) {
+    if (sectionId !== 'languages') return; // Solo la sección 'languages' soporta múltiples variantes de diseño
+
     const config = window.CVConfig;
     const sec = config.sections.find(s => s.id === sectionId);
     if (!sec) return;
