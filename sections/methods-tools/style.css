@@ -56,3 +56,19 @@
     background: rgba(255, 255, 255, 0.12);
     border-color: rgba(255, 255, 255, 0.2);
 }
+
+/* Adaptive main-column styles for methods & tools (ATS Mode) */
+.area-main .sidebar-skill-category {
+    background: #f8fafc !important;
+    border: 1px solid var(--border) !important;
+}
+
+.area-main .sidebar-skill-title {
+    color: var(--text-muted) !important;
+}
+
+.area-main .sidebar-skill-pill {
+    color: var(--text) !important;
+    background: #f1f5f9 !important;
+    border: 1px solid var(--border) !important;
+}

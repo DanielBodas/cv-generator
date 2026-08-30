@@ -164,11 +164,63 @@ function openGeneralSettingsModal() {
             </div>
             <p class="modal-help-text">Muestra las cajas de grid, áreas y márgenes. Se restablece automáticamente al recargar la página.</p>
 
+            <p class="modal-section-label" style="margin-top:24px;">Optimización para ATS (Plataformas de Empleo)</p>
+            <div class="form-group-single">
+                <label>Adapta la estructura al formato de máxima compatibilidad para Workday, Taleo, etc.</label>
+                <button class="modal-btn" style="background: #faf5ff; border: 1px dashed #c084fc; color: #6b21a8; font-weight: 600; width: 100%; text-align: center; margin-top: 8px;" onclick="applyInlineATSPreset(event)">
+                    📊 Convertir a Columna Única (ATS-Optimized)
+                </button>
+            </div>
+
             <button class="modal-btn" onclick="saveGeneralSettings()">Guardar Ajustes</button>
         </div>
     `;
     showModal(html);
 }
+
+window.applyInlineATSPreset = function (event) {
+    if (event) event.preventDefault();
+    const config = window.CVConfig;
+    if (!config) return;
+
+    // Set layout to 1-column
+    config.layout.columns = '1fr';
+    config.layout.gridAreas = ['main'];
+    config.sections.forEach(sec => {
+        sec.area = 'main';
+        if (sec.id === 'profile') sec.weight = 0;
+        else if (sec.id === 'experience') sec.weight = 6;
+        else if (sec.id === 'education') sec.weight = 3;
+        else if (sec.id === 'about') sec.weight = 2;
+        else sec.weight = 1;
+    });
+
+    // Ordenar las secciones de forma óptima y lógica para el procesamiento de los ATS (Workday, etc.)
+    const optimalOrder = [
+        'profile',
+        'about',
+        'experience',
+        'education',
+        'executive-highlights',
+        'methods-tools',
+        'iniciatives',
+        'languages',
+        'references'
+    ];
+    config.sections.sort((a, b) => optimalOrder.indexOf(a.id) - optimalOrder.indexOf(b.id));
+
+    // Slate professional corporate slate colors for optimal scan
+    config.theme.primaryColor = '#0f172a';
+    config.theme.secondaryColor = '#475569';
+    config.theme.sidebarColor = '#0f172a';
+    config.theme.textColor = '#1e293b';
+    config.theme.backgroundColor = '#ffffff';
+
+    localStorage.setItem('cv_master_config', JSON.stringify(config));
+    window.refreshCV();
+    closeModal();
+    alert('📊 ¡CV optimizado para ATS con éxito! Estructura cambiada a Columna Única y colores corporativos de alta legibilidad aplicados.');
+};
 
 window.setDebugLevel = function (level) {
     document.querySelectorAll('.debug-toggle-btn').forEach(b => {

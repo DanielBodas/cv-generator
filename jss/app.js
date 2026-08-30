@@ -99,12 +99,14 @@ async function renderAllCV() {
     }
 
     const debugLvl = config.layout.debugLayout || 0;
+    let pageClasses = ['page-a4'];
     if (debugLvl > 0) {
-        page.className = 'page-a4';
-        page.classList.add(`debug-level-${debugLvl}`);
-    } else {
-        page.className = 'page-a4';
+        pageClasses.push(`debug-level-${debugLvl}`);
     }
+    if (config.layout.columns === '1fr') {
+        pageClasses.push('layout-single-column');
+    }
+    page.className = pageClasses.join(' ');
 
     // Identificar áreas de grid activas según la configuración
     const areas = [...new Set(config.layout.gridAreas.flatMap(r => r.split(' ')))];

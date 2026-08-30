@@ -1,16 +1,16 @@
-<h2>Education & Training</h2>
+<h2>Education</h2>
 <div class="edu-list">
     {{#education}}
-    <div class="edu-item">
+    <div class="edu-item p-education h-event vevent" itemprop="alumniOf" itemscope itemtype="https://schema.org/EducationalOrganization">
         <div class="edu-header">
-            <h3 class="edu-degree">{{degree}}</h3>
-            <span class="edu-year">{{year}}</span>
+            <h3 class="edu-degree" itemprop="award">{{degree}}</h3>
+            <span class="edu-year p-duration" itemprop="startDate">{{year}}</span>
         </div>
-        <div class="edu-school">{{school}}</div>
+        <div class="edu-school p-name fn org" itemprop="name">{{school}}</div>
         <ul class="edu-tags-container" data-tags="{{tags}}">
             <!-- Pills generadas por script.js -->
         </ul>
-        <!-- Fila compacta (visible solo en .is-minimized) -->
+        <!-- Fila compacta (visible solo en .is-minimized en pantalla, Oculta en print) -->
         <div class="edu-mini-row">
             <h3 class="edu-degree">{{degree}}</h3>
             <div class="edu-school">{{school}}</div>
