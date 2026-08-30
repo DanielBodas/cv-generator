@@ -1,0 +1,119 @@
+=========================================
+   SIMULADOR DE PARSEO ATS (ATS PARSER)
+=========================================
+
+--- 1. INFORMACIÓN DE CONTACTO DETECTADA ---
+  [NAME]: Daniel Bodas
+  [EMAIL]: danielbodasromero@gmail.com
+  [PHONE]: (+34) 625 232 666
+  [LOCATION]: Madrid, España
+  [LINKEDIN]: linkedin.com/in/danielbodas/
+
+--- 2. RESUMEN PROFESIONAL DETECTADO ---
+  Forward-thinking Aerospace Engineer combining technical aeronautical expertise with Agile product management. Specialized in rescuing and restructuring complex projects through the practical implementation of Agile methodologies. Acting as a Technical Product Owner, bridging the gap between aerospace content, IT architecture, and software development. Proven track record of driving digital improvements and optimizing workflows across multiple engineering departments.
+
+--- 3. EXPERIENCIA LABORAL DETECTADA ---
+  Puesto 1: Technical Product Owner – Digital Twin / Aircraft Mock-Up
+    Empresa: AIRBUS DS
+    Período: Apr 2024 – Present
+    Descripción: Lead the product vision and Agile delivery for a full-scale Digital Twin. Act as the primary Product Owner managing the ...
+    Palabras Clave: Cross-Functional Integration, Client Management, In-Service Support, Product Strategy
+
+  Puesto 2: Digital Transformation Leader – ILS Data Management
+    Empresa: AIRBUS DS
+    Período: Jan 2022 – Apr 2024
+    Descripción: Led the digital transformation of the ILS (Integrated Logistic Support) Data department in a collaborative multi-program...
+    Palabras Clave: Change Management, Process Optimization, Cross-Functional Leadership, Digital Strategy
+
+  Puesto 3: ILS Data & Delivery Lead – MRTT
+    Empresa: AIRBUS DS
+    Período: Dec 2020 – Jan 2022
+    Descripción: Owned the end-to-end delivery of MRTT maintenance and configuration data into the ILS system. Digitally optimized fragil...
+    Palabras Clave: Product Delivery, Business Intelligence, Digital Optimization, Stakeholder Alignment
+
+  Puesto 4: In-Service Structural Support Engineer
+    Empresa: AIRBUS DS
+    Período: Sept 2017 – Dec 2020
+    Descripción: Spearheaded 24/7 structural engineering support for all military aircraft platforms, delivering rapid solutions to conti...
+    Palabras Clave: 24/7 Support, Stakeholder Management, Airworthiness, Crisis Management, Structural Engineering
+
+  Puesto 5: Structural Maintenance Program Engineer (MSG-3)
+    Empresa: AIRBUS DS
+    Período: Jun 2016 – Sept 2017
+    Descripción: Analyzed and optimized aircraft maintenance programs, balancing safety requirements with cost-efficiency for airline ope...
+    Palabras Clave: Cost-Efficiency, Multidisciplinary Teams, Preventive Maintenance
+
+  Puesto 6: R&D Structural Engineer
+    Empresa: AERNNOVA
+    Período: Jun 2015 – Jun 2016
+    Descripción: Contributed to research and development projects, focusing on structural innovation and the application of new materials...
+    Palabras Clave: R&D, Innovation, Aerospace Design
+
+--- 4. EDUCACIÓN DETECTADA ---
+  Estudio 1: Artificial Intelligence Nanodegree
+    Institución: Udacity & AIRBUS
+    Año: 2023
+    Etiquetas: AI Strategy, Process Automation, Tech Innovation
+
+  Estudio 2: Data Analyst Nanodegree
+    Institución: Udacity & AIRBUS
+    Año: 2022
+    Etiquetas: Data-Driven Decisions, Analytics, Value Creation
+
+  Estudio 3: Master in Professional Development 4.0
+    Institución: University of Alcala (UAH)
+    Año: 2018
+    Etiquetas: Digital Transformation, Industry 4.0, Change Management
+
+  Estudio 4: Degree in Aerospace Engineering (Aircraft Spec.)
+    Institución: Technical University of Madrid (UPM)
+    Año: 2016
+    Etiquetas: Complex Problem-Solving, Aerospace Engineering, Analytical Thinking
+
+--- 5. HABILIDADES (TECNOLOGÍAS Y METODOLOGÍAS) ---
+  Categoría [Agile & Management]: Agile Implementation, LBIP+ (Airbus Methodology), Lean Manufacturing, Scrum Methodologies, Kanban Framework, Change Management Strategy
+  Categoría [Tech & Digital Stack]: Python (Advanced), Java, HTML & CSS, SQL & NoSQL Databases, Spotfire (Data Viz), Google Apps Script, Bash & DevOps, Git & GitHub, Jira & Confluence Admin
+
+--- 6. IDIOMAS DETECTADOS ---
+  - Spanish: Native (Native)
+  - English: Professional Proficiency (C1)
+  - French: Elementary (A1)
+
+--- 7. ANÁLISIS DE PALABRAS CLAVE (DENSIDAD) ---
+  - 'Data': 12 veces
+  - 'Aerospace': 7 veces
+  - 'Engineering': 7 veces
+  - 'Agile': 5 veces
+  - 'Change Management': 4 veces
+  - 'ILS': 4 veces
+  - 'Product Owner': 3 veces
+  - 'Digital Transformation': 3 veces
+  - 'Analytics': 3 veces
+  - 'MRTT': 3 veces
+  - 'Digital Twin': 2 veces
+  - 'Airworthiness': 2 veces
+  - 'R&D': 2 veces
+  - 'Scrum': 1 veces
+  - 'Kanban': 1 veces
+  - 'Process Optimization': 1 veces
+  - 'Stakeholder Management': 1 veces
+  - 'Python': 1 veces
+  - 'SQL': 1 veces
+  - 'Aviation Safety': 1 veces
+  - 'Integrated Logistic Support': 1 veces
+  - 'Eurofighter': 1 veces
+  - 'A400M': 1 veces
+
+--- 8. DIAGNÓSTICO DE COMPATIBILIDAD ---
+  [ADVERTENCIAS]:
+    1. Contiene imágenes/fotos (photo.svg). Algunos ATS obsoletos no procesan bien PDFs con imágenes o intentan leerlas mediante OCR, lo que puede causar saltos de línea incorrectos.
+    2. Estructura de doble columna (Sidebar + Main) mediante CSS Grid. Al convertir el PDF a texto plano (método común de los ATS), las columnas pueden leerse horizontalmente de manera entrelazada (ej. mezclar la sección de idiomas con la experiencia laboral).
+    3. Sistemas de minimizado automático (is-minimized) e indicadores de overflow (+X items adicionales). Si hay roles u otros datos ocultados o colapsados visualmente en la versión final renderizada que se guarda en PDF, un ATS podría leer el contenido de la estructura HTML original si no se excluye, o directamente ignorarlos si no se renderizan al exportar.
+    4. Uso de iconos SVG de contacto. Los ATS los ignoran, pero es fundamental asegurarse de que haya texto alternativo o texto plano al lado (como ocurre aquí con los strings).
+    5. El CV combina etiquetas/textos en inglés (Professional Summary, Technical Product Owner, etc.) con datos e introducción en español (Madrid, España, etc.). Los ATS configurados para un único idioma de vacante pueden penalizar la densidad de palabras clave si hay mezcla.
+
+  [PUNTOS FUERTES]:
+    1. Información estructurada con claridad: Roles, fechas (mes/año), empresas, y estudios bien delimitados.
+    2. Alta densidad de palabras clave industriales altamente demandadas (Agile, Product Owner, Airbus, Python, SQL, Digital Twin).
+    3. Ausencia de tablas complejas, gráficos flotantes o elementos no textuales para describir habilidades (ej. barras de porcentaje de habilidades son CSS puros y tienen texto legible).
+=========================================
