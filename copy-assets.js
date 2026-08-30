@@ -19,16 +19,19 @@ dirs.forEach(dir => {
     }
 });
 
-// Copy favicon.svg directly to dist root so browsers can locate /favicon.svg automatically
-try {
-    const faviconSrc = path.join(process.cwd(), 'favicon.svg');
-    const faviconDest = path.join(process.cwd(), 'dist', 'favicon.svg');
-    if (fs.existsSync(faviconSrc)) {
-        fs.copyFileSync(faviconSrc, faviconDest);
-        console.log('Successfully copied favicon.svg to dist/favicon.svg');
-    } else {
-        console.warn('Source favicon.svg does not exist.');
+// Copy favicon files directly to dist root so browsers can locate them automatically
+const faviconFiles = ['favicon.svg', 'favicon.png', 'favicon.ico'];
+faviconFiles.forEach(file => {
+    try {
+        const src = path.join(process.cwd(), file);
+        const dest = path.join(process.cwd(), 'dist', file);
+        if (fs.existsSync(src)) {
+            fs.copyFileSync(src, dest);
+            console.log(`Successfully copied ${file} to dist/${file}`);
+        } else {
+            console.warn(`Source ${file} does not exist.`);
+        }
+    } catch (err) {
+        console.error(`Error copying ${file} to dist:`, err);
     }
-} catch (err) {
-    console.error('Error copying favicon.svg to dist:', err);
-}
+});
