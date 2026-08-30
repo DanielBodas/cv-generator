@@ -1,0 +1,72 @@
+/* Strategic Impact Highlights - Continuous Horizontal Flow Layout */
+
+:root {
+    --flow-font-size: 8.5px;
+    --flow-line-height: 1.45;
+    --flow-gap-x: 14px;
+    --flow-gap-y: 6px;
+    --flow-padding: 0px;
+    --flow-label-fz: 8px;
+    --flow-label-pad: 2px 5px;
+    --flow-label-bg: rgba(29, 53, 87, 0.04);
+    --flow-label-border: 1px solid rgba(29, 53, 87, 0.08);
+}
+
+/* Eliminate large gap between title and content */
+.section-executive-highlights h2 {
+    margin-bottom: 4px;
+}
+
+.highlights-flow-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    row-gap: var(--flow-gap-y);
+    column-gap: var(--flow-gap-x);
+    margin-top: 4px;
+    padding: var(--flow-padding);
+    box-sizing: border-box;
+}
+
+.highlight-flow-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-sizing: border-box;
+}
+
+.flow-label {
+    font-size: var(--flow-label-fz);
+    font-weight: 800;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: var(--flow-label-bg);
+    border: var(--flow-label-border);
+    padding: var(--flow-label-pad);
+    border-radius: 4px;
+    white-space: nowrap;
+    box-sizing: border-box;
+    display: inline-block;
+}
+
+.flow-text {
+    font-size: var(--flow-font-size);
+    color: #475569;
+    line-height: var(--flow-line-height);
+    font-weight: 500;
+    margin: 0;
+    /* Ensure all text is fully visible (no line clamp or text truncation) */
+    word-break: normal;
+    overflow: visible;
+}
+
+/* Modo Ultra Compacto para Overflow Severo - Shrunk spacings but still fully visible texts */
+.mode-ultra-compact .highlight-flow-item {
+    gap: 4px;
+}
+
+.mode-ultra-compact .flow-label {
+    letter-spacing: 0.3px;
+    padding: 1px 3px;
+}
