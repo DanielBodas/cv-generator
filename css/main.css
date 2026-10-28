@@ -449,6 +449,74 @@ h2 {
     height: 9px;
 }
 
+/* ============================================================
+   REGLAS DE FORMATO Y ESTILO: VERSIÓN ATS (OPTIMIZACIÓN RRHH)
+   ============================================================ */
+.page-a4.version-ats,
+.page-a4.layout-single-column {
+    grid-template-columns: 1fr !important;
+    grid-template-areas: "main" !important;
+}
+
+.page-a4.version-ats .area-sidebar {
+    background: transparent !important;
+    color: var(--text) !important;
+    padding: var(--page-v-pad) var(--main-pad) !important;
+    height: auto !important;
+}
+
+.page-a4.version-ats .cv-section {
+    height: auto !important;
+    flex: 0 0 auto !important;
+    overflow: visible !important;
+    margin-top: 14px !important;
+}
+
+.page-a4.version-ats h2 {
+    color: #0f172a !important;
+    font-size: 11px !important;
+    letter-spacing: 1px !important;
+    border-bottom: 1.5px solid #0f172a !important;
+}
+
+.page-a4.version-ats .skill-name,
+.page-a4.version-ats .skill-pct {
+    color: #334155 !important;
+}
+
+.page-a4.version-ats .skill-bar {
+    background: #e2e8f0 !important;
+}
+
+.page-a4.version-ats .skill-fill {
+    background: #0f172a !important;
+}
+
+.page-a4.version-ats .profile-name {
+    color: #0f172a !important;
+    font-size: 18px !important;
+}
+
+.page-a4.version-ats .profile-role {
+    color: #475569 !important;
+}
+
+.page-a4.version-ats .contact-line {
+    color: #334155 !important;
+}
+
+.page-a4.version-ats .profile-contacts {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px 16px !important;
+}
+
+.page-a4.version-ats .profile-photo-wrap {
+    margin-top: 0 !important;
+    border-color: #cbd5e1 !important;
+}
+
 /* IMPRESIÓN */
 @page {
     size: A4 portrait;

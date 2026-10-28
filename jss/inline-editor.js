@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Bindear botones del Dock (estáticos en el HTML, se bindean una sola vez)
+    document.getElementById('btn-version')?.addEventListener('click', openVersionModal);
     document.getElementById('btn-general-settings')?.addEventListener('click', openGeneralSettingsModal);
     document.getElementById('btn-structure')?.addEventListener('click', openStructureModal);
     document.getElementById('btn-backups')?.addEventListener('click', openBackupsModal);
@@ -143,6 +144,15 @@ function openGeneralSettingsModal() {
                 </div>
             </div>
 
+            <p class="modal-section-label" style="margin-top:24px;">Versión del CV (Optimización RRHH)</p>
+            <div class="form-group-single">
+                <label>Modo de Maquetación y Extracción</label>
+                <select id="inline-cv-version" class="dynamic-select" onchange="setCvVersion(this.value)">
+                    <option value="executive" ${config.version !== 'ats' ? 'selected' : ''}>Versión Corporativa Ejecutiva (2 Columnas)</option>
+                    <option value="ats" ${config.version === 'ats' ? 'selected' : ''}>Versión Optimizada para ATS / RRHH (1 Columna)</option>
+                </select>
+            </div>
+
             <p class="modal-section-label" style="margin-top:24px;">Tipografía</p>
             <div class="form-group-single">
                 <label>Fuente del currículum</label>
@@ -192,6 +202,137 @@ window.saveGeneralSettings = function () {
     window.CVConfig.layout.debugLayout = debugLevel;
 
     localStorage.setItem('cv_master_config', JSON.stringify(window.CVConfig));
+    closeModal();
+    window.refreshCV();
+};
+
+/* ==========================================
+   MODAL: SELECCIÓN DE VERSIÓN DEL CV (EJECUTIVA VS ATS)
+   ========================================== */
+function openVersionModal() {
+    const currentVersion = window.CVConfig?.version || 'executive';
+
+    const html = `
+        <div class="modal-header">
+            <h2>Versión del Currículum</h2>
+            <button class="btn-close" onclick="closeModal()">×</button>
+        </div>
+        <p class="modal-desc-text">
+            Selecciona la versión del CV adaptada a tu canal de postulación. Puedes alternar en cualquier momento entre el formato visual para reclutadores humanos y la versión optimizada para sistemas automatizados ATS.
+        </p>
+
+        <div class="modal-body">
+            <div class="component-options-grid">
+                <div class="component-option-card ${currentVersion === 'executive' ? 'active' : ''}" onclick="setCvVersion('executive')">
+                    <div class="option-card-preview">
+                        <div class="component-preview-visual" style="display: flex; gap: 8px; width: 100%; height: 100%; align-items: stretch;">
+                            <div style="width: 32%; background: #1d3557; border-radius: 4px; padding: 6px; display: flex; flex-direction: column; gap: 4px;">
+                                <div style="height: 12px; background: rgba(255,255,255,0.4); border-radius: 2px;"></div>
+                                <div style="height: 6px; background: rgba(255,255,255,0.2); border-radius: 2px; width: 80%;"></div>
+                                <div style="height: 6px; background: rgba(255,255,255,0.2); border-radius: 2px; width: 60%;"></div>
+                            </div>
+                            <div style="flex: 1; background: #ffffff; border: 1px dashed #cbd5e1; border-radius: 4px; padding: 6px; display: flex; flex-direction: column; gap: 5px;">
+                                <div style="height: 8px; background: #1d3557; border-radius: 2px; width: 50%;"></div>
+                                <div style="height: 4px; background: #e2e8f0; border-radius: 2px; width: 90%;"></div>
+                                <div style="height: 4px; background: #e2e8f0; border-radius: 2px; width: 75%;"></div>
+                                <div style="height: 4px; background: #e2e8f0; border-radius: 2px; width: 85%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="option-card-meta">
+                        <div class="option-card-title-row">
+                            <span class="option-card-title">Versión Ejecutiva (2 Columnas)</span>
+                            ${currentVersion === 'executive' ? '<span class="active-badge">Activo</span>' : ''}
+                        </div>
+                        <p class="option-card-desc">
+                            Diseño corporativo premium de 2 columnas con barra lateral, perfecto para enviar directamente por email o presentar en entrevistas.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="component-option-card ${currentVersion === 'ats' ? 'active' : ''}" onclick="setCvVersion('ats')">
+                    <div class="option-card-preview">
+                        <div class="component-preview-visual" style="display: flex; flex-direction: column; gap: 5px; width: 100%; height: 100%; justify-content: center; padding: 6px; background: #ffffff; border: 1px dashed #94a3b8; border-radius: 4px;">
+                            <div style="height: 8px; background: #0f172a; border-radius: 2px; width: 60%;"></div>
+                            <div style="height: 4px; background: #cbd5e1; border-radius: 2px; width: 100%;"></div>
+                            <div style="height: 6px; background: #334155; border-radius: 2px; width: 40%; margin-top: 2px;"></div>
+                            <div style="height: 4px; background: #e2e8f0; border-radius: 2px; width: 95%;"></div>
+                            <div style="height: 4px; background: #e2e8f0; border-radius: 2px; width: 85%;"></div>
+                        </div>
+                    </div>
+                    <div class="option-card-meta">
+                        <div class="option-card-title-row">
+                            <span class="option-card-title">Versión ATS / RRHH (1 Columna)</span>
+                            ${currentVersion === 'ats' ? '<span class="active-badge">Activo</span>' : ''}
+                        </div>
+                        <p class="option-card-desc">
+                            Estructura lineal monocolumna optimizada para portales de empleo y software de extracción de datos de RRHH (Workday, Taleo, Greenhouse).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    showModal(html);
+    const modalEl = document.getElementById('general-settings-modal');
+    if (modalEl) {
+        modalEl.classList.add('modal-medium');
+    }
+}
+
+window.openVersionModal = openVersionModal;
+
+window.setCvVersion = function (versionName) {
+    const config = window.CVConfig;
+    if (!config) return;
+
+    if (versionName === 'ats') {
+        // Guardar las áreas originales si aún no se han respaldado
+        config.sections.forEach(sec => {
+            if (!sec._execArea) {
+                sec._execArea = sec.area || 'sidebar';
+            }
+        });
+
+        config.version = 'ats';
+        config.layout.columns = '1fr';
+        config.layout.gridAreas = ['main'];
+
+        // Mover todas las secciones a main
+        config.sections.forEach(sec => {
+            sec.area = 'main';
+        });
+
+        // Orden de secciones sugerido para extracción ATS
+        const atsOrder = ['profile', 'about', 'experience', 'education', 'methods-tools', 'languages', 'executive-highlights', 'iniciatives', 'references'];
+        config.sections.sort((a, b) => {
+            let idxA = atsOrder.indexOf(a.id);
+            let idxB = atsOrder.indexOf(b.id);
+            if (idxA === -1) idxA = 99;
+            if (idxB === -1) idxB = 99;
+            return idxA - idxB;
+        });
+
+    } else {
+        // Versión ejecutiva (2 columnas)
+        config.version = 'executive';
+        config.layout.columns = '200px 1fr';
+        config.layout.gridAreas = ['sidebar main'];
+
+        const defaultSidebar = ['profile', 'iniciatives', 'methods-tools', 'languages', 'references'];
+        config.sections.forEach(sec => {
+            if (sec._execArea) {
+                sec.area = sec._execArea;
+            } else if (defaultSidebar.includes(sec.id)) {
+                sec.area = 'sidebar';
+            } else {
+                sec.area = 'main';
+            }
+        });
+    }
+
+    localStorage.setItem('cv_master_config', JSON.stringify(config));
     closeModal();
     window.refreshCV();
 };

@@ -159,6 +159,14 @@ function initThemeTab() {
                         <div class="preset-color-dot" style="background: #27272a;"></div>
                     </div>
                 </button>
+                <button class="preset-btn" data-preset="ats">
+                    <span>🤖 Alineación ATS</span>
+                    <div class="preset-colors">
+                        <div class="preset-color-dot" style="background: #0f172a;"></div>
+                        <div class="preset-color-dot" style="background: #475569;"></div>
+                        <div class="preset-color-dot" style="background: #ffffff;"></div>
+                    </div>
+                </button>
             </div>
         `;
         // Inyectar antes del primer elemento hijo de la pestaña
@@ -175,6 +183,10 @@ function initThemeTab() {
         document.querySelectorAll('.preset-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const id = btn.getAttribute('data-preset');
+                if (id === 'ats' && typeof window.setCvVersion === 'function') {
+                    window.setCvVersion('ats');
+                    return;
+                }
                 const colors = presets[id];
                 if (colors) {
                     config.theme.primaryColor = colors.primary;
