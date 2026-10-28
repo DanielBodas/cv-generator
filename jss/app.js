@@ -65,6 +65,10 @@ function sanitizeConfig(config, defaultConfig) {
         config.layout.debugLayout = 0;
     }
 
+    if (!config.version) {
+        config.version = 'executive';
+    }
+
     // Asegurar que todas las secciones del default existen en el config guardado
     // y tienen los campos de estructura correctos (mode, area, weight)
     if (config.sections && defaultConfig.sections) {
@@ -368,6 +372,12 @@ function setupGrid(layout) {
     const page = document.getElementById('cv-page');
     page.style.gridTemplateColumns = layout.columns || '200px 1fr';
     page.style.gridTemplateAreas = layout.gridAreas.map(r => `"${r}"`).join(' ');
+
+    if (layout.columns === '1fr' || window.CVConfig?.version === 'ats') {
+        page.classList.add('layout-single-column', 'version-ats');
+    } else {
+        page.classList.remove('layout-single-column', 'version-ats');
+    }
 }
 
 function injectStyles(sectionId, path) {

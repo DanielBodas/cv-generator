@@ -44,6 +44,31 @@
     margin-bottom: 8px;
 }
 
+.area-main .profile-name {
+    color: #0f172a !important;
+    font-size: 18px !important;
+}
+
+.area-main .profile-role {
+    color: #475569 !important;
+}
+
+.area-main .contact-line {
+    color: #334155 !important;
+}
+
+.area-main .profile-contacts {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px 16px !important;
+}
+
+.area-main .profile-photo-wrap {
+    margin-top: 0 !important;
+    border-color: #cbd5e1 !important;
+}
+
 /* ── Roles: una línea por rol ── */
 .profile-roles {
     display: flex;
